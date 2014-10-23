@@ -1,4 +1,4 @@
-var domain          = require('./../../config/domain').domain;
+var   domain        = require('./../../config/default').domain_default;
 
 var   url           = require('url');
 var   mime          = require('mime');
@@ -6,7 +6,7 @@ var   validator     = require('validator');
 
 var   formidable    = require('formidable'),
       util          = require('util'),
-      fs            = require('fs-extra');
+      fs            = require('fs');
 
 var   validate_token= require('./../../app/validate_token');
 
@@ -15,53 +15,46 @@ var   bcrypt        = require('bcrypt-nodejs');
 var   Item          = require('./../../models/items');
 var   User          = require('./../../models/users');
 
-var   token         = '';
-var   user_id       = '';
-var   category      = '';
-var   image         = '';
-var   title         = '';
-var   description   = '';
-var   type          = '';
-var   location      = {};
-var   date          = '';
 
 function validatorLocation(location_obj){
 
-    // CHUA XET
+    if (!location_obj.lat || !location_obj.lng)
+        return 0;
     return 1;
 }
 
-module.exports = function(req, res, next) {
+module.exports = function(req, res) {
 
-    var form = new formidable.IncomingForm();
+    if (!req.rawBody){
+        res.json({err : 'Request is incorrect'});
+        res.status(200).end();
+    } else{
 
-    form.parse(req, function(err, fields, files) {
-        item_id     = fields.item_id;
-        token       = fields.token;
-        user_id     = fields.user_id;
-        category_id = fields.category_id;
-        title       = fields.title;
-        description = fields.description;
-        type        = fields.type;
-        location    = fields.location;
-        reward      = fields.reward;
-        report      = fields.report;
-        date        = fields.date;      
-    });
+        // data : {user : {user_id, token}, category_id, image_link, extension, title, description, type, 
+        // location, date_lost, reward, report}
+
+        // REMEMBER TO CREATE TIME_POST
+
+        var data = JSON.parse(req.rawBody);
+
+        var item_id     = data.item_id;
+        var token       = data.user.token;
+        var user_id     = data.user.user_id;
+        var category_id = data.category_id;
+        var title       = data.title;
+        var description = data.description;
+        var type        = data.type;
+        var image_link  = data.image_link;
+        var extension   = data.extension;
+        var location    = data.location;
+        var date_lost   = data.date_lost;
+        var reward      = data.reward;
+        var report      = data.report;
 
 
-    form.on('end', function(fields, files) {
-        if (!this.openedFiles[0]){
-            res.json({err: "Haven't image of item"});
-            res.status(200).end();
-        } else{
-            var temp_path = this.openedFiles[0].path;
-
-            var extension = mime.extension(mime.lookup(this.openedFiles[0].name)).toLowerCase();
+        if (image_link){
 
             // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
-            console.log(validator.isAlphanumeric(user_id));
-            console.log(validator.isAlphanumeric(category_id));
 
             if (    !validator.isAlphanumeric(user_id) || 
                     (item_id != "" && !validator.isAlphanumeric(item_id) ) ||     
@@ -71,8 +64,13 @@ module.exports = function(req, res, next) {
                         res.json({err : 'Validate is not success'});
                         res.status(200).end();
             }
+            else if(!fs.existsSync(image_link)){
+                res.json({err : 'Image is not exist'});
+                res.status(200).end();
+            }
             else if( extension != 'png'  && extension != 'jpg' && extension != 'gif' && 
-                     extension != 'jpeg' && extension != 'bmp'){
+                     extension != 'jpeg' && extension != 'bmp' && 
+                     extension == mime.extension(mime.lookup(image_link)) ){
 
                         res.json({err : 'Image is incorrect'});
                         res.status(200).end();
@@ -90,7 +88,7 @@ module.exports = function(req, res, next) {
 
                         // ======== MAKE NEW ITEM ================
                         // SAVE IMAGE
-                        fs.copy(temp_path, './public' + new_location + file_name, function(err) {
+                        fs.rename(image_link, './public' + new_location + file_name, function(err) {
                             if (err) {
                                 console.error(err);
                                 res.json({err : new Error(err)});
@@ -100,7 +98,7 @@ module.exports = function(req, res, next) {
 
                                     var item            = new Item();
                                     item.user_id        = user_id;
-                                    item.category       = category;
+                                    item.category_id    = category_id;
                                     item.title          = title;
                                     item.description    = description;
                                     item.type           = type;
@@ -108,8 +106,8 @@ module.exports = function(req, res, next) {
                                     item.reward         = reward;
                                     item.report         = report;
                                     item.image          = domain + new_location + file_name;
-                                    item.date           = date;
-                                    item.time_post      = new Date;
+                                    item.date_lost      = date_lost;
+                                    item.time_post      = (new Date).toJSON();
 
                                     // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
                                     User.findOne({_id : user_id}, function(err, user_exits){
@@ -147,8 +145,7 @@ module.exports = function(req, res, next) {
                                             }
                                         }
                                     })
-                                } else{                     // UPDATE ITEM
-
+                                } else {                     // UPDATE ITEM
                                     Item.findOne({_id : item_id}, function(err, item_exist){
                                         if (item_exist && item_exist.user_id == user_id){
 
@@ -162,7 +159,7 @@ module.exports = function(req, res, next) {
 
                                             // UPDATE INFOR
                                             item_exist.user_id        = user_id;
-                                            item_exist.category       = category;
+                                            item_exist.category_id    = category;
                                             item_exist.title          = title;
                                             item_exist.description    = description;
                                             item_exist.type           = type;
@@ -170,7 +167,7 @@ module.exports = function(req, res, next) {
                                             item_exist.reward         = reward;
                                             item_exist.report         = report;
                                             item_exist.image          = domain + new_location + file_name;
-                                            item_exist.date           = date;
+                                            item_exist.date_lost      = date_lost;
                                             item_exist.post_time      = (new Date).toJSON();
                                             // USER INFO IS NOT UPDATE BECAUSE USER IS NOT CHANGE
 
@@ -188,16 +185,19 @@ module.exports = function(req, res, next) {
                                                 }
                                             })
                                         } else{
-                                            res.json({err: 'Item is not exits or user is not have this item'})
+                                            res.json({err: 'Item is not exits or user is not have this item'});
                                             res.status(200).end();
                                         }
-                                    })
-                                }
+                                    });
+                                };
                             }
+
                         })
-                     }
-                });
+                    }
+                })
             }
-        }        
-    });
-} 
+        }
+    }
+}
+                            
+                            

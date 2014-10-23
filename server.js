@@ -7,13 +7,13 @@ var mongoose        =   require('mongoose');
 var Router_raw      =   express.Router();
 var Router_formdata =   express.Router();
 
-var routes   = require('./routes');
+var routes   		= require('./routes');
 
-var configDB = require('./config/database.js');
+var db_url   		= require('./config/default').database;
 
 // ==================================================CONFIGURATION===================================
 
-mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(db_url); // connect to our database
 
 require('./config/index.js')(app, Router_raw, Router_formdata);  //  all config
 
@@ -21,11 +21,14 @@ require('./config/index.js')(app, Router_raw, Router_formdata);  //  all config
 
 // REGISTER, LOGIN, LOGOUT =================
 Router_raw.post('/login', 		  		routes.login.local);          	// api login with local account
-Router_formdata.post('/register', 		routes.register.local);       	// api register with local account
+Router_raw.post('/register', 			routes.register.local);       	// api register with local account
 Router_raw.post('/logout', 		  		routes.logout);					// api logout 
 
+// UPLOAD IMAGE
+Router_formdata.post('/upload_photo',	routes.upload_photo);			// api upload photo, return link '/tmp'
+
 // CREATE, UPDATE, VIEW, REMOVE ITEMS
-Router_formdata.post('/set_an_item', 	routes.item.set);        		// api create, update an item
+Router_raw.post('/set_an_item', 		routes.item.set);        		// api create, update an item
 Router_raw.get('/get_an_item/:id',	 	routes.item.get);				// api get an  item
 Router_raw.post('/del_an_item', 		routes.item.del);				// api del an  item
 
@@ -35,7 +38,6 @@ Router_raw.post('/set_a_category', 		routes.category.set);			// api create,updat
 Router_raw.get('/get_categores',  		routes.category.get);			// api get categores
 
 // REQUEST RECENT
-
 Router_raw.post('/recent',				routes.recent);					// api request recent
 
 // =================================================== LISTEN BY IP AND PORT ========================

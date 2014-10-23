@@ -26,6 +26,7 @@ module.exports = function(req, res){
 				Item.find({}, function(err, items){
 					items.forEach(function(item){
 						console.log(distance(item.location, location));
+						
 					})
 				})
 			} else{

@@ -1,4 +1,5 @@
-var   domain = 'http://localhost:8080';
+var   domain        = require('./../../config/default').domain_default;
+var   avatar_default= require('./../../config/default').avatar_default;
 
 var   formidable    = require('formidable'),
       util          = require('util'),
@@ -13,101 +14,113 @@ var   make_token    = require('./../../app/make_token');
 var   User          = require('./../../models/users');
 
 module.exports = function(req, res) {
-	var avatar = 1;
-    var username = '';
-    var email    = '';
-    var password = '';
-    var avatar_link = '';
-    var extension;
-    var temp_path;
 
-    var form = new formidable.IncomingForm();
+	if (!req.rawBody){
+		res.json({err : 'Request is incorrect'});
+		res.status(200).end();
+	} else{
 
-    form.parse(req, function(err, fields, files) {
-        username = fields.username;
-        email    = fields.email;
-        password = fields.password;    
-    });
+		var data = JSON.parse(req.rawBody);
 
-    // WHEN DATA SENT
-    form.on('end', function(fields, files) {
-        /* Temporary location of our uploaded file */
+		// data : {"username" : "cuongvc93", "email" : "cuongvc93@gmail.com", 
+		// "password" : "123456", "avatar_link" : "/tmp/i1b3r8bfdsbfk", "extension" : "jpeg"}
 
-        // CO KIEM TRA UPLOAD AVATAR
-        if (!this.openedFiles[0]){
-            avatar = 0;
-        } else{
-	        temp_path = this.openedFiles[0].path;
-	        /* The file name of the uploaded file */
-	        
-	        extension = mime.extension(mime.lookup(this.openedFiles[0].name)).toLowerCase();
-	        if (extension != 'png'  && extension != 'jpg' && extension != 'gif' && 
-	        		extension != 'jpeg' && extension != 'bmp'){
-		        		avatar = 0;
-		        		res.json({err : 'Image is incorrect'});
-	        	} 
-	    }
-	    
-	    // VALIDATE FIELS
-	    if (!validator.isEmail(email) || !validator.isAlphanumeric(username) || !validator.isLength(password, 6, 25)){
-	       	res.json({err : 'Validate fiels is not success'});
-	        res.status(200).end();
+		var avatar_link 	= data.avatar_link;
+	    var username 		= data.username;
+	    var email    		= data.email;
+	    var password 		= data.password;
+	    var extension   	= data.extension;
+	    var avatar_latest	= '';
 
-	    } else{
-	        // VALIDATE IS SUCCESS
-			// if (avatar){
-			User.findOne({$or : [{email : email}, {username : username}]}, function(err, user_exist){
-			    if (err) {
-			        console.log(err);
-			        res.json({err : new Error('Err when find user')});
-			        res.status(200).end();
-			    }
-			    // if user is exist
-			    if (user_exist){
-			        res.json({err : 'User was exist'});
-			        res.status(200).end();
-			    } else{
-			        var user      =  new User();
-			        user.username = username;
-			        user.email    = email;
-			        user.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+        // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
+        if (    !validator.isAlphanumeric(username) || 
+                    !validator.isEmail(email)){
+                        res.json({err : 'Validate is not success'});
+                        res.status(200).end();
+        }
+        else {
+            if(!avatar_link || !fs.existsSync(avatar_link)){
 
-			        if (avatar){			                	// HAVE AVATAR
+                User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
+                    if (err){
+                        console.log(err);
+                        res.json({err : new Error(err)});
+                    } 
+                    else if (user_exist){
+                        res.json({err : 'User is exist'});
+                        res.status(200).end();
+                    } else{
 
+                        var user      = new User;
+                        user.username = username;
+                        user.email    = email;
+                        user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                        user.avatar   = avatar_default;
+                        user.save(function(err){
+                            if (err){
+                                console.log(err);
+                            } else{
+                                process.nextTick(function(){
+                                    res.json({err : null, user : user});
+                                    res.status(200).end();
+                                })
+                            }
+                        });
+                    }
+                })
+            }
 
-						var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
-						/* Location where we want to copy the uploaded file */
-						var new_location = '/img/avatar/';
-				        fs.copy(temp_path, './public' + new_location + file_name, function(err) {
-			                if (err) {
-				                console.error(err);
-				                res.json({err : new Error(err)});
-				                res.status(200).end();
-		                    } else {
-				                // location of  avatar
-				                user.avatar = domain + new_location + file_name;
-			                    user.save(function(err){
-			                	    if (err) {
-				                        console.error(err);
-				                        res.json({err : new Error(err)});
-				                        res.status(200).end();
-				                    }
-		                            make_token(user._id, res);
-				                  	})
-				                }
-			        	});
-			        } else{			                			// HAVEN'T AVATAR
-				        user.save(function(err){
-				            if (err) {
-				                console.error(err);
-				                res.json({err : new Error(err)});
-				                res.status(200).end();
-				            }
-				            make_token(user._id, res);
-				        });
-			        }       
-			    }
-			})
-	    }
-	})        
+        else if( extension != 'png'  && extension != 'jpg' && extension != 'gif' && 
+                     extension != 'jpeg' && extension != 'bmp' && 
+                     extension == mime.extension(mime.lookup(image_link)) ){
+
+                        res.json({err : 'Image is incorrect'});
+                        res.status(200).end();
+        } 
+        else {
+            	User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
+            		if (err){
+            			console.log(err);
+            			res.json({err : new Error(err)});
+            		} 
+            		else if (user_exist){
+            			res.json({err : 'User is exist'});
+            			res.status(200).end();
+            		} else{
+            			var user      = new User;
+            			user.username = username;
+            			user.email    = email;
+            			user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+
+                        var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
+                        var new_location = '/img/avatar/';
+
+                        fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
+                        	if (err){
+                        		cosole.log(err);
+                        		res.json({err : new Error(err)});
+                        		res.status(200);
+                        	} else{
+                        		user.avatar = domain + new_location + file_name;
+
+                        		user.save(function(err){
+                        			if (err){
+                        				console.log(err);
+                        			} else{
+                        				process.nextTick(function(){
+                        					res.json({err : null, user : user});
+                        					res.status(200).end();
+                        				})
+                        			}
+
+                        		})
+                        	}
+                        })
+            		}
+            	})   	
+		}
+	   }
+    }
 }
+
+

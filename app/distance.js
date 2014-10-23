@@ -3,6 +3,7 @@
 module.exports = function(location1, location2){
 
 	console.log(location1, location2);
+	location1 = JSON.parse(location1);
 
 	var lat1 = location1.lat;
 	var lng1 = location1.lng;
