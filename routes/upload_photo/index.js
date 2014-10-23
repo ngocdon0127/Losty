@@ -20,7 +20,7 @@ module.exports 			=	function(req, res){
     	} else{
     		var temp_path	=	this.openedFiles[0].path;
     		var extension   =   mime.extension(mime.lookup(this.openedFiles[0].name)).toLowerCase();
-    		res.json({err : null, file_link : temp_path , extension : extension});
+    		res.json({err : null, image_link : temp_path , extension : extension});
     		res.status(200).end();
     	} 
     })

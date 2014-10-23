@@ -49,6 +49,13 @@ var userSchema = mongoose.Schema({
         default      : []
     }],
 
+    Photo             : [{
+        type         : ObjectId,
+        ref          : 'photos',
+        default      : []
+    }],
+
+
     Message          : [{
         type         : ObjectId,
         ref          : 'messages',

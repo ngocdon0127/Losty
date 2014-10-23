@@ -10,6 +10,8 @@ exports.upload_photo		=	require('./upload_photo');
 
 exports.recent				=	require('./recent');
 
+exports.photo				=   require('./photo');
+
 
 
 exports.index = function(req, res){

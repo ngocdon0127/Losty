@@ -6,7 +6,7 @@ var ObjectId     = mongoose.Schema.Types.ObjectId;
 // define the schema for our item model
 var itemSchema = mongoose.Schema({
 
-    image            : {
+    image_link       : {
         type         : String,
         required     : true,
     },
@@ -31,12 +31,12 @@ var itemSchema = mongoose.Schema({
         ref          : 'categores'
     },
 
-    time             : {
-        type         : Date
+    date_lost        : {
+        type         : String
     },
 
-    post_time        : {
-        type         : Date
+    time_post        : {
+        type         : String
     },
 
     type             : {

@@ -54,15 +54,14 @@ module.exports = function(req, res) {
                         var user      = new User;
                         user.username = username;
                         user.email    = email;
-                        user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                        user.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
                         user.avatar   = avatar_default;
                         user.save(function(err){
                             if (err){
                                 console.log(err);
                             } else{
                                 process.nextTick(function(){
-                                    res.json({err : null, user : user});
-                                    res.status(200).end();
+                                    make_token(user, res);
                                 })
                             }
                         });
@@ -90,7 +89,7 @@ module.exports = function(req, res) {
             			var user      = new User;
             			user.username = username;
             			user.email    = email;
-            			user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+            			user.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 
                         var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
                         var new_location = '/img/avatar/';
@@ -108,8 +107,7 @@ module.exports = function(req, res) {
                         				console.log(err);
                         			} else{
                         				process.nextTick(function(){
-                        					res.json({err : null, user : user});
-                        					res.status(200).end();
+                                            make_token(user, res);
                         				})
                         			}
 

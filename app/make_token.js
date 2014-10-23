@@ -1,12 +1,13 @@
 var   bcrypt        = require('bcrypt-nodejs');
 var UserAuthen  =   require('./../models/user_authens');
 
-module.exports  =   function(user_id, res){
-    token = bcrypt.genSaltSync(20);
+module.exports  =   function(user, res){
+    var user_id = user._id;
+    var token       = bcrypt.genSaltSync(20);
 
     UserAuthen.findOne({user_id : user_id}, function(err, user_authen_exist){
         if (user_authen_exist){
-            // update token of user
+            // UPDATE TOKEN OF USER
             user_authen_exist.token = token;
             user_authen_exist.save(function(err){
                 if (err){
@@ -15,13 +16,13 @@ module.exports  =   function(user_id, res){
                     res.status(200).end();
 
                 } else{
-                    res.json({err : null, token : token});
+                    res.json({err : null, user : user, token : token});
                     res.status(200).end();
 
                 }
             })
         } else{
-            // create new user
+            // CREATE NEW USER
             var user_authen = new UserAuthen();
             user_authen.user_id = user_id;
             user_authen.token   = token;
@@ -32,7 +33,7 @@ module.exports  =   function(user_id, res){
                     res.status(200).end();
 
                 } else{
-                    res.json({err : null, token : token});
+                    res.json({err : null, user : user, token : token});
                     res.status(200).end();
 
                 }

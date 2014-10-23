@@ -1,5 +1,5 @@
 var   validate_token	= require('./../../app/validate_token');
-var   Item          	= require('./../../models/items');
+var   Photo          	= require('./../../models/photos');
 var   User          	= require('./../../models/users');
 
 var   url           	= require('url');
@@ -17,31 +17,29 @@ module.exports			=	function(req, res){
 			var data = JSON.parse(req.rawBody);
 
 			var user_id = data.user.user_id;
-			var item_id = data.item_id;
-			console.log('ITEM_ID : ', item_id);
+			var photo_id = data.photo_id;
 
 			// VALIDATE FIELDS
-			if (!validator.isAlphanumeric(user_id) || !validator.isAlphanumeric(item_id)){
+			if (!validator.isAlphanumeric(user_id) || !validator.isAlphanumeric(photo_id)){
 				res.json({err : 'Validate is not success'});
 				res.status(200).end();
 			} else{
 				validate_token(data.user.user_id, data.user.token, function(valid){
 					if (valid){
 						// VALIDATE SUCCESS
-						Item.findOne({_id : item_id}, function(err, item_exist){
+						Photo.findOne({_id : photo_id}, function(err, photo_exist){
 							if (err){
 								res.json({err : new Error(err)});
 								res.status(200).end();
 							} else{
 
-								if (!item_exist){
+								if (!photo_exist){
 									// ITEM IS NOT EXIST
 									res.json({err : 'Item is not exits'});
 									res.status(200).end();
 								} else{
 									// ITEM IS EXIST
-									console.log('authen user_id : ', item_exist.user_id, user_id);
-									if (item_exist.user_id != user_id){
+									if (photo_exist.user_id != user_id){
 										// ITEM KHONG PHAI CUA USER
 										res.json({err : "You don't have enough permission to delete this item"});
 										res.status(200).end();
@@ -50,18 +48,18 @@ module.exports			=	function(req, res){
 
 										// REMOVE ITEM IN INFOR OF USER
 										User.findOne({_id : user_id},function(err, user_exist){
-											user_exist.Item.pull(item_id);
+											user_exist.Photo.pull(photo_exist);
 											user_exist.save(function(err){ });
 										});
 
 										// REMOVE IMAGE OF ITEM
-			                            fs.unlink(  './public' + url.parse(item_exist.image_link).path , function(err){
+			                            fs.unlink(  './public' + url.parse(photo_exist.image_link).path , function(err){
 			                                if (err){
 			                                    console.error(err);
 			                                }
 			                            })
 										// REMOVE ITEM
-										Item.remove({_id : item_id}, function(err, number){
+										Photo.remove({_id : photo_id}, function(err, number){
 											res.json({err : null, number_remove : number});
 											res.status(200).end();
 										});

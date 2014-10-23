@@ -22,17 +22,18 @@ module.exports = function(req, res){
                     console.error(err);
                     res.json({err : new Error(err)});
                     res.status(200).end();
-                }
-
-                if (!user_exist) {
+                } 
+                // VALIDATE EMAIL
+                else if (!user_exist) {
                     res.json('email is incorrect');         //  email is incorrect
                 } else {
+                    // VALIDATE PASSWORD
                     if (!user_exist.validPassword(data.user.password)){
                         res.json({err : new Error('password is incorrect')});  //  password is incorrect
                         res.status(200).end();
                     } else{
                         // login success, make token and res.json token
-                        make_token(user_exist._id, res);
+                        make_token(user_exist, res);
                     }
                 }
             })

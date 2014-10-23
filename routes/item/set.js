@@ -105,7 +105,7 @@ module.exports = function(req, res) {
                                     item.location       = location;
                                     item.reward         = reward;
                                     item.report         = report;
-                                    item.image          = domain + new_location + file_name;
+                                    item.image_link     = domain + new_location + file_name;
                                     item.date_lost      = date_lost;
                                     item.time_post      = (new Date).toJSON();
 
