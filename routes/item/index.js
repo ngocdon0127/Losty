@@ -7,3 +7,6 @@ exports.get     =   require('./get');
 
 // del an item
 exports.del		= 	require('./del');
+
+// search item
+exports.search  =   require('./search');

@@ -5,9 +5,7 @@ var   formidable    = require('formidable'),
 
 var form = new formidable.IncomingForm();
 
-module.exports 			=	function(req, res){
-	console.log('in Upload photo');
-    
+module.exports 			=	function(req, res){ 
 
     // PARSE FORM-DATA
     form.parse(req, function(err, fields, files) { });
@@ -19,8 +17,10 @@ module.exports 			=	function(req, res){
     		res.status(200).end();
     	} else{
     		var temp_path	=	this.openedFiles[0].path;
-    		var extension   =   mime.extension(mime.lookup(this.openedFiles[0].name)).toLowerCase();
-    		res.json({err : null, image_link : temp_path , extension : extension});
+            console.log(temp_path);
+            var extension   =   mime.extension(this.openedFiles[0].type);
+            
+    		res.json({err : null, image_link : temp_path, extension : extension});
     		res.status(200).end();
     	} 
     })

@@ -1,5 +1,6 @@
 var   domain        = require('./../../config/default').domain_default;
 var   avatar_default= require('./../../config/default').avatar_default;
+var   validate_extension = require('./../../app/validate_extension');
 
 var   formidable    = require('formidable'),
       util          = require('util'),
@@ -29,8 +30,8 @@ module.exports = function(req, res) {
 	    var username 		= data.username;
 	    var email    		= data.email;
 	    var password 		= data.password;
-	    var extension   	= data.extension;
 	    var avatar_latest	= '';
+        var extension       = data.extension;
 
         // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
         if (    !validator.isAlphanumeric(username) || 
@@ -69,9 +70,7 @@ module.exports = function(req, res) {
                 })
             }
 
-        else if( extension != 'png'  && extension != 'jpg' && extension != 'gif' && 
-                     extension != 'jpeg' && extension != 'bmp' && 
-                     extension == mime.extension(mime.lookup(image_link)) ){
+        else if( !validate_extension(avatar_link, extension) ){
 
                         res.json({err : 'Image is incorrect'});
                         res.status(200).end();
@@ -90,7 +89,6 @@ module.exports = function(req, res) {
             			user.username = username;
             			user.email    = email;
             			user.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-
                         var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
                         var new_location = '/img/avatar/';
 

@@ -3,6 +3,7 @@ var   domain        = require('./../../config/default').domain_default;
 var   url           = require('url');
 var   mime          = require('mime');
 var   validator     = require('validator');
+var   validate_extension = require('./../../app/validate_extension');
 
 var   formidable    = require('formidable'),
       util          = require('util'),
@@ -68,10 +69,7 @@ module.exports = function(req, res) {
                 res.json({err : 'Image is not exist'});
                 res.status(200).end();
             }
-            else if( extension != 'png'  && extension != 'jpg' && extension != 'gif' && 
-                     extension != 'jpeg' && extension != 'bmp' && 
-                     extension == mime.extension(mime.lookup(image_link)) ){
-
+            else if( !validate_extension(image_link, extension)) {
                         res.json({err : 'Image is incorrect'});
                         res.status(200).end();
             } 

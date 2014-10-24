@@ -21,7 +21,7 @@ module.exports 			=	function(req, res){
 
 		var name  	   = data.name;
 		var image_link = data.image_link;
-		var extension  = data.extension;
+        var extension  = data.extension; 
 
 		var user_id	   = data.user.user_id;
 		var token      = data.user.token;
