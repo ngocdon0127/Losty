@@ -1,10 +1,17 @@
 // ==================================================SETUP TOOL NEED===================================
+
 var express         =   require('express');
+
 var app             =   express();
+
 var ip              =   'localhost';
+
 var port            =   process.env.PORT || 8080;
+
 var mongoose        =   require('mongoose');
+
 var Router_raw      =   express.Router();
+
 var Router_formdata =   express.Router();
 
 var routes   		= require('./routes');
