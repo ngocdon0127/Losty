@@ -30,3 +30,16 @@ Paris
 
 Nam Phi
 	-29.191440, 23.596053
+
+
+
+
+{
+    "err": null,
+    "user": {
+        "email": "Cuongvu93@gmail.com",
+        "username": "CuongVu",
+        "id": "544a8c3bc146d14e7d2d7616",
+        "avatar": "http://104.131.69.233:3000/img/avatar/1414171876166.png"
+    },
+    "token": "$2a$20$/O7h25GmT42/1humgRv

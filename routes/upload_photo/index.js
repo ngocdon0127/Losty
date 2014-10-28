@@ -8,6 +8,10 @@ var form = new formidable.IncomingForm();
 module.exports 			=	function(req, res){ 
 
     // PARSE FORM-DATA
+    var form = new formidable.IncomingForm();
+
+
+    console.log('bat dau vao module upload photo');
     form.parse(req, function(err, fields, files) { });
 
 
@@ -18,11 +22,11 @@ module.exports 			=	function(req, res){
     	} else{
     		var temp_path	=	this.openedFiles[0].path;
             console.log(temp_path);
-            var extension   =   mime.extension(this.openedFiles[0].type);
+            var extension   =   mime.extension(this.openedFiles[0].type).toLowerCase();
             
     		res.json({err : null, image_link : temp_path, extension : extension});
     		res.status(200).end();
+            return 1;
     	} 
     })
-
 }	

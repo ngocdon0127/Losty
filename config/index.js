@@ -6,10 +6,14 @@ var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var express      = require('express');
 
+var favicon = require('serve-favicon');
+
+
 
 
 module.exports = function(app, Router_raw, Router_formdata){
     console.log('in config');
+    
     app.use(morgan('dev')); // log every request to the console
     app.use(cookieParser()); // read cookies (needed for auth)
     app.use(bodyParser()); // get information from html forms
@@ -17,6 +21,7 @@ module.exports = function(app, Router_raw, Router_formdata){
     app.set('view engine', 'ejs');
     app.set('views', __dirname + './../views');
     app.use(express.static(__dirname + './../public'));
+    // app.use(favicon(__dirname + '/public/favicon.ico'));
 
     Router_raw.use(function(req, res, next) {
       console.log('config rawBody');

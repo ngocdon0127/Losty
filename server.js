@@ -7,6 +7,8 @@ var mongoose        =   require('mongoose');
 var Router_raw      =   express.Router();
 var Router_formdata =   express.Router();
 
+var favicon = require('serve-favicon');
+
 var routes   		= require('./routes');
 
 var db_url   		= require('./config/default').database;
@@ -19,10 +21,17 @@ require('./config/index.js')(app, Router_raw, Router_formdata);  //  all config
 
 // ================================================= API ============================================
 
-// REGISTER, LOGIN, LOGOUT =================
+// REGISTER, LOGIN, LOGOUT LOCAL 
 Router_raw.post('/login', 		  		routes.login.local);          	// api login with local account
 Router_raw.post('/register', 			routes.register.local);       	// api register with local account
 Router_raw.post('/logout', 		  		routes.logout);					// api logout 
+
+
+// REGISTER, LOGIN, LOGOUT FACEBOOK
+Router_raw.post('/login_fb',            routes.login.facebook);         // api login with facebook
+
+// REGISTER, LOGIN, LOGOUT TWITTER
+Router_raw.post('/login_twitter',		routes.login.twitter);			// api login with twitter
 
 // UPLOAD PHOTO
 Router_formdata.post('/upload_photo',	routes.upload_photo);			// api upload photo, return link '/tmp'

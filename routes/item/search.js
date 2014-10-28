@@ -1,4 +1,6 @@
 var Item                =   require('./../../models/items');
+var Category            =   require('./../../models/categores');
+
 var validator           =   require('validator');
 
 module.exports 			=	function(req, res){
@@ -21,10 +23,19 @@ module.exports 			=	function(req, res){
 				var result = [];
 
 				items.forEach(function(item){
-					if ( item.type == type && 
-					   (item.description.indexOf(keyword) != -1 || item.title.indexOf(keyword) != -1 )){
-						    result.push(item);
-					};
+
+					var description = item.description.toLowerCase();
+					var title       = item.title.toLowerCase();
+
+					Category.findOne({_id : item.category_id}, function(err, category_exist){
+						var category = category_exist.name.toLowerCase();
+
+						if (item.type == type && 
+						   (category.indexOf(keyword) != -1 || description.indexOf(keyword) != -1 
+						   	|| title.indexOf(keyword) != -1 )){
+							    result.push(item);
+						};
+					})
 				})
 
 				process.nextTick(function(){

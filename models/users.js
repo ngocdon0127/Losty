@@ -13,12 +13,12 @@ var userSchema = mongoose.Schema({
 
     username         : {
         type         : String,
-        required     : true,
+        required     : true
     },
 
     email            : {
         type         : String,
-        required     : true
+        default      : ''
     },
 
     permission       : {
@@ -31,13 +31,31 @@ var userSchema = mongoose.Schema({
 
     local            : {
         password     : String,
+        default      : {
+            password : ''
+        }
+
     },
+    
     facebook         : {
         id           : String,
+        token        : String,
+        default      : {
+            id       : '',
+            token    : ''
+        }
     },
+
     twitter          : {
         id           : String,
+        token_key    : String,
+        token_secret : String,
+        default      : {
+            id       : '',
+            token    : ''
+        }
     },
+
     location         : {
         lat          : Number,
         lng          : Number
@@ -69,8 +87,15 @@ var userSchema = mongoose.Schema({
     }],
 
     Friend           : [{   
-        type         : ObjectId,
-        ref          : 'user',
+
+        id           :{
+            type         : ObjectId,
+            ref          : 'user'
+        },
+
+        avatar       : String,
+        username     : String,
+
         default      : []
     }],
 });
