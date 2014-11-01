@@ -1,4 +1,4 @@
-var User                = require('./../models/users');
+	var User                = require('./../models/users');
 var async               = require('async');
 
 module.exports   		=	function(user_id, friends){
@@ -9,18 +9,14 @@ module.exports   		=	function(user_id, friends){
 			console.log(err);
 		}
 		else {
-			console.log('Have exist user : ', user);
-
 			async.waterfall([
 				function(next){
 					friends.forEach(function(friend){
 						User.findOne({'twitter.id' : friend.id }, function(err, user_exist){
 							if (err){
-								console.log(err);
+								return 1;
 							} else{
-								console.log('Friend is exist : ', user_exist);
 								if (user_exist){
-
 									user.Friend.push({id 	   : user_exist._id, 
 													  avatar   : user_exist.avatar, 
 													  username : user_exist.username
@@ -29,8 +25,12 @@ module.exports   		=	function(user_id, friends){
 									user_exist.save(function(err){
 										if (err){
 											console.log(err);
+											return 1;
+										} else{
+											console.log(err);
+											next(null);
 										}
-										next(null);
+										
 									})
 								}
 							}
@@ -41,6 +41,8 @@ module.exports   		=	function(user_id, friends){
 					user.save(function(err){
 						if (err){
 							console.log(err);
+							return 1;
+
 						};
 					})
 				}	

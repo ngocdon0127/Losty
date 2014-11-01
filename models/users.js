@@ -30,29 +30,35 @@ var userSchema = mongoose.Schema({
     country          : String,
 
     local            : {
-        password     : String,
-        default      : {
-            password : ''
+        password     : {
+            type     : String,
+            default  : ''
         }
-
     },
     
     facebook         : {
-        id           : String,
-        token        : String,
-        default      : {
-            id       : '',
-            token    : ''
+        id           : {
+            type     : String,
+            default  : ''
+        },
+        token        : {
+            type     : String,
+            default  : ''
         }
     },
 
     twitter          : {
-        id           : String,
-        token_key    : String,
-        token_secret : String,
-        default      : {
-            id       : '',
-            token    : ''
+        id           : {
+            type     : String,
+            default  : ''
+        },
+        token_key        : {
+            type     : String,
+            default  : ''
+        },
+        token_secret        : {
+            type     : String,
+            default  : ''
         }
     },
 
@@ -80,11 +86,11 @@ var userSchema = mongoose.Schema({
         default      : []
     }],
 
-    Notification     : [{
-        type         : ObjectId,
-        ref          : 'notifications',
-        default      : []
-    }],
+    // Notification     : [{
+    //     type         : ObjectId,
+    //     ref          : 'notifications',
+    //     default      : []
+    // }],
 
     Friend           : [{   
 
@@ -107,6 +113,7 @@ userSchema.methods.generateHash = function(password) {
 
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
+    if (this.local.password =='') return 0;         // facebook/twitter account not have password
     return bcrypt.compareSync(password, this.local.password);
 };
 

@@ -4,47 +4,61 @@ var Category            =   require('./../../models/categores');
 var validator           =   require('validator');
 
 module.exports 			=	function(req, res){
-	if (!req.rawBody){
-		res.json({err : 'Request is incorrect'});
-		res.status(200).end();
-	} else{
+	try{
 		var data = JSON.parse(req.rawBody);
 
-		// data : {"keyword", "type"}
+		// data : {"keyword", "type", "start", "limit"}
 
 		var keyword = data.keyword;
 		var type    = data.type;
+		var start   = data.start;
+		var limit   = data.limit;
+	}
+	catch(e){
+		res.json({error_code : 201});		// Input is valid
+		res.status(200).end();
+	}
+	finally{
 
 		if (!validator.isNumeric(type)){
-			res.json({err : 'Validate is not success'});
+			res.json({error_code : 201});		// Input is valid
 			res.status(200);
 		} else {
 			Item.find({} , function(err, items){
+				if (err){
+					res.json({error_code : 401});	//Database cannot find
+					res.status(200).end();
+				}
 				var result = [];
 
 				items.forEach(function(item){
 
-					var description = item.description.toLowerCase();
-					var title       = item.title.toLowerCase();
+					if (item.description){
+						var description = item.description.toLowerCase();
+					} else var description = '';
 
-					Category.findOne({_id : item.category_id}, function(err, category_exist){
-						var category = category_exist.name.toLowerCase();
+					if (item.title){
+						var title = item.title.toLowerCase();
+					} else var title = '';
 
-						if (item.type == type && 
-						   (category.indexOf(keyword) != -1 || description.indexOf(keyword) != -1 
-						   	|| title.indexOf(keyword) != -1 )){
-							    result.push(item);
-						};
-					})
+					if (item.category){
+						var category = item.category.toLowerCase();
+					} else var category = '';
+
+					if (item.type == type && 
+					   (category.indexOf(keyword) != -1 || description.indexOf(keyword) != -1 
+					   	|| title.indexOf(keyword) != -1 )){
+					    result.push(item);
+					};	
 				})
 
 				process.nextTick(function(){
-					res.json({err : null, items : result});
+					res.json({error_code : 0, items : result.slice(start, start + limit)});		
+					
 					res.status(200).end();
 				})
 				
 			})
 		}
-
 	}
 }

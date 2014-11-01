@@ -21,7 +21,7 @@ var User   					=	require('./../../models/users');
 
 module.exports  	=	function(req, res){
 	if (!req.rawBody){
-		res.json({err : 'request is incorrect'});
+		res.json({error_code : 201});						//	Input is invalid
 		res.status(200).end();
 	} else{
 		async.waterfall([
@@ -60,54 +60,58 @@ module.exports  	=	function(req, res){
 				});
 			}],
 			function(err){
-				console.log('FRIEND :' , friends);
-				console.log('PROFILE :'  ,profile);
+				if (!friends || !profile){
+					res.json({error_code : 101});			// Access_token is incorrect
+					res.status(200).end();
+				} else{
+					console.log('FRIEND :' , friends);
+					console.log('PROFILE :'  ,profile);
 
-				// LOGIN OR REGISTER
-				User.findOne({'twitter.id' : profile.id}, function(err, user_exist){
-					console.log('User is exist : ', user_exist);
-					if (err){
-						console.log(err);
-						res.json({err : 'Request is incorrect'});
-						res.status(200).end();
-					} else{
-						if (user_exist){
-
-							// LOGIN WITH TWITTER ACCOUNT
-
-							user_exist.twitter.token_key = access_token_key;
-							user_exist.twitter.token_secret = access_token_secret;
-
-							make_token(user_exist, res);
+					// LOGIN OR REGISTER
+					User.findOne({'twitter.id' : profile.id}, function(err, user_exist){
+						if (err){
+							res.json({error_code : 401});		//	Database cannot find
+							res.status(200).end();
 						} else{
-							// MAKE NEW ACCOUNT
+							if (user_exist){
 
-							var user = new User;
-							console.log('screen_name : ', typeof(profile));
-							user.username = profile.screen_name;
+								// LOGIN WITH TWITTER ACCOUNT
 
-							// IMAGE NORMAL
-							user.avatar   = profile.profile_image_url;
+								user_exist.twitter.token_key = access_token_key;
+								user_exist.twitter.token_secret = access_token_secret;
 
-							user.twitter.id = profile.id;
+								make_token(user_exist, res);
+							} else{
+								// MAKE NEW ACCOUNT
 
-							user.twitter.token_key = access_token_key;
-							user.twitter.token_secret = access_token_secret;
+								var user = new User;
+								user.username = profile.screen_name;
 
-							user.save(function(err){
-								if (err){
-									console.log('Hava error : ', err);
-								} else{
-									process.nextTick(function(){
-										make_token(user, res);
-										add_friend_twitter(user._id, FRIENDiends);
-									});
-								}
+								// IMAGE NORMAL
+								user.avatar   = profile.profile_image_url;
 
-							});
+								user.twitter.id = profile.id;
+
+								user.twitter.token_key = access_token_key;
+								user.twitter.token_secret = access_token_secret;
+
+								user.save(function(err){
+									if (err){
+										res.json({error_code : 402});		//	Database cannot save
+										res.status(200).end();
+									} else{
+										process.nextTick(function(){
+											make_token(user, res);
+											console.log('add friends');
+											add_friend_twitter(user._id, friends);
+										});
+									}
+
+								});
+							}
 						}
-					}
-				})
+					})
+				}
 			});	
 	}
 }

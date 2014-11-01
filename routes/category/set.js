@@ -6,74 +6,87 @@ var   User              = require('./../../models/users');
 module.exports = function(req, res) {
     // data : {"user" : {"user_id", "token"}, "category_id", name"}
 
-    if (!validator.isJSON(req.rawBody)){
-        res.json({err : 'Request is incorrect'})
-        res.status(200).end();
-    } else{
+    try{
         var data = JSON.parse(req.rawBody);
 
         var user_id = data.user.user_id;
         var token   = data.user.token;
         var category_id = data.category_id;
         var name = data.name;
-        if (!validator.isAlphanumeric(user_id) || (category_id != "" && !validator.isAlphanumeric(category_id))) {
+        var create = data.create;
 
-            res.json({err : 'Validate fiels is not success'});
-            res.status(200).end();
+    }
+    catch(e){
+        res.json({error_code : 201});               // Input is invalid
+        res.status(200).end();
+
+    }
+    finally{
+        if (!validator.isAlphanumeric(user_id) || (create == 0 && 
+            !validator.isAlphanumeric(category_id))) {
+                res.json({error_code : 201});               // Input is invalid
+                res.status(200).end();
         } else{
             // authen user
             validate_token(user_id, token, function(valid){
                 if (!valid){
-                    res.json({err : 'User is incorrect'});
+                    res.json({error_code : 100});           // Authenticate is incorrect
                     res.status(200).end();     
                 } else{
                     User.findOne({_id : user_id}, function(err, user_exist){
+                        if (err){
+                            res.json({error_code : 401});   //  Database cannot find
+                            res.status(200).end();
+                        } else
                         if (user_exist.permission){ 
                             // USER IS ADMIN
-                            if (category_id == ''){
+                            if (create == 1){
                                 // MAKE NEW CATEGORY
                                 category = new Category();    
                                 category.name = name;
                                 category.save(function(err){
                                     if (err){
-                                        console.err(err);
-                                        res.json({err : new Error('Can not set category')});
+                                        res.json({error_code : 402});
                                         res.status(200).end();
                                     };
                                     process.nextTick(function(){
-                                        res.json({err : null, category : category});
+                                        res.json({error_code : 0, category : category});
                                         res.status(200).end();
                                     })
                                 })
                             } else{
                                 // UPDATE CATEGORY
                                 Category.findOne({_id : category_id}, function(err, category_exist){
-                                    category_exist.name = name;
-                                    category_exist.save(function(err){
-                                        if (err){
-                                            console.err(err);
-                                            res.json({err : new Error('Can not set category')});
+                                    if (err){
+                                        res.json({error_code : 401});
+                                        res.status(200).end();
+                                    } else{
+                                        if (category_exist){
+                                            category_exist.name = name;
+                                            category_exist.save(function(err){
+                                                if (err){
+                                                    res.json({error_code : 402});
+                                                    res.status(200).end();
+                                                };
+                                                process.nextTick(function(){
+                                                    res.json({error_code : 0, category : category_exist});
+                                                    res.status(200).end();
+                                                })
+                                            })
+                                        } else{
+                                            res.json({error_code : 307});       // Category is not exist
                                             res.status(200).end();
-                                        };
-                                        process.nextTick(function(){
-                                            res.json({err : null, category : category_exist});
-                                            res.status(200).end();
-                                        })
-                                    })
+                                        }
+                                    }
                                 })
                             }                                            
                         } else{     // USER IS NOT ADMIN
-                            res.json({err : "You don't have enough permission to create a category"});
+                            res.json({error_code : 500});       // Not have enough permission
                             res.status(200).end();
                         }
                     })
                 }
-
             })
         }
-
-
     }
-
-    
 }

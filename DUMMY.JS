@@ -43,3 +43,4 @@ Nam Phi
         "avatar": "http://104.131.69.233:3000/img/avatar/1414171876166.png"
     },
     "token": "$2a$20$/O7h25GmT42/1humgRv
+}

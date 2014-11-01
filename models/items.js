@@ -31,6 +31,10 @@ var itemSchema = mongoose.Schema({
         ref          : 'categores'
     },
 
+    category         : {
+        type         : String
+    },
+
     date_lost        : {
         type         : String
     },

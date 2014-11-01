@@ -14,29 +14,39 @@ var   make_token    = require('./../../app/make_token');
 
 var   User          = require('./../../models/users');
 
+function validate_username(username){
+    var regex = /^([a-zA-Z])+([a-zA-Z0-9\_])/;
+    return regex.test(username);
+
+}
+
 module.exports = function(req, res) {
 
-	if (!req.rawBody){
-		res.json({err : 'Request is incorrect'});
-		res.status(200).end();
-	} else{
+    try{
+        var data = JSON.parse(req.rawBody);
 
-		var data = JSON.parse(req.rawBody);
+        // data : {"username" : "cuongvc93", "email" : "cuongvc93@gmail.com", 
+        // "password" : "123456", "avatar_link" : "/tmp/i1b3r8bfdsbfk", "extension" : "jpeg"}
 
-		// data : {"username" : "cuongvc93", "email" : "cuongvc93@gmail.com", 
-		// "password" : "123456", "avatar_link" : "/tmp/i1b3r8bfdsbfk", "extension" : "jpeg"}
-
-		var avatar_link 	= data.avatar_link;
-	    var username 		= data.username;
-	    var email    		= data.email;
-	    var password 		= data.password;
-	    var avatar_latest	= '';
+        var avatar_link     = data.avatar_link;           
+        var username        = data.username;
+        var email           = data.email;
+        var password        = data.password;
+        var avatar_latest   = '';
         var extension       = data.extension;
 
+    }
+    catch(e){
+        res.json({error_code : 201});                     //  Input is invalid
+        res.status(200).end();
+
+    }
+    finally{
+
         // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
-        if (    !validator.isAlphanumeric(username) || 
-                    !validator.isEmail(email)){
-                        res.json({err : 'Validate is not success'});
+        if ( !validate_username(username) || 
+             !validator.isEmail(email)){
+                        res.json({error_code : 201});       //   Input is invalid
                         res.status(200).end();
         }
         else {
@@ -45,10 +55,11 @@ module.exports = function(req, res) {
                 User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
                     if (err){
                         console.log(err);
-                        res.json({err : new Error(err)});
+                        res.json({error_code : 401});       //  Databse cannot find
+                        res.status(200).end();
                     } 
                     else if (user_exist){
-                        res.json({err : 'User is exist'});
+                        res.json({error_code : 303});       //  Email is really exist
                         res.status(200).end();
                     } else{
 
@@ -60,6 +71,8 @@ module.exports = function(req, res) {
                         user.save(function(err){
                             if (err){
                                 console.log(err);
+                                res.json({error_code : 402});// Database cannot save
+                                res.status(200).end();
                             } else{
                                 process.nextTick(function(){
                                     make_token(user, res);
@@ -72,17 +85,17 @@ module.exports = function(req, res) {
 
         else if( !validate_extension(avatar_link, extension) ){
 
-                        res.json({err : 'Image is incorrect'});
+                        res.json({error_code : 203});
                         res.status(200).end();
         } 
         else {
             	User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
             		if (err){
-            			console.log(err);
-            			res.json({err : new Error(err)});
+            			res.json({error_code : 401});
+                        res.status(200).end();
             		} 
             		else if (user_exist){
-            			res.json({err : 'User is exist'});
+            			res.json({error_code : 303});
             			res.status(200).end();
             		} else{
             			var user      = new User;
@@ -94,15 +107,15 @@ module.exports = function(req, res) {
 
                         fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
                         	if (err){
-                        		cosole.log(err);
-                        		res.json({err : new Error(err)});
-                        		res.status(200);
+                        		res.json({error_code : 202});
+                        		res.status(200).end();
                         	} else{
                         		user.avatar = domain + new_location + file_name;
 
                         		user.save(function(err){
                         			if (err){
-                        				console.log(err);
+                        				res.json({error_code : 402});
+                                        res.status(200).end();
                         			} else{
                         				process.nextTick(function(){
                                             make_token(user, res);

@@ -3,15 +3,13 @@ var async               = require('async');
 
 module.exports   		=	function(user_id, friends){
 
-	console.log('Add friend');
-
 	User.findOne({_id : user_id}, function(err, user){
 		if (err || !user){
-			console.log(err);
+			res.json({error_code : 401});
+	    	res.status(200).end();			//	database cannot find
+
 		}
 		else {
-			console.log('Have exist user : ', user);
-
 			async.waterfall([
 				function(next){
 					friends.forEach(function(friend){
@@ -34,7 +32,8 @@ module.exports   		=	function(user_id, friends){
 
 									user_exist.save(function(err){
 										if (err){
-											console.log(err);
+											res.json({error_code : 402});
+	    									res.status(200).end();			//	database cannot save
 										}
 										next(null);
 									})
@@ -46,7 +45,9 @@ module.exports   		=	function(user_id, friends){
 				function(next){
 					user.save(function(err){
 						if (err){
-							console.log(err);
+							res.json({error_code : 402});
+	    					res.status(200).end();			//	database cannot save
+
 						};
 					})
 				}	

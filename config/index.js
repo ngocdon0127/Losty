@@ -24,7 +24,7 @@ module.exports = function(app, Router_raw, Router_formdata){
     // app.use(favicon(__dirname + '/public/favicon.ico'));
 
     Router_raw.use(function(req, res, next) {
-      console.log('config rawBody');
+
       req.rawBody = '';
       req.setEncoding('utf8');
 
@@ -36,20 +36,6 @@ module.exports = function(app, Router_raw, Router_formdata){
         next();
       });
     });
-
-    // app.use(, function(req, res, next) {
-    //   console.log('config rawBody');
-    //   req.rawBody = '';
-    //   req.setEncoding('utf8');
-
-    //   req.on('data', function(chunk) {
-    //     req.rawBody += chunk;
-    //   });
-
-    //   req.on('end', function() {
-    //     next();
-    //   });
-    // });
 
     app.use('/api', Router_formdata);
     app.use('/api', Router_raw);

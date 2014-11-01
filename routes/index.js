@@ -14,6 +14,8 @@ exports.recent				=	require('./recent');
 
 exports.photo				=   require('./photo');
 
+exports.friend				=   require('./friend');
+
 
 exports.index = function(req, res){
     res.json('get /');

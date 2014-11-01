@@ -15,6 +15,7 @@ var   bcrypt        = require('bcrypt-nodejs');
 
 var   Item          = require('./../../models/items');
 var   User          = require('./../../models/users');
+var   Categores     = require('./../../models/categores');
 
 
 function validatorLocation(location_obj){
@@ -26,22 +27,38 @@ function validatorLocation(location_obj){
 
 module.exports = function(req, res) {
 
-    if (!req.rawBody){
-        res.json({err : 'Request is incorrect'});
-        res.status(200).end();
-    } else{
+    try{
 
-        // data : {user : {user_id, token}, category_id, image_link, extension, title, description, type, 
-        // location, date_lost, reward, report}
+        // data : {user : {user_id, token}, category_id, create, item_id, image_link, extension, 
+        /// title, description, type, location, date_lost, reward, report}
 
         // REMEMBER TO CREATE TIME_POST
 
         var data = JSON.parse(req.rawBody);
-
-        var item_id     = data.item_id;
+        
         var token       = data.user.token;
         var user_id     = data.user.user_id;
+        var create      = data.create;
+
+        var item_id     = data.item_id;
         var category_id = data.category_id;
+        var category;
+        Categores.findOne({_id : category_id}, function(err, category_exist){
+            if (err){
+                res.json({error_code : 307});
+                res.status(200);
+                return 1;
+            }
+            else if(category_exist){
+                category = category_exist.name;    
+            } else{
+                res.json({error_code : 307});
+                res.status(200);
+                return 1;
+
+            }
+        })  
+
         var title       = data.title;
         var description = data.description;
         var type        = data.type;
@@ -52,150 +69,145 @@ module.exports = function(req, res) {
         var reward      = data.reward;
         var report      = data.report;
 
-
-        if (image_link){
-
+    }
+    catch(e){
+        res.json({error_code : 201});               // Input is invalid
+        res.status(200).end();
+    }
+    finally{
             // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
-
             if (    !validator.isAlphanumeric(user_id) || 
                     (item_id != "" && !validator.isAlphanumeric(item_id) ) ||     
                     !validator.isAlphanumeric(category_id) || 
                     !validatorLocation(location)){
 
-                        res.json({err : 'Validate is not success'});
-                        res.status(200).end();
-            }
-            else if(!fs.existsSync(image_link)){
-                res.json({err : 'Image is not exist'});
-                res.status(200).end();
-            }
-            else if( !validate_extension(image_link, extension)) {
-                        res.json({err : 'Image is incorrect'});
+                        res.json({error_code : 201});       // Input is invalid
                         res.status(200).end();
             } 
-            else {
+            else if(create == 1 && (image_link == "" || !fs.existsSync(image_link)) ){
+                res.json({error_code : 202});               // image link is not exist
+                res.status(200).end();
+            }
+            else if(create == 1 &&  (image_link == "" || !validate_extension(image_link, extension))) {
+                res.json({error_code : 203});               // extension of file is incorrect
+                res.status(200).end();
+                return 1;
+            }
+            else{
                 // =================== VALIDATE ALL IS SUCCESS ==================================
                 // make file_name by RANDOM NUMBER + TIME + EXTENSION
-                var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
                 validate_token(user_id, token, function(valid){
                     if (!valid){
-                        res.json({err : 'user is fake'});
+                        res.json({error_code : 100});       // Authenticate is incorrect
                         res.status(200).end();
-                    } else{
-                        var new_location = '/img/item/';
+                    } else {
+                        if (create == 1){         // ======== MAKE NEW ITEM ================
+                            var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
+                                + '.' + extension;
 
-                        // ======== MAKE NEW ITEM ================
-                        // SAVE IMAGE
-                        fs.rename(image_link, './public' + new_location + file_name, function(err) {
-                            if (err) {
-                                console.error(err);
-                                res.json({err : new Error(err)});
-                                res.status(200).end();
-                            } else {
-                                if (item_id === ''){        // MAKE NEW ITEM
+                            var new_location = '/img/item/';
+                            // SAVE IMAGE
+                            fs.rename(image_link, './public' + new_location + file_name, function(err) {
+                                if (err) {
+                                    res.json({error_code : 306});       // Image is not exist
+                                    res.status(200).end();
+                                } else {
+                                        var item            = new Item();
+                                        item.user_id        = user_id;
+                                        item.category_id    = category_id;
+                                        item.category       = category;
+                                        item.title          = title;
+                                        item.description    = description;
+                                        item.type           = type;
+                                        item.location       = location;
+                                        item.reward         = reward;
+                                        item.report         = report;
+                                        item.image_link     = domain + new_location + file_name;
+                                        item.date_lost      = date_lost;
+                                        item.time_post      = (new Date).toJSON();
 
-                                    var item            = new Item();
-                                    item.user_id        = user_id;
-                                    item.category_id    = category_id;
-                                    item.title          = title;
-                                    item.description    = description;
-                                    item.type           = type;
-                                    item.location       = location;
-                                    item.reward         = reward;
-                                    item.report         = report;
-                                    item.image_link     = domain + new_location + file_name;
-                                    item.date_lost      = date_lost;
-                                    item.time_post      = (new Date).toJSON();
+                                        // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
+                                        User.findOne({_id : user_id}, function(err, user_exits){
+                                            if (err){
+                                                res.json({error_code : 401});   // database cannot find
+                                                res.status(200).end();
+                                            } else{
+                                                if (user_exits){
 
-                                    // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
-                                    User.findOne({_id : user_id}, function(err, user_exits){
-                                        if (err){
-                                            console.error(err);
-                                        } else{
-                                            if (user_exits){
-
-                                                // SAVE ITEM
-                                                item.user.avatar   = user_exits.avatar;
-                                                item.user.username = user_exits.username;
-                                                item.user.city     = user_exits.city;
-                                                item.user.country  = user_exits.country;
-                                                                    // SAVE ITEM
-                                                item.save(function(err){
-                                                    if (err){
-                                                        console.error(err);
-                                                        res.json({err : new Error(err)});
-                                                        res.status(200).end();
-                                                    }
-                                                    else {
-                                                        process.nextTick(function(){
-                                                            // SAVE ITEM IN INFOR USER
-                                                            user_exits.Item.push(item._id);
-                                                            user_exits.save(function(err){
-                                                                if (err){
-                                                                    console.err;
-                                                                }
-                                                            })
-                                                            res.json({err : null, item : item});
-                                                            res.status(200).end();   
-                                                        })   
-                                                    }
-                                                })
+                                                    // SAVE ITEM
+                                                    item.user.avatar   = user_exits.avatar;
+                                                    item.user.username = user_exits.username;
+                                                    item.user.city     = user_exits.city;
+                                                    item.user.country  = user_exits.country;
+                                                                        // SAVE ITEM
+                                                    item.save(function(err){
+                                                        if (err){
+                                                            res.json({error_code : 402});
+                                                            res.status(200).end();
+                                                        }
+                                                        else {
+                                                            process.nextTick(function(){
+                                                                // SAVE ITEM IN INFOR USER
+                                                                user_exits.Item.push(item._id);
+                                                                user_exits.save(function(err){
+                                                                    if (err){
+                                                                        res.json({error_code : 402});
+                                                                        res.status(200).end();
+                                                                    }
+                                                                })
+                                                                res.json({error_code : 0, item : item});
+                                                                res.status(200).end();   
+                                                            })   
+                                                        }
+                                                    })
+                                                }
                                             }
-                                        }
-                                    })
-                                } else {                     // UPDATE ITEM
-                                    Item.findOne({_id : item_id}, function(err, item_exist){
+                                        })
+                                }
+                            })
+                        } else{         // UPDATE ITEM
+                            console.log('Update item');
+                            Item.findOne({_id : item_id}, function(err, item_exist){
                                         if (item_exist && item_exist.user_id == user_id){
 
-                                            // REMOVE IMAGE OF OLD ITEM
-
-                                            fs.unlink(  './public' + url.parse(item_exist.image).path , function(err){
-                                                if (err){
-                                                    console.error(err);
-                                                }
-                                            })
-
                                             // UPDATE INFOR
+                                            // cannot update image_link
                                             item_exist.user_id        = user_id;
-                                            item_exist.category_id    = category;
+                                            item_exist.category_id    = category_id;
+                                            item.category       = category;
                                             item_exist.title          = title;
                                             item_exist.description    = description;
                                             item_exist.type           = type;
                                             item_exist.location       = location;
                                             item_exist.reward         = reward;
                                             item_exist.report         = report;
-                                            item_exist.image          = domain + new_location + file_name;
                                             item_exist.date_lost      = date_lost;
                                             item_exist.post_time      = (new Date).toJSON();
                                             // USER INFO IS NOT UPDATE BECAUSE USER IS NOT CHANGE
 
                                             item_exist.save(function(err){
                                                 if (err){
-                                                    console.error(err);
-                                                    res.json({err : new Error(err)});
-                                                    res.status(200).end();
+                                                    res.json({error_code : 402});       // database
+                                                    res.status(200).end();              // cannot save
                                                 }
                                                 else {
                                                     process.nextTick(function(){
-                                                        res.json({err : null, item : item_exist});
+                                                        res.json({error_code : 0, item : item_exist});
                                                         res.status(200).end();   
                                                     })   
                                                 }
                                             })
                                         } else{
-                                            res.json({err: 'Item is not exits or user is not have this item'});
+                                            res.json({error_code: 305});                // Item is not exist
                                             res.status(200).end();
                                         }
-                                    });
-                                };
-                            }
-
-                        })
+                            })
+                        }
                     }
                 })
             }
-        }
     }
 }
-                            
-                            
+
+
+

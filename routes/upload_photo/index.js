@@ -8,25 +8,41 @@ var form = new formidable.IncomingForm();
 module.exports 			=	function(req, res){ 
 
     // PARSE FORM-DATA
-    var form = new formidable.IncomingForm();
+    try{
+        var form = new formidable.IncomingForm();
 
+        form.parse(req, function(err, fields, files) { 
+            if (err){
+                res.json({error_code : 201});                       //  Input is invalid
+                res.status(200).end();
+            }
+        });
 
-    console.log('bat dau vao module upload photo');
-    form.parse(req, function(err, fields, files) { });
+        form.on('end', function(fields, files){
+        	if (!this.openedFiles[0]){
+                res.json({error_code : 201});                       //  Input is invalid
+                res.status(200).end();
+        	} else{
+        		var temp_path	=	this.openedFiles[0].path;
+                if (!mime.extension(this.openedFiles[0].type)){
+                    res.json({error_code : 201});                       //  Input is invalid
+                    res.status(200).end();
+                }   
+                else{
+                    var extension   =   mime.extension(this.openedFiles[0].type).toLowerCase();
+                    
+            		res.json({error_code : 0, image_link : temp_path, extension : extension});
+            		res.status(200).end();
+                }
+                return 1;
+        	} 
+        })
+    }
+    catch(e){
+        res.json({error_code : 201});                       //  Input is invalid
+        res.status(200).end();
+    }
+    finally{
 
-
-    form.on('end', function(fields, files){
-    	if (!this.openedFiles[0]){
-    		res.json({err : 'Have not image'});
-    		res.status(200).end();
-    	} else{
-    		var temp_path	=	this.openedFiles[0].path;
-            console.log(temp_path);
-            var extension   =   mime.extension(this.openedFiles[0].type).toLowerCase();
-            
-    		res.json({err : null, image_link : temp_path, extension : extension});
-    		res.status(200).end();
-            return 1;
-    	} 
-    })
+    }
 }	
