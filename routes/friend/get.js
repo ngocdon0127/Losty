@@ -25,7 +25,7 @@ module.exports			=	function(req, res){
 						res.json({error_code : 401});	//  Database cannot find
 						res.status(200).end();
 					} else if (user_exist){
-						res.json({error_code : 0, friends : user_exist.friend});
+						res.json({error_code : 0, friends : user_exist.Friend});
 						res.status(200).end();
 					} else{
 						res.json({error_code : 308});

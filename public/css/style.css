@@ -1,0 +1,17 @@
+.Show {
+  height: 100px;
+  width: 600px;
+  border: 1px solid #d1d1d1;
+  padding: 80px;
+  margin-left: 200px;
+  overflow-y: scroll;
+} 
+
+.Inbox {
+  height: 100px;
+  width: 600px;
+  border: 1px solid #d1d1d1;
+  padding: 80px;
+  margin-left: 200px;
+} 
+

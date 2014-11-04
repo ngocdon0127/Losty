@@ -21,7 +21,6 @@ require('./config/index.js')(app, Router_raw, Router_formdata);  //  all config
 
 // ================================================= API ============================================
 
-
 app.get('/api/login_fb',					function(req, res){
 	res.render('login_fb');
 })
@@ -70,8 +69,10 @@ Router_raw.post('/recent',				routes.recent);					// api request recent
 // GET FRIENDS
 Router_raw.post('/get_friends',			routes.friend.get);				// api get friends
 
+
 // =================================================== LISTEN BY IP AND PORT ========================
 
 var io = require('socket.io').listen(app.listen(port, function(){
     console.log('Server is running at http://%s:%s', ip, port);
+    require('./app/handler_socket')(io);
 }));
