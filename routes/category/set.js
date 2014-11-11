@@ -16,15 +16,15 @@ module.exports = function(req, res) {
         var create = data.create;
 
     }
-    catch(e){
-        res.json({error_code : 201});               // Input is invalid
+    catch(err){
+        res.json({error_code : 201, msg : err.toString()});               // Input is invalid
         res.status(200).end();
 
     }
     finally{
         if (!validator.isAlphanumeric(user_id) || (create == 0 && 
             !validator.isAlphanumeric(category_id))) {
-                res.json({error_code : 201});               // Input is invalid
+                res.json({error_code : 201, msg : 'Format of User_id or Category_id is invalid'});               // Input is invalid
                 res.status(200).end();
         } else{
             // authen user
@@ -35,7 +35,7 @@ module.exports = function(req, res) {
                 } else{
                     User.findOne({_id : user_id}, function(err, user_exist){
                         if (err){
-                            res.json({error_code : 401});   //  Database cannot find
+                            res.json({error_code : 401, msg : err.toString()});   //  Database cannot find
                             res.status(200).end();
                         } else
                         if (user_exist.permission){ 
@@ -46,7 +46,7 @@ module.exports = function(req, res) {
                                 category.name = name;
                                 category.save(function(err){
                                     if (err){
-                                        res.json({error_code : 402});
+                                        res.json({error_code : 402, msg : err.toString()});
                                         res.status(200).end();
                                     };
                                     process.nextTick(function(){
@@ -58,14 +58,14 @@ module.exports = function(req, res) {
                                 // UPDATE CATEGORY
                                 Category.findOne({_id : category_id}, function(err, category_exist){
                                     if (err){
-                                        res.json({error_code : 401});
+                                        res.json({error_code : 401, msg : err.toString()});
                                         res.status(200).end();
                                     } else{
                                         if (category_exist){
                                             category_exist.name = name;
                                             category_exist.save(function(err){
                                                 if (err){
-                                                    res.json({error_code : 402});
+                                                    res.json({error_code : 402, msg : err.toString()});
                                                     res.status(200).end();
                                                 };
                                                 process.nextTick(function(){
@@ -74,14 +74,14 @@ module.exports = function(req, res) {
                                                 })
                                             })
                                         } else{
-                                            res.json({error_code : 307});       // Category is not exist
+                                            res.json({error_code : 307, msg : 'Category is not exist'});       // Category is not exist
                                             res.status(200).end();
                                         }
                                     }
                                 })
                             }                                            
                         } else{     // USER IS NOT ADMIN
-                            res.json({error_code : 500});       // Not have enough permission
+                            res.json({error_code : 500, msg : 'Not have enough permission'});       // Not have enough permission
                             res.status(200).end();
                         }
                     })

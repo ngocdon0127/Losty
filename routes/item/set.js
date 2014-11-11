@@ -45,14 +45,14 @@ module.exports = function(req, res) {
         var category;
         Categores.findOne({_id : category_id}, function(err, category_exist){
             if (err){
-                res.json({error_code : 307});
+                res.json({error_code : 307, msg : err.toString()});
                 res.status(200);
                 return 1;
             }
             else if(category_exist){
                 category = category_exist.name;    
             } else{
-                res.json({error_code : 307});
+                res.json({error_code : 307, msg : 'Categores is not exist'});
                 res.status(200);
                 return 1;
 
@@ -69,9 +69,13 @@ module.exports = function(req, res) {
         var reward      = data.reward;
         var report      = data.report;
 
+        if (!validatorLocation(location)){
+            throw Error('Location is incorrect');
+        }
+
     }
-    catch(e){
-        res.json({error_code : 201});               // Input is invalid
+    catch(err){
+        res.json({error_code : 201, msg : err.toString()});               // Input is invalid
         res.status(200).end();
     }
     finally{
@@ -81,15 +85,15 @@ module.exports = function(req, res) {
                     !validator.isAlphanumeric(category_id) || 
                     !validatorLocation(location)){
 
-                        res.json({error_code : 201});       // Input is invalid
+                        res.json({error_code : 201, msg : 'format of user_id or item_id or category_id or location is incorrect'});       // Input is invalid
                         res.status(200).end();
             } 
             else if(create == 1 && (image_link == "" || !fs.existsSync(image_link)) ){
-                res.json({error_code : 202});               // image link is not exist
+                res.json({error_code : 202, msg : 'image link is not exist'});               // image link is not exist
                 res.status(200).end();
             }
             else if(create == 1 &&  (image_link == "" || !validate_extension(image_link, extension))) {
-                res.json({error_code : 203});               // extension of file is incorrect
+                res.json({error_code : 203, msg : 'extension of file is incorrect'});               // extension of file is incorrect
                 res.status(200).end();
                 return 1;
             }
@@ -109,7 +113,7 @@ module.exports = function(req, res) {
                             // SAVE IMAGE
                             fs.rename(image_link, './public' + new_location + file_name, function(err) {
                                 if (err) {
-                                    res.json({error_code : 306});       // Image is not exist
+                                    res.json({error_code : 306, msg : err.toString()});       // Image is not exist
                                     res.status(200).end();
                                 } else {
                                         var item            = new Item();
@@ -129,7 +133,7 @@ module.exports = function(req, res) {
                                         // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
                                         User.findOne({_id : user_id}, function(err, user_exits){
                                             if (err){
-                                                res.json({error_code : 401});   // database cannot find
+                                                res.json({error_code : 401, msg : err.toString()});   // database cannot find
                                                 res.status(200).end();
                                             } else{
                                                 if (user_exits){
@@ -142,7 +146,7 @@ module.exports = function(req, res) {
                                                                         // SAVE ITEM
                                                     item.save(function(err){
                                                         if (err){
-                                                            res.json({error_code : 402});
+                                                            res.json({error_code : 402, msg : err.toString()});
                                                             res.status(200).end();
                                                         }
                                                         else {
@@ -151,7 +155,7 @@ module.exports = function(req, res) {
                                                                 user_exits.Item.push(item._id);
                                                                 user_exits.save(function(err){
                                                                     if (err){
-                                                                        res.json({error_code : 402});
+                                                                        res.json({error_code : 402, msg : err.toString()});
                                                                         res.status(200).end();
                                                                     }
                                                                 })
@@ -168,6 +172,9 @@ module.exports = function(req, res) {
                         } else{         // UPDATE ITEM
                             console.log('Update item');
                             Item.findOne({_id : item_id}, function(err, item_exist){
+                                        if (err){
+                                            res.json({error_code : 401, msg : err.toString()});
+                                        } else
                                         if (item_exist && item_exist.user_id == user_id){
 
                                             // UPDATE INFOR
@@ -187,7 +194,7 @@ module.exports = function(req, res) {
 
                                             item_exist.save(function(err){
                                                 if (err){
-                                                    res.json({error_code : 402});       // database
+                                                    res.json({error_code : 402, msg : err.toString()});       // database
                                                     res.status(200).end();              // cannot save
                                                 }
                                                 else {
@@ -198,7 +205,7 @@ module.exports = function(req, res) {
                                                 }
                                             })
                                         } else{
-                                            res.json({error_code: 305});                // Item is not exist
+                                            res.json({error_code: 305, msg : 'Item is not exist'});                // Item is not exist
                                             res.status(200).end();
                                         }
                             })

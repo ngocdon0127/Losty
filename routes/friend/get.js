@@ -9,8 +9,8 @@ module.exports			=	function(req, res){
 		var user_id = data.user.user_id;
 		var token	= data.user.token;
 	}
-	catch(e){
-		res.json({error_code : 201});					// Input is invalid
+	catch(err){
+		res.json({error_code : 201, msg : err.toString()});					// Input is invalid
 		res.status(200).end();
 
 	}	
@@ -22,13 +22,13 @@ module.exports			=	function(req, res){
 			}else{
 				User.findOne({_id : user_id}, function(err, user_exist){
 					if (err){
-						res.json({error_code : 401});	//  Database cannot find
+						res.json({error_code : 401, msg : err.toString()});	//  Database cannot find
 						res.status(200).end();
 					} else if (user_exist){
 						res.json({error_code : 0, friends : user_exist.Friend});
 						res.status(200).end();
 					} else{
-						res.json({error_code : 308});
+						res.json({error_code : 308, msg : 'User is not exist'});
 						res.status(200).end();
 					}
 				})

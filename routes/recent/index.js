@@ -19,8 +19,8 @@ module.exports = function(req, res){
 		var start       = data.start;	// default = 0
 		var limit       = data.limit;   // default = 20;
 	}
-	catch(e){
-		res.json({error_code : 201});
+	catch(err){
+		res.json({error_code : 201, msg : err.toString()});
 		res.status(200).end();
 	}
 
@@ -30,7 +30,7 @@ module.exports = function(req, res){
 			if (!valid){
 
 				// VALIDATE IS NOT SUCCESS
-				res.json({error_code : 100});				// Authenticate is incorrect
+				res.json({error_code : 100, msg : 'Authenticate is incorrect'});				// Authenticate is incorrect
 				res.status(200).end();
 
 			} else{
@@ -38,7 +38,7 @@ module.exports = function(req, res){
 				// find all item is near this user
 				Item.find({}, function(err, items){
 					if (err){
-						res.json({error_code : 401});	// Database cannot find
+						res.json({error_code : 401, msg : err.toString()});	// Database cannot find
 						res.status(200).end();
 					} else{
 						items.sort(function(a, b){

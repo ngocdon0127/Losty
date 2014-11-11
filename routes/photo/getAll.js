@@ -9,20 +9,19 @@ module.exports 			=	function(req, res){
 		var user_id = data.user.user_id;
 		var token	= data.user.token;
 	}
-	catch(e){
-		res.json({error_code : 201});			//	Input is invalid
+	catch(err){
+		res.json({error_code : 201, msg : err.toString()});			//	Input is invalid
 		res.status(200).end();
-		console.log(e);
 	}
 	finally{
 		validate_token(user_id, token, function(valid){
 			if (!valid){
-				res.json({error_code : 100});			//	Authenticate is incorrect
+				res.json({error_code : 100, msg : 'Authenticate is incorrect'});			//	Authenticate is incorrect
 				res.status(200).end();
 			}else{
 				Photo.find({user_id : user_id}, function(err, photos){
 					if (err){
-						res.json({error_code : 401});	//  Database cannot find
+						res.json({error_code : 401, msg : err.toString()});	//  Database cannot find
 						res.status(200).end();
 					} else{
 						res.json({error_code : 0, photos : photos});

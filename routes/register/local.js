@@ -22,7 +22,9 @@ function validate_username(username){
 }
 
 function validateLocation(location){
-    if (!location.lat || !location.lng)
+    if (typeof(location) == 'undefined')
+        return 0;
+    if (!location.lat || !location.lng || !validator.isNumeric(location.lat) || !validator.isNumeric(location.lng))
         return 0;
     return 1;
 }
@@ -43,36 +45,36 @@ module.exports = function(req, res) {
         var avatar_latest   = '';
         var extension       = data.extension;
         var location        = data.location;
-
+        if (!validateLocation(location))
+            throw Error('Location is invalid');
     }
     catch(e){
-        res.json({error_code : 201});                     //  Input is invalid
+        console.log('bi o day', e);
+        res.json({error_code : 201, msg : e.toString()});                     //  Input is invalid
         res.status(200).end();
-
     }
     finally{
 
         // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
-        if ( !validate_username(username) || 
-             !validator.isEmail(email) || !validateLocation(location)){
-                        res.json({error_code : 201});       //   Input is invalid
+        if ( !validate_username(username) ||  !validator.isEmail(email)){
+                        res.json({error_code : 201, msg : 'Username or Email is incorrect'});       //   Input is invalid
                         res.status(200).end();
         }
         else {
             if(create == 1){    // Create new user
                 if( !validate_extension(avatar_link, extension) ){
 
-                        res.json({error_code : 203});
+                        res.json({error_code : 203, msg : 'extension is incorrect'});
                         res.status(200).end();
                 }  else{
                     User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
                         if (err){
                             console.log(err);
-                            res.json({error_code : 401});       //  Databse cannot find
+                            res.json({error_code : 401, msg : err.toString()});       //  Databse cannot find
                             res.status(200).end();
                         } 
                         else if (user_exist){
-                            res.json({error_code : 303});       //  Email is really exist
+                            res.json({error_code : 303, msg : 'Email is really exist'});       //  Email is really exist
                             res.status(200).end();
                         } else{
 
@@ -92,7 +94,7 @@ module.exports = function(req, res) {
                                 user.save(function(err){
                                     if (err){
                                         console.log(err);
-                                        res.json({error_code : 402});// Database cannot save
+                                        res.json({error_code : 402, msg : err.toString()});// Database cannot save
                                         res.status(200).end();
                                     } else{
                                         process.nextTick(function(){
@@ -113,11 +115,11 @@ module.exports = function(req, res) {
 
             	User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
             		if (err){
-            			res.json({error_code : 401});
+            			res.json({error_code : 401, msg : err.toString()});
                         res.status(200).end();
             		} 
             		else if (user_exist){
-            			res.json({error_code : 303});
+            			res.json({error_code : 303, msg : 'User is really exist'});
             			res.status(200).end();
             		} else{
             			var user      = new User;
@@ -136,21 +138,20 @@ module.exports = function(req, res) {
 
                         fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
                         	if (err){
-                        		res.json({error_code : 202});
+                        		res.json({error_code : 202, msg : err.toString()});
                         		res.status(200).end();
                         	} else{
                         		user.avatar = domain + new_location + file_name;
 
                         		user.save(function(err){
                         			if (err){
-                        				res.json({error_code : 402});
+                        				res.json({error_code : 402, msg : err.toString()});
                                         res.status(200).end();
                         			} else{
                         				process.nextTick(function(){
                                             make_token(user, res);
                         				})
                         			}
-
                         		})
                         	}
                         })

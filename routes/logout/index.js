@@ -4,22 +4,27 @@ var validator       =   require('validator');
 
 module.exports = function(req, res){
 	// data : {"user": { "user_id" : "5445bbb95f00451d08016a4f", "token" : "$2a$20$b17NqQiebNug4/h9EnLizO" }}
-	if (!req.rawBody){
-		res.json({error_code : 201});								//	Input is invalid
+	try{
+
+		var data = JSON.parse(req.rawBody);
+		var user_id = data.user_id;
+		var token   = data.token;
+	}
+	catch(err){
+		res.json({error_code : 201, msg : err.toString()});								//	Input is invalid
 		res.status(200).end();
-	} else{
+	}
+	finally{
 
-		var data = JSON.parse(req.rawBody).user;
-
-		if (!validator.isAlphanumeric(data.user_id)){
-			res.json({error_code : 201});							//	Input is invalid
+		if (!validator.isAlphanumeric(user_id)){
+			res.json({error_code : 201, msg : 'Format of user_id is invalid'});							//	Input is invalid
 			res.status(200).end();
 		} else{
 			validate_token(data.user_id, data.token, function(valid){	
 				if (valid){
 					UserAuthen.remove({user_id : data.user_id, token : data.token}, function(err){
 						if (err){
-							res.json({error_code : 403});			//	Database cannot remove
+							res.json({error_code : 403, msg : err.toString()});			//	Database cannot remove
 							res.status(200).end();
 						} else{
 							res.json({error_code : 0});				
@@ -27,7 +32,7 @@ module.exports = function(req, res){
 						}
 					})
 				} else{
-					res.json({error_code : 100});					// Authenticate is incorrect
+					res.json({error_code : 100, msg : 'Authenticate is incorrect'});					// Authenticate is incorrect
 					res.status(200).end();
 				}
 			})		

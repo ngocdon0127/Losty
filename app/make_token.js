@@ -21,13 +21,17 @@ module.exports      =   function(user, res){
     var token       =   bcrypt.genSaltSync(20);
 
     UserAuthen.findOne({user_id : user_id}, function(err, user_authen_exist){
+        if (err){
+            res.json({error_code : '401', msg : err.toString() });
+            res.status(200).end();
+        } else
         if (user_authen_exist){
             // UPDATE TOKEN OF USER
             user_authen_exist.token = token;
             user_authen_exist.save(function(err){
                 if (err){
                     console.error(err);
-                    res.json({error_code : 402});             // database can't save
+                    res.json({error_code : 402, msg : err.toString()});             // database can't save
                     res.status(200).end();
 
                 } else{
@@ -48,7 +52,7 @@ module.exports      =   function(user, res){
             user_authen.token   = token;
             user_authen.save(function(err, user_authen){
                 if (err){
-                    res.json({error_code : 402});             // database can't save
+                    res.json({error_code : 402, msg : err.toString()});             // database can't save
                     res.status(200).end();
 
                 } else{

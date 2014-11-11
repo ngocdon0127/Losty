@@ -14,19 +14,19 @@ module.exports 			=	function(req, res){
 		var start   = data.start;
 		var limit   = data.limit;
 	}
-	catch(e){
-		res.json({error_code : 201});		// Input is valid
+	catch(err){
+		res.json({error_code : 201, msg : err.toString()});		// Input is valid
 		res.status(200).end();
 	}
 	finally{
 
 		if (!validator.isNumeric(type)){
-			res.json({error_code : 201});		// Input is valid
+			res.json({error_code : 201, msg : 'Type is not number'});		// Input is valid
 			res.status(200);
 		} else {
 			Item.find({} , function(err, items){
 				if (err){
-					res.json({error_code : 401});	//Database cannot find
+					res.json({error_code : 401, msg : err.toString()});	//Database cannot find
 					res.status(200).end();
 				}
 				var result = [];

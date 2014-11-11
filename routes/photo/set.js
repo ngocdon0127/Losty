@@ -25,30 +25,30 @@ module.exports 			=	function(req, res){
         var extension  = data.extension; 
 
 	}
-	catch(e){
-		res.json({error_code : 201});							// Input is invalid
+	catch(err){
+		res.json({error_code : 201, msg : err.toString()});							// Input is invalid
 		res.status(200).end();
 	}
 
 	finally{
 		if (!validator.isAlphanumeric(user_id) || (create == 0 && !validator.isAlphanumeric(photo_id))){
-            res.json({error_code : 201});                       //  Input is invalid
+            res.json({error_code : 201, msg : 'user_id or photo_id is incorrect'});                       //  Input is invalid
             res.status(200).end();
 		} else{
 			validate_token(user_id, token, function(valid){
 				if (!valid){
 					// VALIDATE IS NOT SUCCESS
-		            res.json({error_code : 100});              //  Authenticate is incorrect
+		            res.json({error_code : 100, msg : 'Authenticate is incorrect'});              //  Authenticate is incorrect
 		            res.status(200).end();
 
 				} else{
 					if (create == 1){				 // CREATE PHOTO
 						if(!image_link || !fs.existsSync(image_link)){
-					        res.json({error_code : 201});         //  Input is invalid
+					        res.json({error_code : 201, msg : 'Image link is not exist'});         //  Input is invalid
 					        res.status(200).end();
 						} else{
 							if (!validate_extension(image_link, extension)){
-						        res.json({error_code : 203});     //  Extension of file is incorrect
+						        res.json({error_code : 203, msg : 'Extension of image_link is incorrect'});     //  Extension of file is incorrect
 						        res.status(200).end()
 							} else{		
 								var photo = new Photo;
@@ -61,14 +61,14 @@ module.exports 			=	function(req, res){
 								fs.rename(image_link, './public' + new_location + file_name, 
 								function(err){
 									if (err){
-							            res.json({error_code : 202});     //  Image link is incorrect
+							            res.json({error_code : 202, msg : err.toString()});     //  Image link is incorrect
 							            res.status(200).end()
 									} else{
 										photo.image_link = domain + new_location + file_name;
 										photo.user_id    = user_id;
 										photo.save(function(err){
 											if (err){
-									            res.json({error_code : 402});     //  Database cannot 
+									            res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
 									            res.status(200).end()			  //  save
 											} else{
 												process.nextTick(function(){
@@ -99,14 +99,14 @@ module.exports 			=	function(req, res){
 					} else{							 // Update photo
 						Photo.findOne({_id : photo_id}, function(err, photo_exist){
 							if (err){
-								res.json({error_code : 402});
+								res.json({error_code : 402, msg : err.toString()});
 								res.status(200).end();
 							} else{
 								if(photo_exist){
 									photo_exist.name = name;
 									photo_exist.save(function(err){
 										if (err){
-											res.json({error_code : 402});
+											res.json({error_code : 402, msg : err.toString()});
 											res.status(200).end();
 										} else{
 											process.nextTick(function(){
@@ -116,7 +116,7 @@ module.exports 			=	function(req, res){
 										}
 									})
 								} else{
-									res.json({error_code : 304});		// photo is not exist
+									res.json({error_code : 304, msg : 'photo is not exist'});		// photo is not exist
 									res.status(200).end();
 								}
 							}
