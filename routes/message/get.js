@@ -14,7 +14,7 @@ module.exports				=	function(req, res){
 		var limit     	= data.limit;
 	}
 	catch(err){
-		res.json({error_code : 201, err.toString()});												//	Input is invalid
+		res.json({error_code : 201, msg : err.toString()});												//	Input is invalid
 		res.status(200).end();
 	}	
 	finally{
