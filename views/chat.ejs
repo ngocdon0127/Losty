@@ -1,0 +1,129 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title> Chat use Socket.IO</title>
+  <link rel="stylesheet" href="../public/css/style.css">
+
+
+  <script src="../public/js/jquery-1.10.2.min.js"></script>
+  <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+
+
+  <script type="text/javascript">
+
+    // var my_id  = '54583aa7026b433219644284';
+    // var friend_id = '54583ab1026b433219644286';
+
+    var my_id, friend_id, token;
+    var url='';
+
+    var $window = $(window);
+
+    var user_number = prompt('User number');
+
+    if (user_number == 1){
+      my_id     = '54583aa7026b433219644284';
+      token     = '$2a$20$BYuPaQVGVGWcizGL2ymXM.';
+      friend_id = '54583ab1026b433219644286';
+      $('.Show').append('<p> My id : ' + my_id + '</p>');
+      console.log('co vao day hay khong');
+
+    } else{
+      my_id     = '54583ab1026b433219644286';
+      token     = '$2a$20$mCDLiOOOxmD.QQVCv.QsBe';
+      friend_id = '54583aa7026b433219644284';
+      $('.Show').append('<p> My id : ' + my_id + '</p>');
+    }
+
+    url = 'http://localhost:8080/chat?user_id='+ my_id +'&token=' + token;
+    console.log(url);
+
+
+    var socket = io.connect(url);
+    console.log('connect');
+
+    // ============================= TYPING =============================================
+    function typing(){
+      socket.emit('Typing', {user_send : my_id, user_recei : friend_id});
+    }
+
+    socket.on('Typing', function(data){
+      alert('Friend typing');
+      $('.Show').append('<p>' + data.user_send + 'is typing </p>');
+    })
+
+    // ============================= STOP TYPING =========================================
+
+    function stopTyping(){
+      socket.emit('stopTyping', {user_send : my_id, user_recei : friend_id});
+    }
+
+    socket.on('stopTyping', function(data){
+      alert('Friend stop typing');
+      $('.Show').append('<p>' + data.user_send + ' stop typing </p>');
+    })
+
+    // ============================= READ ALL MESSAGE =========================================
+    function readAllMessage(){
+      socket.emit('readAllMessage', {user_send : my_id, user_recei : friend_id});
+    }
+
+    socket.on('readAllMessage', function(data){
+      $('.Show').append('<p>' + data.user_send + ' read all your message </p>');
+    })
+
+    // ============================= SEND MESSAGE==============================================
+
+    $window.keydown(function (event) {
+      // When the client hits ENTER on their keyboard
+      if (event.which === 13) {
+        // send message
+        var content = $('.Inbox').val();
+        $('.Show').append('<p> Me : ' + content + '\n </p>');
+
+        var element = document.getElementById("Show");
+        element.scrollTop = element.scrollHeight;
+
+        socket.emit('Send message', {user_send : my_id, user_recei : friend_id, content : content});
+        $('.Inbox').val('');
+      }
+    });
+
+    socket.on('Send message', function(data){
+        var user_send  = data.user_send;
+        var user_recei = data.user_recei;
+        var content    = data.content;
+        var status     = data.status;
+        var time       = data.time;
+        var username   = data.username;
+        var avatar     = data.avatar;
+
+        $('.Show').append('<p>' + avatar + '<br>' + username + ' : ' + content + ' Time : ' + time + '\n</p>');
+
+        var element = document.getElementById("Show");
+        element.scrollTop = element.scrollHeight;
+
+    })
+
+  </script>
+
+</head>
+<body>
+
+  <div class="home">
+    <div class="Show" id = "Show">
+    </div>
+
+    <div class="Button">
+      <button class="Typing" onclick="typing()"> TYPING </button>  
+      <button class="StopTyping" onclick="stopTyping()"> STOP TYPING </button>
+      <button class="ReadAll" onclick="readAllMessage();"> READ ALL MESSAGES </button>      
+    </div>
+
+    <textarea class="Inbox" id= "Inbox"> </textarea> 
+
+  </div>
+
+</body>
+</html>
