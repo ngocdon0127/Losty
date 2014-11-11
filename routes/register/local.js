@@ -2,6 +2,7 @@
 var   domain             = require('./../../config/default').domain_default;
 var   avatar_default     = require('./../../config/default').avatar_default;
 var   validate_extension = require('./../../app/validate_extension');
+var   validate_location  = require('./../../app/validate_location');
 var   reverseGeocode     = require('./../../app/reverseGeocode');
 
 var   formidable    = require('formidable'),
@@ -21,13 +22,6 @@ function validate_username(username){
     return regex.test(username);
 }
 
-function validateLocation(location){
-    if (typeof(location) == 'undefined')
-        return 0;
-    if (!location.lat || !location.lng || !validator.isNumeric(location.lat) || !validator.isNumeric(location.lng))
-        return 0;
-    return 1;
-}
 
 module.exports = function(req, res) {
 
@@ -45,12 +39,12 @@ module.exports = function(req, res) {
         var avatar_latest   = '';
         var extension       = data.extension;
         var location        = data.location;
-        if (!validateLocation(location))
+        if (!validate_location(location))
             throw Error('Location is invalid');
     }
-    catch(e){
-        console.log('bi o day', e);
-        res.json({error_code : 201, msg : e.toString()});                     //  Input is invalid
+    catch(err){
+        console.log(err);
+        res.json({error_code : 201, msg : err.toString()});                     //  Input is invalid
         res.status(200).end();
     }
     finally{

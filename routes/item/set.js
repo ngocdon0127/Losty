@@ -4,6 +4,7 @@ var   url           = require('url');
 var   mime          = require('mime');
 var   validator     = require('validator');
 var   validate_extension = require('./../../app/validate_extension');
+var   validate_location  = require('./../../app/validate_location');
 
 var   formidable    = require('formidable'),
       util          = require('util'),
@@ -16,14 +17,6 @@ var   bcrypt        = require('bcrypt-nodejs');
 var   Item          = require('./../../models/items');
 var   User          = require('./../../models/users');
 var   Categores     = require('./../../models/categores');
-
-
-function validatorLocation(location_obj){
-
-    if (!location_obj.lat || !location_obj.lng)
-        return 0;
-    return 1;
-}
 
 module.exports = function(req, res) {
 
@@ -69,7 +62,7 @@ module.exports = function(req, res) {
         var reward      = data.reward;
         var report      = data.report;
 
-        if (!validatorLocation(location)){
+        if (!validate_location(location)){
             throw Error('Location is incorrect');
         }
 
@@ -82,9 +75,7 @@ module.exports = function(req, res) {
             // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
             if (    !validator.isAlphanumeric(user_id) || 
                     (item_id != "" && !validator.isAlphanumeric(item_id) ) ||     
-                    !validator.isAlphanumeric(category_id) || 
-                    !validatorLocation(location)){
-
+                    !validator.isAlphanumeric(category_id) ){
                         res.json({error_code : 201, msg : 'format of user_id or item_id or category_id or location is incorrect'});       // Input is invalid
                         res.status(200).end();
             } 
@@ -105,7 +96,7 @@ module.exports = function(req, res) {
                         res.json({error_code : 100});       // Authenticate is incorrect
                         res.status(200).end();
                     } else {
-                        if (create == 1){         // ======== MAKE NEW ITEM ================
+                        if (create == 1){           // ======== MAKE NEW ITEM ================
                             var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
                                 + '.' + extension;
 
@@ -116,6 +107,7 @@ module.exports = function(req, res) {
                                     res.json({error_code : 306, msg : err.toString()});       // Image is not exist
                                     res.status(200).end();
                                 } else {
+
                                         var item            = new Item();
                                         item.user_id        = user_id;
                                         item.category_id    = category_id;
@@ -137,7 +129,7 @@ module.exports = function(req, res) {
                                                 res.status(200).end();
                                             } else{
                                                 if (user_exits){
-
+                                                    
                                                     // SAVE ITEM
                                                     item.user.avatar   = user_exits.avatar;
                                                     item.user.username = user_exits.username;
@@ -169,7 +161,7 @@ module.exports = function(req, res) {
                                         })
                                 }
                             })
-                        } else{         // UPDATE ITEM
+                        } else{                     // =========== UPDATE ITEM=====================
                             console.log('Update item');
                             Item.findOne({_id : item_id}, function(err, item_exist){
                                         if (err){
