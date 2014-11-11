@@ -40,7 +40,7 @@ module.exports = function(req, res){
 			if (!valid){
 
 				// VALIDATE IS NOT SUCCESS
-				res.json({error_code : 100, msg : 'Authenticate is incorrect'});				// Authenticate is incorrect
+				res.json({error_code : 100, msg : 'Authenticate is incorrect'});
 				res.status(200).end();
 
 			} else{
@@ -57,7 +57,7 @@ module.exports = function(req, res){
 								})						
 
 								items.sort(function(a, b){
-									return distance(location, a.location) - distance(location, b.location);
+								 	return distance(location, a.location) - distance(location, b.location);
 								})
 								console.log('Dang sort');
 								next(null);
