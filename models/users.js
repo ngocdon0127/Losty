@@ -26,8 +26,18 @@ var userSchema = mongoose.Schema({
         default      : 0
     },
 
-    city             : String,
-    country          : String,
+    city             : {
+        type         : String
+    },
+
+    country          : {
+        type         : String
+    },
+
+    location         : {
+        lat          : String,
+        lng          : String
+    },
 
     local            : {
         password     : {

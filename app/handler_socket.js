@@ -1,6 +1,7 @@
 var  validate_token			=	require('./validate_token');
 
 var Message                 =   require('./../models/messages');
+var User                    =   require('./../models/users');
 
 module.exports = function(io){
 
@@ -56,6 +57,7 @@ module.exports = function(io){
     		var user_send = data.user_send;
     		var user_recei = data.user_recei;
 
+
     		Message.find({$and : [{ user_send : user_recei}, {user_recei : user_send}, { status : 0}]}, 
     		function(err, messages_exist){
     			if (messages_exist){
@@ -66,6 +68,7 @@ module.exports = function(io){
     				})
     			};
     		});
+
 
     		if (online_user[user_recei]){
     			online_user[user_recei].emit('readAllMessage', {user_send : user_send});
@@ -81,6 +84,8 @@ module.exports = function(io){
  			var status     = 0;
  			var time       = (new Date).toJSON();
 
+
+ 			// SAVE MESSAGE
  			var message    = new Message;
 
 	 		message.user_send 	= user_send;
@@ -91,9 +96,26 @@ module.exports = function(io){
 	 		message.save(function(err){
 	 		})	
 
+	 		// ADD MESSAGE UNREAD OF USER_RECEI
+
  			if (online_user[user_recei]){
- 				online_user[user_recei].emit('Send message', data);
- 			}
+ 				User.findOne({_id : user_send}, function(err, user_exist){
+ 					online_user[user_recei].emit('Send message', 
+ 						{	user_send : user_send, 
+ 							user_recei: user_recei,
+ 							content   : content,
+ 							status    : status,
+ 							time      : time,
+ 							username  : user_exist.username,
+ 							avatar    : user_exist.avatar
+ 						});
+ 				})
+		 	}
+ 		})
+ // ============================= DISCONNECT=======================================================
+
+ 		socket.on('disconnect', function(){
+ 			delete online_user[socket.id];
  		})
     })
 }

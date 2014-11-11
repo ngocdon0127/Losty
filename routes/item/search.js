@@ -9,7 +9,7 @@ module.exports 			=	function(req, res){
 
 		// data : {"keyword", "type", "start", "limit"}
 
-		var keyword = data.keyword;
+		var keyword = data.keyword.toLowerCase();
 		var type    = data.type;
 		var start   = data.start;
 		var limit   = data.limit;

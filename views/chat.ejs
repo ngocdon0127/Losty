@@ -81,7 +81,7 @@
         // send message
         var content = $('.Inbox').val();
         $('.Show').append('<p> Me : ' + content + '\n </p>');
-        
+
         var element = document.getElementById("Show");
         element.scrollTop = element.scrollHeight;
 
@@ -94,10 +94,12 @@
         var user_send  = data.user_send;
         var user_recei = data.user_recei;
         var content    = data.content;
-        var status     = 0;
-        var time       = (new Date).toJSON();
+        var status     = data.status;
+        var time       = data.time;
+        var username   = data.username;
+        var avatar     = data.avatar;
 
-        $('.Show').append('<p> Friend : ' + content + ' Time : ' + time + '\n</p>');
+        $('.Show').append('<p>' + avatar + '<br>' + username + ' : ' + content + ' Time : ' + time + '\n</p>');
 
         var element = document.getElementById("Show");
         element.scrollTop = element.scrollHeight;

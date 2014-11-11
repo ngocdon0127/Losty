@@ -69,6 +69,12 @@ Router_raw.post('/recent',				routes.recent);					// api request recent
 // GET FRIENDS
 Router_raw.post('/get_friends',			routes.friend.get);				// api get friends
 
+// GET MESSAGE
+Router_raw.post('/get_messages',		routes.message.get);			// api get messages
+
+// FORGOT PASSWORD
+Router_raw.get('/forgot_password', 		routes.forgot_password);
+
 
 // =================================================== LISTEN BY IP AND PORT ========================
 

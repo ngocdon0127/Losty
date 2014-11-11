@@ -16,6 +16,10 @@ exports.photo				=   require('./photo');
 
 exports.friend				=   require('./friend');
 
+exports.forgot_password     =   require('./forgot_password');
+
+exports.message             =   require('./message');
+
 
 exports.index = function(req, res){
     res.json('get /');
