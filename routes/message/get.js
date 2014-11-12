@@ -1,9 +1,9 @@
-var validate_token			=	require('./../../app/validate_token');
+var validate_token					=	require('./../../app/validate/validate_token');
 
 var Message               	=	require('./../../models/messages');
-var User                	=	require('./../../models/users');
+var User                		=	require('./../../models/users');
 
-module.exports				=	function(req, res){
+module.exports	=	function(req, res){
 	try{
 		// data : { "user" : {"user_id" , "token" }, "friend_id", "start", "limit" }
 		var data 		= JSON.parse(req.rawBody);

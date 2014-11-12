@@ -1,9 +1,9 @@
-var   validate_token	= require('./../../app/validate_token');
+var   validate_token	= require('./../../app/validate/validate_token');
 var   Item          	= require('./../../models/items');
 var   User          	= require('./../../models/users');
 
 var   url           	= require('url');
-var   fs    			= require('fs');
+var   fs    				  = require('fs');
 var   validator     	= require('validator');
 
 module.exports			=	function(req, res){

@@ -1,6 +1,10 @@
+var dev_port 					 = 8080;
+var dev_domain 			   = 'localhost';
 
-exports.avatar_default = 'http://localhost:8080/img/avatar/default-avatar.png';
+exports.port					 = dev_port;
 
-exports.domain_default = 'http://localhost:8080';
+exports.avatar_default = 'http://' + dev_domain + ':' + dev_port + '/img/avatar/default-avatar.png';
 
-exports.database       = 'mongodb://localhost/losty/user';
+exports.domain_default = 'http://' + dev_domain + ':' + dev_port;
+
+exports.database       = 'mongodb://' + dev_domain + '/losty/user';

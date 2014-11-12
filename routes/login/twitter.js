@@ -1,11 +1,12 @@
 var async					=	require('async');
 
-var consumer_key 			=	require('./../../app/auth').consumer_key;
-var consumer_secret			=	require('./../../app/auth').consumer_secret;
+var consumer_key 			=	require('./../../app/authen/auth').consumer_key;
+var consumer_secret			=	require('./../../app/authen/auth').consumer_secret;
 
-var make_token				=	require('./../../app/make_token');
-var add_friend_twitter      =   require('./../../app/add_friend_twitter');
+var make_token				=	require('./../../app/authen/make_token');
+var add_friend_twitter      =   require('./../../app/add_friend/add_friend_twitter');
 
+var User   					=	require('./../../models/users');
 
 var util 					= require('util'),
 	twitter 				= require('twitter');
@@ -14,10 +15,6 @@ var util 					= require('util'),
 var twit;
 var profile, friends;
 var access_token_key, access_token_secret ;
-
-
-var User   					=	require('./../../models/users');
-
 
 module.exports  	=	function(req, res){
 	if (!req.rawBody){

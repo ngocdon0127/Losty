@@ -1,7 +1,7 @@
 
-var validate_token      = require('./../../app/validate_token');
-var validate_extension  = require('./../../app/validate_extension');
-var domain        		= require('./../../config/default').domain_default;
+var validate_token      = require('./../../app/validate/validate_token');
+var validate_extension  = require('./../../app/validate/validate_extension');
+var domain        			= require('./../../config/default').domain_default;
 
 var User                = require('./../../models/users');
 var Photo               = require('./../../models/photos');                

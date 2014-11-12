@@ -23,25 +23,50 @@
     var user_number = prompt('User number');
 
     if (user_number == 1){
-      my_id     = '54583aa7026b433219644284';
-      token     = '$2a$20$BYuPaQVGVGWcizGL2ymXM.';
-      friend_id = '54583ab1026b433219644286';
-      $('.Show').append('<p> My id : ' + my_id + '</p>');
-      console.log('co vao day hay khong');
+
+      my_id     = '5462f79b3a022b3926699d84';
+      token     = '$2a$20$0PeBd6ZilAA3FkV/Rx8TGu';
+      friend_id = '5462f7a73a022b3926699d86';
 
     } else{
-      my_id     = '54583ab1026b433219644286';
-      token     = '$2a$20$mCDLiOOOxmD.QQVCv.QsBe';
-      friend_id = '54583aa7026b433219644284';
-      $('.Show').append('<p> My id : ' + my_id + '</p>');
+      my_id     = '5462f7a73a022b3926699d86';
+      token     = '$2a$20$KAq85EaLMTwhindGOQfIHu';
+      friend_id = '5462f79b3a022b3926699d84';
+      
     }
 
     url = 'http://localhost:8080/chat?user_id='+ my_id +'&token=' + token;
-    console.log(url);
-
 
     var socket = io.connect(url);
-    console.log('connect');
+
+    // ============================= ONLINE USERS =======================================
+    // data : [user_id1, user_id2, ...]
+    socket.on('Online users', function(data){
+      if (user_number == 1)
+        $('.Show').append('<p>CuongVu: My id : ' + my_id + '</p>');
+      else 
+        $('.Show').append('<p>HanhLuu: My id : ' + my_id + '</p>');
+
+      $('.Show').append('<p> User online : ' );
+      data.forEach(function(user){
+        $('.Show').append('<ul>' + user +'<br>');
+      })
+      $('.Show').append('</p>');
+    })
+
+    // ============================= ONE USER ONLINE ====================================     
+
+    // data : user_id
+    socket.on('One user online', function(data){
+      $('.Show').append('<p> User online : '+ data +' </p>');
+    })  
+
+    // ============================= ONE USER OFF ====================================     
+
+    // data : user_id
+    socket.on('One user off', function(data){
+      $('.Show').append('<p> User off : '+ data +' </p>');
+    })  
 
     // ============================= TYPING =============================================
     function typing(){
@@ -49,18 +74,15 @@
     }
 
     socket.on('Typing', function(data){
-      alert('Friend typing');
       $('.Show').append('<p>' + data.user_send + 'is typing </p>');
     })
 
     // ============================= STOP TYPING =========================================
-
     function stopTyping(){
       socket.emit('stopTyping', {user_send : my_id, user_recei : friend_id});
     }
 
     socket.on('stopTyping', function(data){
-      alert('Friend stop typing');
       $('.Show').append('<p>' + data.user_send + ' stop typing </p>');
     })
 

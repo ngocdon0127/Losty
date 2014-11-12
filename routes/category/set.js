@@ -1,6 +1,6 @@
 var   Category          = require('./../../models/categores');
 var   validator         = require('validator');
-var   validate_token    = require('./../../app/validate_token');
+var   validate_token    = require('./../../app/validate/validate_token');
 var   User              = require('./../../models/users');
 
 module.exports = function(req, res) {

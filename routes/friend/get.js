@@ -1,5 +1,5 @@
 var User				=	require('./../../models/users');
-var validate_token		=	require('./../../app/validate_token');
+var validate_token		=	require('./../../app/validate/validate_token');
 
 module.exports			=	function(req, res){
 	try{

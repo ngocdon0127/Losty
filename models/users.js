@@ -39,6 +39,11 @@ var userSchema = mongoose.Schema({
         lng          : String
     },
 
+    type_account     : {
+        type         : Number,
+        default      : 1
+    },
+
     local            : {
         password     : {
             type     : String,

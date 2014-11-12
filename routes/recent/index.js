@@ -1,12 +1,13 @@
 // ================================ RETURN ITEMS NEAR USER ==========================
 
-var Item  	   			= require('./../../models/items');
+var Item  	   					= require('./../../models/items');
 
-var distance   			= require('./../../app/distance');
-var validate_token 		= require('./../../app/validate_token');
-var validate_location 	= require('./../../app/validate_location');
-var async				= require('async');
+var distance   					= require('./../../app/map/distance');
+var validate_token 			= require('./../../app/validate/validate_token');
+var validate_location 	= require('./../../app/validate/validate_location');
+var async								= require('async');
 
+// Rounding num with ext numbers
 function round_f(num,ext){
 	//num: so can lam tron
 	//ext: phan thap phan
@@ -35,7 +36,6 @@ module.exports = function(req, res){
 	}
 
 	finally{
-			
 		validate_token(user_id, token, function(valid){
 			if (!valid){
 
@@ -52,6 +52,7 @@ module.exports = function(req, res){
 					} else{
 						async.waterfall([
 							function(next){
+
 								items.forEach(function(item){
 									console.log(distance(location, item.location));
 								})						
@@ -59,13 +60,16 @@ module.exports = function(req, res){
 								items.sort(function(a, b){
 								 	return distance(location, a.location) - distance(location, b.location);
 								})
-								console.log('Dang sort');
+
 								next(null);
+
 							},
 							function(next){
+								
 								distances = [];
-								console.log('nhap coc');
+
 								process.nextTick(function(){
+									
 									items.forEach(function(item){
 										distances.push(round_f(distance(location, item.location), 1 ));
 									})

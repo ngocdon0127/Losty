@@ -1,16 +1,16 @@
-var client_id       =   require('./../../app/auth').client_id_fb;
-var client_secret   =   require('./../../app/auth').client_secret_fb;
+var client_id       			=   require('./../../app/authen/auth').client_id_fb;
+var client_secret   			=   require('./../../app/authen/auth').client_secret_fb;
 
 // var client_id          =   '1495985440641529';
 // var client_secret      =   '0ef9188327f12b29bbe76bf5a274cfe7';
 
-var async			   =	require('async');
-var graph 			   = 	require('fbgraph');
+var async			  				  =		require('async');
+var graph 			   				= 	require('fbgraph');
   
-var make_token         = 	require('./../../app/make_token');
-var add_friend_fb      =    require('./../../app/add_friend_fb');
+var make_token         		= 	require('./../../app/authen/make_token');
+var add_friend_fb      		=    require('./../../app/add_friend/add_friend_fb');
 
-var User               =    require('./../../models/users');
+var User               		=    require('./../../models/users');
 
 var options = {
     timeout:  3000
@@ -35,8 +35,6 @@ function  API(api, callback){
 
 
 module.exports = function(req, res){	
-	console.log('Have request');
-
 	var access_token = '';
 
 	var profile = {},
@@ -114,7 +112,7 @@ module.exports = function(req, res){
 		    				user.email    		= profile.email;
 		    				user.avatar   		= avatar;
 		    				user.facebook.id 	= profile.id;
-		    				user.facebook.token = access_token;
+		    				user.facebook.token = access_token;3
 		    				user.save(function(err){
 		    					if (err){
 		    						res.json({error_code : 402});

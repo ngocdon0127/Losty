@@ -1,5 +1,5 @@
-var UserAuthen		=	require('./../../models/user_authens');
-var validate_token  = 	require('./../../app/validate_token');
+var UserAuthen			=	require('./../../models/user_authens');
+var validate_token  = 	require('./../../app/validate/validate_token');
 var validator       =   require('validator');
 
 module.exports = function(req, res){
@@ -7,8 +7,8 @@ module.exports = function(req, res){
 	try{
 
 		var data = JSON.parse(req.rawBody);
-		var user_id = data.user_id;
-		var token   = data.token;
+		var user_id = data.user.user_id;
+		var token   = data.user.token;
 	}
 	catch(err){
 		res.json({error_code : 201, msg : err.toString()});								//	Input is invalid

@@ -1,5 +1,5 @@
 var User            = require('./../../models/users');
-var   make_token    = require('./../../app/make_token');
+var   make_token    = require('./../../app/authen/make_token');
 
 var validator       = require('validator');
 var bcrypt          = require('bcrypt-nodejs');
