@@ -24,17 +24,17 @@ module.exports = function(req, res){
                 // VALIDATE IS SUCCESS
                 User.findOne({email : email}, function(err, user_exist){
                     if (err) {
-                        res.json({error_code : 401, msg : err.toString()});             //  database cannot find
+                        res.json({error_code : 401, msg : err.toString()});            
                         res.status(200).end();
                     } 
                     // VALIDATE EMAIL
                     else if (!user_exist) {
-                        res.json({error_code : 301, msg : 'User is not exist'});              //  email is incorrect
+                        res.json({error_code : 301, msg : 'User is not exist'});           
                         res.status(200).end();
                     } else {
                         // VALIDATE PASSWORD
                         if (!user_exist.validPassword(password)){
-                            res.json({error_code : 302, msg : 'Password is incorrect'});         //  password is incorrect
+                            res.json({error_code : 302, msg : 'Password is incorrect'});   
                             res.status(200).end();
                         } else{
                             // login success, make token and res.json token

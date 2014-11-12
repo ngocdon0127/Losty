@@ -20,9 +20,9 @@ module.exports = function(req, res){
 			res.json({error_code : 201, msg : 'Format of user_id is invalid'});							//	Input is invalid
 			res.status(200).end();
 		} else{
-			validate_token(data.user_id, data.token, function(valid){	
+			validate_token(user_id, token, function(valid){	
 				if (valid){
-					UserAuthen.remove({user_id : data.user_id, token : data.token}, function(err){
+					UserAuthen.remove({user_id : user_id, token : token}, function(err){
 						if (err){
 							res.json({error_code : 403, msg : err.toString()});			//	Database cannot remove
 							res.status(200).end();

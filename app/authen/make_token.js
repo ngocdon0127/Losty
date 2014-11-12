@@ -3,13 +3,13 @@
 /*
     RETURN
     {   “error_code” : 0,
-                 "user": {
-        "email": "cuongvc93@gmail.com",
-        "username": "cuongvc93",
-        "id": "544a175881b36c7c71f5333a",
-        "avatar": "http://104.131.69.233:3000/img/avatar/1414154.jpeg"
-      },
-      "token": "$2a$20$PZ3Et7YQ4yNOjVIGSMQVm."
+        "user": {
+            "email": "cuongvc93@gmail.com",
+            "username": "cuongvc93",
+            "id": "544a175881b36c7c71f5333a",
+            "avatar": "http://104.131.69.233:3000/img/avatar/1414154.jpeg"
+          },
+        "token": "$2a$20$PZ3Et7YQ4yNOjVIGSMQVm."
     }
 */
 
