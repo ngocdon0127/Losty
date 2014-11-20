@@ -1,5 +1,5 @@
 	var User                = require('./../../models/users');
-var async               = require('async');
+var async               	= require('async');
 
 module.exports   		=	function(user_id, friends){
 

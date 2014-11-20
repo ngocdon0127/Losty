@@ -14,8 +14,6 @@ module.exports = function(io){
   var chat = io.of('chat');
 
   chat.use(function(socket, next){
-    console.log('LIST USER :', list_user);
-    console.log(socket.request._query);
     var user_id = socket.request._query.user_id;
     var token   = socket.request._query.token;
     validate_token(user_id, token, function(valid){

@@ -21,11 +21,6 @@ var itemSchema = mongoose.Schema({
         required     : true,
     },
 
-    user_id          : {
-        type         : ObjectId,
-        ref          : 'users'
-    },
-
     category_id      : {
         type         : ObjectId,
         ref          : 'categores'
@@ -70,15 +65,25 @@ var itemSchema = mongoose.Schema({
     }, 
 
     user             : {
+        id           : String,
         avatar       : String,
         username     : String,
         city         : String,
         country      : String
-    }
+    },
 
-
-
-
+    people_view      : [{
+        id           : {
+            type         : ObjectId,
+            ref          : 'users'
+        },
+        avatar       : {
+            type         : String
+        },
+        username     : {
+            type         : String,
+        }
+    }]
 });
 
 

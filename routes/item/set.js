@@ -25,7 +25,6 @@ module.exports = function(req, res) {
       /// title, description, type, location, date_lost, reward, report}
 
       // REMEMBER TO CREATE TIME_POST
-      console.log('DANG SET ITEM');
       var data = JSON.parse(req.rawBody);
         
       var token       = data.user.token;
@@ -80,7 +79,6 @@ module.exports = function(req, res) {
         res.status(200).end();
       } 
       else if(create == 1 && (image_link == "" || !fs.existsSync(image_link)) ){
-        console.log(image_link);
         res.json({error_code : 202, msg : 'image link is not exist'});            
         res.status(200).end();
       }
@@ -109,7 +107,6 @@ module.exports = function(req, res) {
                   res.status(200).end();
                 } else {
                   var item            = new Item();
-                  item.user_id        = user_id;
                   item.category_id    = category_id;
                   item.category       = category;
                   item.title          = title;
@@ -130,6 +127,7 @@ module.exports = function(req, res) {
                     } else{
                       if (user_exits){                                
                         // SAVE ITEM
+                        item.user.id       = user_exits._id;
                         item.user.avatar   = user_exits.avatar;
                         item.user.username = user_exits.username;
                         item.user.city     = user_exits.city;

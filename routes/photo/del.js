@@ -42,10 +42,13 @@ module.exports			=	function(req, res){
 								} else{
 									// Photo IS EXIST
 									if (photo_exist.user_id != user_id){
+
 										// Photo KHONG PHAI CUA USER
+										
 										res.json({error_code : 500, msg : 'Not have enough permission'});		// Not have enough permission
 										res.status(200).end();
 									} else{
+
 										// Photo LA CUA USER, TIEN HANH XOA ITEM VA XOA THONG TIN TREN USER
 
 										// REMOVE ITEM IN INFOR OF USER
@@ -67,13 +70,13 @@ module.exports			=	function(req, res){
 										});
 
 										// REMOVE IMAGE OF ITEM
-			                            fs.unlink(  './public' + url.parse(photo_exist.image_link).path , function(err){
-			                                if (err){
-			                                    res.json({error_code : 306, msg : err.toString()})	//	image is not exist
-			                                    res.status(200).end();
-			                                    return 1;
-			                                }
-			                            })
+			              fs.unlink(  './public' + url.parse(photo_exist.image_link).path , function(err){
+			                if (err){
+			                  res.json({error_code : 306, msg : err.toString()})	//	image is not exist
+			                  res.status(200).end();
+			                  return 1;
+			                }
+			              })
 										// REMOVE ITEM
 										Photo.remove({_id : photo_id}, function(err, number){
 											if (err){

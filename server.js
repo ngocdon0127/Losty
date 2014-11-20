@@ -52,9 +52,10 @@ Router_raw.get('/get_photo/:photo_id',   routes.photo.get);				// api get photo
 Router_raw.post('/get_photos',				   routes.photo.getAll);			// api get all photos
 
 // CREATE, UPDATE, VIEW, REMOVE ITEMS
-Router_raw.post('/set_an_item', 			   routes.item.set);        		// api create, update an item
+Router_raw.post('/set_an_item', 			   routes.item.set);       	// api create, update an item
 Router_raw.get('/get_an_item/:item_id',  routes.item.get);				// api get an  item
 Router_raw.post('/del_an_item', 		     routes.item.del);				// api del an  item
+Router_raw.post('/add_people_view',      routes.item.add_people_view);				// api del an  item
 
 // SEARCH ITEM BY KEYWORD
 Router_raw.post('/search_item', 		     routes.item.search);			// api search item

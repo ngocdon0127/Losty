@@ -59,6 +59,10 @@ var userSchema = mongoose.Schema({
         token        : {
             type     : String,
             default  : ''
+        },
+        email        : {
+            type     : String,
+            default  : ''
         }
     },
 
@@ -84,21 +88,22 @@ var userSchema = mongoose.Schema({
 
     Item             : [{
         type         : ObjectId,
-        ref          : 'items',
-        default      : []
+        ref          : 'items'
     }],
 
-    Photo             : [{
+    Photo            : [{
         type         : ObjectId,
-        ref          : 'photos',
-        default      : []
+        ref          : 'photos'
     }],
 
+    unread_msg       : {
+        type         : Number,
+        default      : 0
+    }
 
     Message          : [{
         type         : ObjectId,
-        ref          : 'messages',
-        default      : []
+        ref          : 'messages'
     }],
 
     // Notification     : [{
@@ -115,9 +120,7 @@ var userSchema = mongoose.Schema({
         },
 
         avatar       : String,
-        username     : String,
-
-        default      : []
+        username     : String
     }],
 });
 

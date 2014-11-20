@@ -20,6 +20,7 @@ module.exports = function(req, res){
 			res.json({error_code : 201, msg : 'Format of user_id is invalid'});							//	Input is invalid
 			res.status(200).end();
 		} else{
+			
 			validate_token(user_id, token, function(valid){	
 				if (valid){
 					UserAuthen.remove({user_id : user_id, token : token}, function(err){
@@ -36,8 +37,6 @@ module.exports = function(req, res){
 					res.status(200).end();
 				}
 			})		
-		}
-		
+		}		
 	}
-    
 }

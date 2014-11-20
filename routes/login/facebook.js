@@ -20,18 +20,16 @@ var options = {
 
 
 function  API(api, callback){
-    graph
-        .setOptions(options)
-        .get(api, function(err, data) {
-            if (err) {
-            	res.json({error_code : 600});			//	Have error
-            	res.status(200).end();
-            } else{
-	            callback(data);
-            }
-            
-        });
-    }
+  graph
+    .setOptions(options)
+    .get(api, function(err, data) {
+      if (err) {
+       	callback(err, null);
+      } else{
+	      callback(null, data);
+      }    
+    });
+  }
 
 
 module.exports = function(req, res){	
@@ -41,95 +39,115 @@ module.exports = function(req, res){
 	    friends = {},
 	    avatar = {};
 
-	if (!req.rawBody){
-		res.json({error_code : 201});
-		res.status(200).end();
-	} else{
+	try{
 
+		access_token = JSON.parse(req.rawBody).access_token;
+
+	}
+	catch(err){
+		res.json({error_code : 201, msg : err.toString()});
+		res.status(200).end();
+	} 
+  finally{
 		async.series([
 			function(next){
-				access_token = JSON.parse(req.rawBody).access_token;
-				console.log(access_token);
-			    graph.setAccessToken(access_token);
+			  graph.setAccessToken(access_token);
 
-			    graph.extendAccessToken({
-			        "access_token":      access_token
-			        , "client_id":       client_id
-			        , "client_secret":   client_secret
-			    }, function (err, facebookRes) {
-			    	if (err) {
-			    		res.json({error_code : 101});			//	Access_token is incorrect
-			    		res.status(200).end();
-			    	}
-			        else {
-			        	next(null);
-			        }
+			  graph.extendAccessToken({
+			    "access_token":      access_token
+			    , "client_id":       client_id
+			    , "client_secret":   client_secret
+			  }, function (err, facebookRes) {
+			    if (err) {
+			    	res.json({error_code : 101, msg : err.message});			  //	Access_token is incorrect
+			    	res.json({error_code : 101, msg : 'Error validating access token: The session is invalid because the user logged out or access token is incorrect'});			  //	Access_token is incorrect
+			   		res.status(200).end();
+			    } else {
+			      next(null);
+			    }
+			  });
+			},
+			function( next){																								// GET PROFILE
+			    API("/me", function(err, data){
+			    	if (err){
+			    		console.log(err);
+			       	res.json({error_code : 600, msg : err.message});			//	Have error
+			       	res.status(200).end();
+			    	} else{
+			    		profile = data;
+			    		next(null);		
+			    	}  	
 			    });
 			},
 			function( next){
-			    API("/me",  function(data){
-			    	profile = data;
-			    	next(null);
-			    });
-			},
-			function( next){
-			    API("/me/friends", function(data){
-			    	friends = data.data;
-			    	next(null);
+			    API("/me/friends", function(err, data){											// GET FRIENDS
+			    	if (err){
+			    		console.log(err);
+			       	res.json({error_code : 600, msg : err.message});			//	Have error
+			       	res.status(200).end();
+			    	} else{
+				    	friends = data.data;
+				    	next(null);
+				    }
 			    });
 			},
 			function(next){
-			    API("me?fields=picture.width(800).height(800)&redirect=false", function(data){
-				    avatar = data.picture.data.url;
-				    next(null);
+			    API("me?fields=picture.width(800).height(800)&redirect=false", function(err, data){
+			    	if (err){
+			    		console.log(err);
+			       	res.json({error_code : 600, msg : err.message});			//	Have error
+			       	res.status(200).end();
+			    	} else{
+					    avatar = data.picture.data.url;												  // GET AVATAR
+					    next(null);	
+					  }
 			    });
 
 			}], function(err){
-				
-		    	// console.log('Profile : ', profile);
-		    	// console.log('Friends : ',friends);
-		    	// console.log('Avatar  : ',avatar);
+						if (err){
+							console.log(err);
+						}
+						console.log(profile);
 
-		    	User.findOne( {'facebook.id' : profile.id}, function(err, user_exist){
-		    		if (err){										// database cannot find
-		    			res.json({error_code : 401});
-		    			res.status(200).end();
-		    		} else{
-		    			if ( user_exist){			// USER IS REALLY EXIST
-		    				user_exist.facebook.token = access_token;
-		    				user_exist.save(function(err){
-		    					if (err){
-		    						res.json({error_code : 402});
-		    						res.status(200).end();			//	database cannot save
-		    					}
-		    				});
-
-		    				make_token(user_exist, res);
-		    			}
-		    			else{						// USER IS NOT EXIST
-		    				var user      		= new User;
-		    				user.username 		= profile.name;
-		    				user.email    		= profile.email;
-		    				user.avatar   		= avatar;
-		    				user.facebook.id 	= profile.id;
-		    				user.facebook.token = access_token;3
-		    				user.save(function(err){
-		    					if (err){
-		    						res.json({error_code : 402});
-		    						res.status(200).end();			//	database cannot save
-		    					} else{
-		    						process.nextTick(function(){
-		    							// Add friends
-		    							add_friend_fb(user._id, friends);
-		    							make_token(user, res);
-		    						})
-		    					}
-		    				})
-		    			}
-		    		}
-		    	})
-
-	    
+			    	User.findOne( {'facebook.id' : profile.id}, function(err, user_exist){
+			    		if (err){																									// database cannot find
+			    			res.json({error_code : 401, msg : err.toString()});
+			    			res.status(200).end();
+			    		} else{
+			    			if ( user_exist){																				// USER IS REALLY EXIST
+			    				user_exist.facebook.token = access_token;
+			    				user_exist.save(function(err){
+			    					if (err){
+			    						res.json({error_code : 402, msg : err.toString()});
+			    						res.status(200).end();			//	database cannot save
+			    					}
+			    				});
+			    				make_token(user_exist, res);
+			    			}
+			    			else{						// USER IS NOT EXIST, MAKE NEW USER
+			    				var user      				= new User;
+			    				user.username 				= profile.name;
+			    				user.type_account 		= 2;
+			    				user.email    				= profile.email;
+			    				user.avatar   				= avatar;
+			    				user.facebook.email   = profile.email;
+			    				user.facebook.id 			= profile.id;
+			    				user.facebook.token 	= access_token;3
+			    				user.save(function(err){
+			    					if (err){
+			    						res.json({error_code : 402, msg : err.toString()});  //	database cannot save
+			    						res.status(200).end();			
+			    					} else{
+			    						process.nextTick(function(){
+			    							// Add friends
+			    							add_friend_fb(user._id, friends);
+			    							make_token(user, res);
+			    						})
+			    					}
+			    				})
+			    			}
+			    		}
+			    	})    
 			});
-	}
+  }
 };

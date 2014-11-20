@@ -51,18 +51,13 @@ module.exports = function(req, res){
 						res.status(200).end();
 					} else{
 						async.waterfall([
-							function(next){
-
-								items.forEach(function(item){
-									console.log(distance(location, item.location));
-								})						
+							function(next){	
 
 								items.sort(function(a, b){
 								 	return distance(location, a.location) - distance(location, b.location);
 								})
 
 								next(null);
-
 							},
 							function(next){
 								
