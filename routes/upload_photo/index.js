@@ -24,17 +24,9 @@ module.exports 			=	function(req, res){
         res.status(200).end();
       } else{
         var temp_path	=	this.openedFiles[0].path;
-        if (!mime.extension(this.openedFiles[0].type)){
-          res.json({error_code : 201, msg : 'extension of file is incorrect'});                       //  Input is invalid
-          res.status(200).end();
-        }   
-        else{
-          var extension   =   mime.extension(this.openedFiles[0].type).toLowerCase();
-                    
-          res.json({error_code : 0, image_link : temp_path, extension : extension});
-          res.status(200).end();
-        }
-        return 1;
+        var extension   =   mime.extension(this.openedFiles[0].type).toLowerCase();                   
+        res.json({error_code : 0, image_link : temp_path, extension : extension});
+        res.status(200).end();
       } 
     })
   }

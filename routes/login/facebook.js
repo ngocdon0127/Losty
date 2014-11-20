@@ -41,7 +41,7 @@ module.exports = function(req, res){
 
 	try{
 
-		access_token = JSON.parse(req.rawBody).access_token;
+		access_token = req.body.access_token;
 
 	}
 	catch(err){

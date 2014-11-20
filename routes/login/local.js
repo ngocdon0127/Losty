@@ -6,7 +6,7 @@ var bcrypt          = require('bcrypt-nodejs');
 
 module.exports = function(req, res){
         try{
-            var data = JSON.parse(req.rawBody);
+            var data = req.body;
             // data : {"user": { "email" : "...", "password" : "..." }}
             var email = data.user.email;
             var password = data.user.password;

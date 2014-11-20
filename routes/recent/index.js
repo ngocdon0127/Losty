@@ -19,7 +19,7 @@ module.exports = function(req, res){
 	try{
 		// data : {"user" : {"user_id", "token"}, "location", "start", "limit"}
 
-		var data    	= JSON.parse(req.rawBody);
+		var data    	= req.body;
 
 		var user_id 	= data.user.user_id;
 		var token   	= data.user.token;

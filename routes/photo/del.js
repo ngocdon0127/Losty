@@ -11,7 +11,7 @@ module.exports			=	function(req, res){
 	// data : {"user" : { "username" : "cuongvc", "token" : "7g1h2b312b3hb12h3h" }, "item_id" : "13j213ub12b39u123"}
 
 	try{
-		var data = JSON.parse(req.rawBody);
+		var data = req.body;
 		var user_id = data.user.user_id;
 		var photo_id = data.photo_id;
 	}

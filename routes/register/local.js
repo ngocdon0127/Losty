@@ -27,7 +27,7 @@ function validate_username(username){
 module.exports = function(req, res) {
 
   try{
-    var data = JSON.parse(req.rawBody);
+    var data = req.body;
 
     // data : {"username" : "cuongvc93", "email" : "cuongvc93@gmail.com", "create" : "1"
     // "password" : "123456", "avatar_link" : "/tmp/i1b3r8bfdsbfk", "extension" : "jpeg", 

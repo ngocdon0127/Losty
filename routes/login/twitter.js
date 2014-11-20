@@ -18,7 +18,7 @@ var access_token_key, access_token_secret ;
 
 module.exports  	=	function(req, res){
 	try{
-		var data  = JSON.parse(req.rawBody);
+		var data  = req.body;
 		access_token_key    = data.access_token_key;
 		access_token_secret = data.access_token_secret;
 	}

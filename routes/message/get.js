@@ -6,7 +6,7 @@ var User                		=	require('./../../models/users');
 module.exports	=	function(req, res){
 	try{
 		// data : { "user" : {"user_id" , "token" }, "friend_id", "start", "limit" }
-		var data 				= JSON.parse(req.rawBody);
+		var data 				= req.body;
 		var user_id 		= data.user.user_id;
 		var token   		= data.user.token;	
 		var friend_id 	= data.friend_id;

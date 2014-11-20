@@ -25,7 +25,7 @@ module.exports = function(req, res) {
       /// title, description, type, location, date_lost, reward, report}
 
       // REMEMBER TO CREATE TIME_POST
-      var data = JSON.parse(req.rawBody);
+      var data        = req.body;
         
       var token       = data.user.token;
       var user_id     = data.user.user_id;

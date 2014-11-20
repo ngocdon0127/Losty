@@ -5,7 +5,7 @@ var validator           =   require('validator');
 
 module.exports 			=	function(req, res){
 	try{
-		var data = JSON.parse(req.rawBody);
+		var data = req.body;
 
 		// data : {"keyword", "type", "start", "limit"}
 

@@ -7,7 +7,7 @@ var validate_token	=	require('./../../app/validate/validate_token');
 module.exports		=	function(req, res){
 	try{
 
-		var data	  =	JSON.parse(req.rawBody);
+		var data	  =	req.body;
 		var user_id = data.user.user_id;
 		var token   = data.user.token;
 		var item_id = data.item_id;

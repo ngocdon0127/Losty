@@ -99,7 +99,7 @@ var userSchema = mongoose.Schema({
     unread_msg       : {
         type         : Number,
         default      : 0
-    }
+    },
 
     Message          : [{
         type         : ObjectId,

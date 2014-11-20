@@ -8,7 +8,7 @@ var express      = require('express');
 
 var favicon = require('serve-favicon');
 
-module.exports = function(app, Router_raw, Router_formdata){
+module.exports = function(app, Router_raw, Router_formdata, Router_body){
    
     app.use(morgan('dev')); // log every request to the console
     app.use(cookieParser()); // read cookies (needed for auth)
@@ -18,6 +18,10 @@ module.exports = function(app, Router_raw, Router_formdata){
     app.set('views', __dirname + './../views');
     app.use(express.static(__dirname + './../public'));
     // app.use(favicon(__dirname + '/public/favicon.ico'));
+
+    Router_body.use(function(req, res, next){
+    	next();
+    })
 
     Router_raw.use(function(req, res, next) {
       console.log('\n' + new Date);
@@ -35,6 +39,7 @@ module.exports = function(app, Router_raw, Router_formdata){
 
     app.use('/api', Router_formdata);
     app.use('/api', Router_raw);
+    app.use('/api', Router_body);
 
 }
 
