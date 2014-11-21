@@ -12,7 +12,10 @@ module.exports = function(app, Router_raw, Router_formdata, Router_body){
    
     app.use(morgan('dev')); // log every request to the console
     app.use(cookieParser()); // read cookies (needed for auth)
-    app.use(bodyParser()); // get information from html forms
+    //app.use(bodyParser()); // get information from html forms
+
+    app.use(bodyParser.json({limit: '50mb'}));
+    app.use(bodyParser.urlencoded({limit: '50mb'}));
 
     app.set('view engine', 'ejs');
     app.set('views', __dirname + './../views');
@@ -39,8 +42,10 @@ module.exports = function(app, Router_raw, Router_formdata, Router_body){
     });
 
     app.use('/api', Router_formdata);
-    // app.use('/api', Router_raw);
     app.use('/api', Router_body);
+
+    // app.use('/api', Router_raw);
+
 
 }
 

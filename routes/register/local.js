@@ -78,9 +78,7 @@ module.exports = function(req, res) {
                 user.location = location;
                 user.type_account = 1; // local account
 
-
                 reverseGeocode(location, function(data){
-                  console.log(data.city, '' , data.country);
                   user.city    = data.city;
                   user.country = data.country;
 

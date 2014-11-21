@@ -1,7 +1,7 @@
 var   formidable    = require('formidable'),
       util          = require('util'),
       fs            = require('fs-extra'),
-      mime			= require('mime');
+      mime			    = require('mime');
 
 var form = new formidable.IncomingForm();
 
@@ -13,12 +13,22 @@ module.exports 			=	function(req, res){
 
     form.parse(req, function(err, fields, files) { 
       if (err){
+        console.log('Alo');
         res.json({error_code : 201, msg : err.toString()});         //  Input is invalid
-          res.status(200).end();
-        }
+        res.status(200).end();
+      }
+      console.log('Alo');
+    });
+
+    form.on('error', function(err) {
+      console.log(err);
+      res.json({error_code : 201, msg : err.toString()});         //  Input is invalid
+      res.status(200).end();
+
     });
 
     form.on('end', function(fields, files){
+
       if (!this.openedFiles[0]){
         res.json({error_code : 201, msg : 'File is incorrect'});    //  Input is invalid
         res.status(200).end();

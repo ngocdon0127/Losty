@@ -41,6 +41,7 @@ module.exports      =   function(user, res){
                             email : user.email, username : user.username, 
                             id    : user._id  , avatar   : user.avatar
                         }, 
+                        unread_msg : user.unread_msg,
                         token : token});
                     res.status(200).end();                        
                 }
@@ -62,6 +63,7 @@ module.exports      =   function(user, res){
                             email : user.email, username : user.username, 
                             id    : user._id  , avatar   : user.avatar
                         }, 
+                        unread_msg : user.unread_msg,
                         token : token});
                     res.status(200).end();                        
                 }
