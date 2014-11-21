@@ -20,6 +20,7 @@ module.exports = function(app, Router_raw, Router_formdata, Router_body){
     // app.use(favicon(__dirname + '/public/favicon.ico'));
 
     Router_body.use(function(req, res, next){
+    	console.log('\n' + new Date);
     	next();
     })
 
@@ -38,7 +39,7 @@ module.exports = function(app, Router_raw, Router_formdata, Router_body){
     });
 
     app.use('/api', Router_formdata);
-    app.use('/api', Router_raw);
+    // app.use('/api', Router_raw);
     app.use('/api', Router_body);
 
 }
