@@ -15,7 +15,7 @@ var   formidable         = require('formidable'),
       fs                 = require('fs-extra');
 
 var   mime               = require('mime'),
-	  validator            = require('validator');
+	    validator          = require('validator');
 
 var   bcrypt             = require('bcrypt-nodejs');
  

@@ -101,17 +101,6 @@ var userSchema = mongoose.Schema({
         default      : 0
     },
 
-    Message          : [{
-        type         : ObjectId,
-        ref          : 'messages'
-    }],
-
-    // Notification     : [{
-    //     type         : ObjectId,
-    //     ref          : 'notifications',
-    //     default      : []
-    // }],
-
     Friend           : [{   
 
         id           :{

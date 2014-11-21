@@ -28,7 +28,6 @@ module.exports 			=	function(req, res){
     });
 
     form.on('end', function(fields, files){
-
       if (!this.openedFiles[0]){
         res.json({error_code : 201, msg : 'File is incorrect'});    //  Input is invalid
         res.status(200).end();
