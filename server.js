@@ -75,7 +75,7 @@ Router_body.post('/get_friends',			   routes.friend.get);				// api get friends
 Router_body.post('/get_messages',		     routes.message.get);			// api get messages
 
 // FORGOT PASSWORD
-Router_body.get('/forgot_password', 		 routes.forgot_password);
+Router_body.post('/forgot_password', 		 routes.forgot_password);
 
 // ERROR CODE
 Router_body.get('/error_code/:error_code',routes.error_code);

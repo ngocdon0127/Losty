@@ -10,7 +10,7 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports          =   function(){
+module.exports          =   function(email){
     // NB! No need to recreate the transporter object. You can use
     // the same transporter object for all e-mails
 
@@ -20,9 +20,7 @@ module.exports          =   function(){
 
     var mailOptions = {
         from: 'losty.app@gmail.com', // sender address
-        to: ['cuongvc93@gmail.com', 'vcc.bka@gmail.com', 'emenu.campcoder@gmail.com', 'emenu.campcoder.chef1@gmail.com',
-            'emenu.campcoder.chef2@gmail.com', 'emenu.campcoder.waiter1@gmail.com', 'emenu.campcoder.waiter2@gmail.com',
-            'emenu.campcoder.cashier1@gmail.com', 'emenu.campcoder.cashier2@gmail.com'],
+        to: [email],
         subject: 'Hello',           // Subject line
         text: content,                 // plaintext body
         html:  content
