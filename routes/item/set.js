@@ -168,7 +168,7 @@ module.exports = function(req, res) {
                   // cannot update image_link
                   item_exist.user_id        = user_id;
                   item_exist.category_id    = category_id;
-                  item.category             = category;
+                  item_exist.category       = category;
                   item_exist.title          = title;
                   item_exist.description    = description;
                   item_exist.type           = type;

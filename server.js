@@ -78,6 +78,9 @@ Router_body.post('/get_messages',		     routes.message.get);			// api get messag
 Router_body.post('/sync_fb',						 routes.sync_account.facebook);
 Router_body.post('/sync_tw',						 routes.sync_account.twitter);
 
+// MAKE FRIEND
+Router_body.post('/make_friend',				 routes.friend.make);			// api make friends
+
 
 // FORGOT PASSWORD
 Router_body.post('/forgot_password', 		 routes.forgot_password);
