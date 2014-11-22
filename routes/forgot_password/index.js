@@ -15,5 +15,4 @@ module.exports			=	function(req, res){
 		res.json({error_code : 0});
 		res.status(200).end();
 	}
-	
 }

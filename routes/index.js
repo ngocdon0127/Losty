@@ -22,6 +22,8 @@ exports.message             =   require('./message');
 
 exports.error_code          =   require('./error_code');
 
+exports.sync_account				=   require('./sync_account');
+
 exports.index = function(req, res){
     res.json('get /');
 }

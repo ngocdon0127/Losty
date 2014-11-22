@@ -5,7 +5,6 @@
 // Owner	lostyapp
 // Owner ID	2813720386
 
-
 // FACEBOOK
 // client_id_fb    	:   '1521666321415364',
 // client_secret_fb  :   'e1a124e86fbd2b95f3f6e12f0e17865c',

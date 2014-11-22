@@ -44,7 +44,8 @@ var itemSchema = mongoose.Schema({
 
     location         : {
         lat          : Number,
-        lng          : Number
+        lng          : Number,
+        address      : String
     },
 
     reward           : {

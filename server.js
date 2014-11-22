@@ -23,11 +23,11 @@ require('./config/index.js')(app, Router_raw, Router_formdata, Router_body);  //
 
 // ================================================= API ============================================
 
-app.get('/api/login_fb',					function(req, res){
+app.get('/api/login_fb',								 function(req, res){
 	res.render('login_fb');
 })
 
-app.get('/api/login_twitter',				function(req, res){
+app.get('/api/login_twitter',						 function(req, res){
 	res.render('login_twitter');
 })
 
@@ -73,6 +73,11 @@ Router_body.post('/get_friends',			   routes.friend.get);				// api get friends
 
 // GET MESSAGE
 Router_body.post('/get_messages',		     routes.message.get);			// api get messages
+
+// SYNC ACCOUNT
+Router_body.post('/sync_fb',						 routes.sync_account.facebook);
+Router_body.post('/sync_tw',						 routes.sync_account.twitter);
+
 
 // FORGOT PASSWORD
 Router_body.post('/forgot_password', 		 routes.forgot_password);

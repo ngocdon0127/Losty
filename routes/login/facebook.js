@@ -107,7 +107,6 @@ module.exports = function(req, res){
 						if (err){
 							console.log(err);
 						}
-						console.log(profile);
 
 			    	User.findOne( {'facebook.id' : profile.id}, function(err, user_exist){
 			    		if (err){																									// database cannot find
@@ -148,6 +147,6 @@ module.exports = function(req, res){
 			    			}
 			    		}
 			    	})    
-			});
+		});
   }
 };
