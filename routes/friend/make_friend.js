@@ -28,7 +28,7 @@ module.exports			=	function(req, res){
 						user1.save(function(err){});	
 						// }
 					
-					res.status(200).end();
+						res.status(200).end();
 				})
 		})
 	}

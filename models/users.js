@@ -111,6 +111,11 @@ var userSchema = mongoose.Schema({
         avatar       : String,
         username     : String
     }],
+
+    active					 : {
+    	type           : Number,
+    	default        : 1
+    }
 });
 
 // generating a hash
