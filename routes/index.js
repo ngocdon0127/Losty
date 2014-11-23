@@ -24,6 +24,8 @@ exports.error_code          =   require('./error_code');
 
 exports.sync_account				=   require('./sync_account');
 
+exports.edit_profile				=   require('./edit_profile');
+
 exports.index = function(req, res){
     res.json('get /');
 }

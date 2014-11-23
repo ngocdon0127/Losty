@@ -59,7 +59,7 @@ module.exports  	=	function(req, res){
 			}],
 			function(err){
 				if (!friends || !profile){
-					res.json({error_code : 101, msg : 'Access_token is incorrect'});			// Access_token is incorrect
+					res.json({error_code : 100, msg : 'Access_token is incorrect'});			// Access_token is incorrect
 					res.status(200).end();
 				} else{
 					// LOGIN OR REGISTER

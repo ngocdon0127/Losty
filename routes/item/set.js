@@ -78,14 +78,9 @@ module.exports = function(req, res) {
                   msg : 'format of user_id or item_id or category_id or location is incorrect'});       
         res.status(200).end();
       } 
-      else if(create == 1 && (image_link == "" || !fs.existsSync(image_link)) ){
+      else if(create == 1 && (image_link != "" && !fs.existsSync(image_link)) ){
         res.json({error_code : 202, msg : 'image link is not exist'});            
         res.status(200).end();
-      }
-      else if(create == 1 &&  (image_link == "" || !validate_extension(image_link, extension))) {
-        res.json({error_code : 203, msg : 'extension of file is incorrect'});   
-        res.status(200).end();
-        return 1;
       }
       else{
         // =================== VALIDATE ALL IS SUCCESS ==================================

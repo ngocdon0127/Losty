@@ -59,8 +59,7 @@ module.exports = function(req, res){
 			    , "client_secret":   client_secret
 			  }, function (err, facebookRes) {
 			    if (err) {
-			    	res.json({error_code : 101, msg : err.message});			  //	Access_token is incorrect
-			    	res.json({error_code : 101, msg : 'Error validating access token: The session is invalid because the user logged out or access token is incorrect'});			  //	Access_token is incorrect
+			    	res.json({error_code : 100, msg : err.message});			  //	Access_token is incorrect
 			   		res.status(200).end();
 			    } else {
 			      next(null);

@@ -56,7 +56,7 @@ module.exports = function(req, res) {
     }
     else {
       if(create == 1){      // Create new user
-        if( !validate_extension(avatar_link, extension) ){
+        if(avatar_link!= '' && !validate_extension(avatar_link, extension) ){
           res.json({error_code : 203, msg : 'extension is incorrect'});
           res.status(200).end();
         }  else{

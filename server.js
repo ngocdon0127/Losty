@@ -81,6 +81,9 @@ Router_body.post('/sync_tw',						 routes.sync_account.twitter);
 // MAKE FRIEND
 Router_body.post('/make_friend',				 routes.friend.make);			// api make friends
 
+// EDIT PROFILE
+Router_body.post('/edit_profile',				 routes.edit_profile);	
+
 
 // FORGOT PASSWORD
 Router_body.post('/forgot_password', 		 routes.forgot_password);

@@ -31,7 +31,7 @@ module.exports 			=	function(req, res){
 	}
 
 	finally{
-		if (!validator.isAlphanumeric(user_id) || (create == 0 && !validator.isAlphanumeric(photo_id))){
+		if ( !validator.isAlphanumeric(user_id)){
             res.json({error_code : 201, msg : 'user_id or photo_id is incorrect'});                       //  Input is invalid
             res.status(200).end();
 		} else{
@@ -47,10 +47,7 @@ module.exports 			=	function(req, res){
 					        res.json({error_code : 201, msg : 'Image link is not exist'});         //  Input is invalid
 					        res.status(200).end();
 						} else{
-							if (!validate_extension(image_link, extension)){
-						        res.json({error_code : 203, msg : 'Extension of image_link is incorrect'});     //  Extension of file is incorrect
-						        res.status(200).end()
-							} else{		
+	
 								var photo = new Photo;
 								photo.name = name;
 								var file_name = Math.floor(Math.random() * 1000000 + 1) + 
@@ -94,7 +91,7 @@ module.exports 			=	function(req, res){
 										});
 									}
 								})
-							}
+
 						}
 					} else{							 // Update photo
 						Photo.findOne({_id : photo_id}, function(err, photo_exist){
