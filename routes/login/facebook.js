@@ -128,6 +128,8 @@ module.exports = function(req, res){
 							console.log(err);
 						}
 
+						console.log(friends);
+
 			    	User.findOne( {'facebook.id' : profile.id}, function(err, user_exist){
 			    		if (err){																									// database cannot find
 			    			res.json({error_code : 401, msg : err.toString()});
