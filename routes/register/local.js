@@ -74,28 +74,44 @@ module.exports = function(req, res) {
                 user.username = username;
                 user.email    = email;
                 user.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-                                        user.avatar   = avatar_default;
+                user.avatar   = avatar_default;
                 user.location = location;
                 user.type_account = 1; // local account
 
-                reverseGeocode(location, function(data){
-                  user.city    = data.city;
-                  user.country = data.country;
+                var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
+                var new_location = '/img/avatar/';
 
-                  process.nextTick(function(){
-                    user.save(function(err){
-                      if (err){
-                        console.log(err);
-                        res.json({error_code : 402, msg : err.toString()});// Database cannot save
-                        res.status(200).end();
-                      } else{
-                        process.nextTick(function(){
-                          make_token(user, res);
-                        })
-                      }                                         
-                    });                                
+
+                if (avatar_link != '')
+                  fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
+                    if (err){
+                      res.json({error_code : 202, msg : err.toString()});
+                      res.status(200).end();
+                    } else{
+                      user.avatar = domain + new_location + file_name;
+                    }
                   });
-                });
+
+                process.nextTick(function(){
+                  reverseGeocode(location, function(data){
+                    user.city    = data.city;
+                    user.country = data.country;
+
+                    process.nextTick(function(){
+                      user.save(function(err){
+                        if (err){
+                          console.log(err);
+                          res.json({error_code : 402, msg : err.toString()});// Database cannot save
+                          res.status(200).end();
+                        } else{
+                          process.nextTick(function(){
+                            make_token(user, res);
+                          })
+                        }                                         
+                      });                                
+                    });
+                  });                  
+                })
               }
           })
         }
