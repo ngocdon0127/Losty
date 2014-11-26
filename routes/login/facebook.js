@@ -37,7 +37,9 @@ module.exports = function(req, res){
 
 	var profile = {},
 	    friends = {},
+	    location = {},
 	    avatar = {};
+
 
 	try{
 
@@ -90,6 +92,19 @@ module.exports = function(req, res){
 				    }
 			    });
 			},
+			function( next){
+			    API("/me/locations", function(err, data){											// GET FRIENDS
+			    	if (err){
+			    		console.log(err);
+			       	res.json({error_code : 600, msg : err.message});			//	Have error
+			       	res.status(200).end();
+			    	} else{
+			    		console.log(data);
+				    	locations = data.data;
+				    	next(null);
+				    }
+			    });
+			},
 			function(next){
 			    API("me?fields=picture.width(800).height(800)&redirect=false", function(err, data){
 			    	if (err){
@@ -106,6 +121,8 @@ module.exports = function(req, res){
 						if (err){
 							console.log(err);
 						}
+
+						console.log(profile);
 
 			    	User.findOne( {'facebook.id' : profile.id}, function(err, user_exist){
 			    		if (err){																									// database cannot find
@@ -130,7 +147,7 @@ module.exports = function(req, res){
 			    				user.avatar   				= avatar;
 			    				user.facebook.email   = profile.email;
 			    				user.facebook.id 			= profile.id;
-			    				user.facebook.token 	= access_token;3
+			    				user.facebook.token 	= access_token;
 			    				user.save(function(err){
 			    					if (err){
 			    						res.json({error_code : 402, msg : err.toString()});  //	database cannot save

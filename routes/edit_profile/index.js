@@ -45,7 +45,6 @@ module.exports								=	function(req, res){
 				res.status(200).end();
 			} else{
 
-				console.log(data);
 				async.waterfall([	
 
 					function(next){	

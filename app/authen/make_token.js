@@ -39,7 +39,7 @@ module.exports      =   function(user, res){
                        {error_code : 0, 
                         user : {
                             email : user.email, username : user.username, 
-                            id    : user._id  , avatar   : user.avatar
+                            id    : user._id  , avatar   : user.avatar, city : user.city, coutry : user.country
                         }, 
                         unread_msg : user.unread_msg,
                         token : token});
@@ -61,7 +61,7 @@ module.exports      =   function(user, res){
                        {error_code : 0, 
                         user : {
                             email : user.email, username : user.username, 
-                            id    : user._id  , avatar   : user.avatar
+                            id    : user._id  , avatar   : user.avatar, city : user.city, coutry : user.country
                         }, 
                         unread_msg : user.unread_msg,
                         token : token});
