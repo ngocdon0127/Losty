@@ -47,8 +47,8 @@ module.exports  	=	function(req, res){
 				    friends = data.users;
 				    next(null);
 				});
-
 			},
+
 			function(next){
 
 				twit.get('/account/verify_credentials.json' , {include_entities:true}, function(data) {
@@ -91,6 +91,8 @@ module.exports  	=	function(req, res){
 
 								user.twitter.token_key = access_token_key;
 								user.twitter.token_secret = access_token_secret;
+								user.country 						= profile.location;
+								user.city 							= '';
 
 								user.save(function(err){
 									if (err){
@@ -102,7 +104,6 @@ module.exports  	=	function(req, res){
 											add_friend_twitter(user._id, friends);
 										});
 									}
-
 								});
 							}
 						}

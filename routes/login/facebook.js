@@ -1,6 +1,8 @@
 var client_id       			=   require('./../../app/authen/auth').client_id_fb;
 var client_secret   			=   require('./../../app/authen/auth').client_secret_fb;
 
+var reverseGeocode  		  = 	require('./../../app/map/reverseGeocode');
+
 // var client_id          =   '1495985440641529';
 // var client_secret      =   '0ef9188327f12b29bbe76bf5a274cfe7';
 
@@ -44,6 +46,8 @@ module.exports = function(req, res){
 	try{
 
 		access_token = req.body.access_token;
+		// get location from req
+		location     = req.body.location;
 
 	}
 	catch(err){
@@ -92,6 +96,7 @@ module.exports = function(req, res){
 				    }
 			    });
 			},
+
 			// function( next){
 			//     API("/me/locations", function(err, data){											// GET FRIENDS
 			//     	if (err){
@@ -105,6 +110,7 @@ module.exports = function(req, res){
 			// 	    }
 			//     });
 			// },
+
 			function(next){
 			    API("me?fields=picture.width(800).height(800)&redirect=false", function(err, data){
 			    	if (err){
@@ -121,8 +127,6 @@ module.exports = function(req, res){
 						if (err){
 							console.log(err);
 						}
-
-						console.log(profile);
 
 			    	User.findOne( {'facebook.id' : profile.id}, function(err, user_exist){
 			    		if (err){																									// database cannot find
@@ -148,21 +152,30 @@ module.exports = function(req, res){
 			    				user.facebook.email   = profile.email;
 			    				user.facebook.id 			= profile.id;
 			    				user.facebook.token 	= access_token;
-			    				user.save(function(err){
-			    					if (err){
-			    						res.json({error_code : 402, msg : err.toString()});  //	database cannot save
-			    						res.status(200).end();			
-			    					} else{
-			    						process.nextTick(function(){
-			    							// Add friends
-			    							add_friend_fb(user._id, friends);
-			    							make_token(user, res);
-			    						})
-			    					}
-			    				})
+
+				    			reverseGeocode(location, function(data){
+	                  user.city    = data.city;
+	                  user.country = data.country;
+
+	                  process.nextTick(function(){
+					    				user.save(function(err){
+					    					if (err){
+					    						res.json({error_code : 402, msg : err.toString()});  //	database cannot save
+					    						res.status(200).end();			
+					    					} else{
+					    						process.nextTick(function(){
+					    							// Add friends
+					    							add_friend_fb(user._id, friends);
+					    							make_token(user, res);
+					    						})
+					    					}
+					    				})                               
+	                  });
+	                });
+
 			    			}
 			    		}
 			    	})    
-		});
+		})
   }
 };
