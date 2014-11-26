@@ -40,8 +40,8 @@ module.exports = function(req, res) {
     var password        = data.password;
     var extension       = data.extension;
     var location        = data.location;
-    if (!validate_location(location))
-      throw Error('Location is invalid');
+    // if (!validate_location(location))
+    //   throw Error('Location is invalid');
   }
   catch(err){
     res.json({error_code : 201, msg : err.toString()});                     //  Input is invalid

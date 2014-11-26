@@ -24,7 +24,7 @@ module.exports			=	function(req, res){
 			if (err){
 					console.log(err);
 			} else{
-					send_mail(email, key);
+					send_mail(res, email, key);
 					res.json({error_code : 0});
 					res.status(200).end();		
 			}

@@ -23,9 +23,7 @@ module.exports    = function(req, res){
 	}
 
 	finally{
-		console.log(key);
 		Reset_keys.findOne({key : key}, function(err, reset_key){
-			console.log(reset_key);
 			email = reset_key.email;
 			console.log(email);
 			Users.findOne({email : email}, function(err, user_exist){
@@ -35,17 +33,20 @@ module.exports    = function(req, res){
 				} else if(!user_exist){
 					res.json({message : 'Have error : Email is not exist'});
 					res.status(200).end();
-
 				} else{
-
 					user_exist.password =  bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 					user_exist.save(function(err){
-
+						res.json({error_code : 0});
+						res.status(200).end();
 					});
 				}
 			})
 		})
+
+		Reset_keys.remove({key : key }, function(err, number){
+			if (err){
+				console.log(err);
+			};
+		})	
 	}
-	
-	
 }

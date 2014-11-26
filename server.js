@@ -88,15 +88,12 @@ Router_body.post('/make_friend',				 					routes.friend.make);			// api make fri
 // EDIT PROFILE
 Router_body.post('/edit_profile',				 					routes.edit_profile);	
 
-
 // FORGOT PASSWORD
 Router_body.post('/forgot_password', 		 					routes.forgot_password.forgot_password);
 Router_body.post('/reset_password',								routes.forgot_password.reset_password);
 
-
 // ERROR CODE
 Router_body.get('/error_code/:error_code',				routes.error_code);
-
 
 // =================================================== LISTEN BY IP AND PORT ========================
 
