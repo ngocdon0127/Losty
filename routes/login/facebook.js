@@ -92,19 +92,19 @@ module.exports = function(req, res){
 				    }
 			    });
 			},
-			function( next){
-			    API("/me/locations", function(err, data){											// GET FRIENDS
-			    	if (err){
-			    		console.log(err);
-			       	res.json({error_code : 600, msg : err.message});			//	Have error
-			       	res.status(200).end();
-			    	} else{
-			    		console.log(data);
-				    	locations = data.data;
-				    	next(null);
-				    }
-			    });
-			},
+			// function( next){
+			//     API("/me/locations", function(err, data){											// GET FRIENDS
+			//     	if (err){
+			//     		console.log(err);
+			//        	res.json({error_code : 600, msg : err.message});			//	Have error
+			//        	res.status(200).end();
+			//     	} else{
+			//     		console.log(data);
+			// 	    	locations = data.data;
+			// 	    	next(null);
+			// 	    }
+			//     });
+			// },
 			function(next){
 			    API("me?fields=picture.width(800).height(800)&redirect=false", function(err, data){
 			    	if (err){
