@@ -18,7 +18,6 @@ module.exports          =   function(res, email, key){
     // setup e-mail data with unicode symbols
     Users.findOne({email : email}, function(err, user_exist){
         if (err || !user_exist){
-            
             res.json({error_code : 308, msg : ' Email is incorrect'});
         } else{
             var content = '<p>Dear ' + user_exist.username + ', <br> We received a request to reset the password of your account. <br> If you made this request, please click the link below to get it back, or just ignore this email. <br> Link reset password : http://104.131.69.233:3000/api/reset_password/' + key + '</p>';
