@@ -67,6 +67,7 @@ module.exports								=	function(req, res){
 				        }
 				      });
 						} else{
+							console.log('next thoi');
 							next(null);
 						}
 					}, 
@@ -86,7 +87,8 @@ module.exports								=	function(req, res){
 									user_exist.avatar = img_server;
 								user_exist.email  = email;
 								user_exist.username = username;
-	              user_exist.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+	              if (password != '')
+	              	user_exist.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 
 	              process.nextTick(function(){
 	              	user_exist.save(function(err){});

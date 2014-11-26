@@ -24,8 +24,8 @@ module.exports = function(req, res){
 		var user_id 	= data.user.user_id;
 		var token   	= data.user.token;
 		var location	= data.location;
-		if (!validate_location(location))
-            throw Error('Location is invalid');
+		// if (!validate_location(location))
+  //           throw Error('Location is invalid');
 
 		var start       = data.start;	// default = 0
 		var limit       = data.limit;   // default = 20;

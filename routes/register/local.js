@@ -74,7 +74,7 @@ module.exports = function(req, res) {
                 user.username = username;
                 user.email    = email;
                 user.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-                user.avatar   = avatar_default;
+                                        user.avatar   = avatar_default;
                 user.location = location;
                 user.type_account = 1; // local account
 
@@ -92,7 +92,7 @@ module.exports = function(req, res) {
                         process.nextTick(function(){
                           make_token(user, res);
                         })
-                      }
+                      }                                         
                     });                                
                   });
                 });

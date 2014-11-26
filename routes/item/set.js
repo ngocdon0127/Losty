@@ -18,6 +18,17 @@ var   Item               = require('./../../models/items');
 var   User               = require('./../../models/users');
 var   Categores          = require('./../../models/categores');
 
+var   moment             = require('moment-timezone');
+
+function convert_another_zone(time, city){
+	var time = moment(time).tz("America/Los_Angeles").format();
+	return time;
+}
+
+function convert_time_to_GMT(time){
+	return new Date(new Date(time).toGMTString()).toJSON();
+}
+
 module.exports = function(req, res) {
 
     try{
@@ -91,6 +102,7 @@ module.exports = function(req, res) {
             res.status(200).end();
           } else {
             if (create == 1){           // ======== MAKE NEW ITEM ================
+            	console.log('make new item');
               var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
                               + '.' + extension;
 
@@ -111,10 +123,11 @@ module.exports = function(req, res) {
                   item.reward         = reward;
                   item.report         = report;
                   item.image_link     = domain + new_location + file_name;
-                  item.date_lost      = date_lost;
-                  item.time_post      = (new Date).toJSON();
+                  item.date_lost      = convert_time_to_GMT(date_lost);
+                  item.time_post      = convert_time_to_GMT((new Date).toJSON());
 
                   // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
+                  console.log('find user');
                   User.findOne({_id : user_id}, function(err, user_exits){
                     if (err){
                       res.json({error_code : 401, msg : err.toString()});   // database cannot find
@@ -141,6 +154,8 @@ module.exports = function(req, res) {
                                 if (err){
                                   res.json({error_code : 402, msg : err.toString()});
                                   res.status(200).end();
+                                } else{
+                                	console.log('save');
                                 }
                               })
                               res.json({error_code : 0, item : item});
@@ -148,6 +163,9 @@ module.exports = function(req, res) {
                             })   
                           }
                         })
+                      } else{
+                      	res.json({error_code : 308, msg : 'User is not exist'});
+                      	res.status(200).end();
                       }
                     }
                   })
@@ -170,8 +188,8 @@ module.exports = function(req, res) {
                   item_exist.location       = location;
                   item_exist.reward         = reward;
                   item_exist.report         = report;
-                  item_exist.date_lost      = date_lost;
-                  item_exist.post_time      = (new Date).toJSON();
+                  item.date_lost      			= convert_another_zone(date_lost, 'America/Los_Angeles');
+                  item.time_post      			= convert_another_zone((new Date).toJSON(), 'America/Los_Angeles');
                   // USER INFO IS NOT UPDATE BECAUSE USER IS NOT CHANGE
 
                   item_exist.save(function(err){
