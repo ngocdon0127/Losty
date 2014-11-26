@@ -71,9 +71,9 @@ module.exports = function(req, res) {
       var reward      = data.reward;
       var report      = data.report;
 
-      if (!validate_location(location)){
-        throw Error('Location is incorrect');
-      }
+      // if (!validate_location(location)){
+      //   throw Error('Location is incorrect');
+      // }
     }
     catch(err){
       res.json({error_code : 201, msg : err.toString()});             
