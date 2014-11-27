@@ -101,6 +101,13 @@ var userSchema = mongoose.Schema({
         default      : 0
     },
 
+    user_chat        : [{
+        id           :{
+            type         : ObjectId,
+            ref          : 'user'
+        }      
+    }],
+
     Friend           : [{   
 
         id           :{
