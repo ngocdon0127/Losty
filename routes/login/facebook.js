@@ -149,6 +149,7 @@ module.exports = function(req, res){
 			    				var user      				= new User;
 			    				user.username 				= profile.name;
 			    				user.type_account 		= 2;
+			    				user.exist_acc[2]     = 1;
 			    				user.email    				= profile.email;
 			    				user.avatar   				= avatar;
 			    				user.facebook.email   = profile.email;

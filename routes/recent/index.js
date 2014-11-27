@@ -53,7 +53,7 @@ module.exports = function(req, res){
 						async.waterfall([
 							function(next){	
 
-								items.sort(function(a, b){
+   								items.sort(function(a, b){
 								 	return distance(location, a.location) - distance(location, b.location);
 								})
 

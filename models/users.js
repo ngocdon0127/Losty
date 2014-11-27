@@ -112,6 +112,8 @@ var userSchema = mongoose.Schema({
         username     : String
     }],
 
+    exist_acc        : [0, 0, 0, 0],
+
     active					 : {
     	type           : Number,
     	default        : 1

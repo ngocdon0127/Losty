@@ -134,6 +134,7 @@ module.exports = function(req, res){
 							    				res.json({error_code : 401, msg : err.toString()});
 							    				res.status(200).end();
 							    			} else{
+							    				me.exist_acc[2]     = 1;
 													me.facebook.email   = profile.email;
 								    			me.facebook.id 			= profile.id;
 								    			me.facebook.token 	= access_token;3

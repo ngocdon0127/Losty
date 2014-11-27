@@ -82,6 +82,7 @@ module.exports  	=	function(req, res){
 								var user = new User;
 								user.username = profile.screen_name;
 								user.type_account = 3;
+								user.exist_acc[3] = 1;
 
 								// IMAGE NORMAL
 								user.avatar   = profile.profile_image_url.replace('_normal', '');

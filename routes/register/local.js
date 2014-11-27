@@ -67,6 +67,7 @@ module.exports = function(req, res) {
                 res.status(200).end();
               } 
             else if (user_exist){
+              console.log(user_exist);
               res.json({error_code : 303, msg : 'Email is really exist'});       //  Email is really exist
                 res.status(200).end();
               } else{
@@ -77,6 +78,7 @@ module.exports = function(req, res) {
                 user.avatar   = avatar_default;
                 user.location = location;
                 user.type_account = 1; // local account
+                user.exist_acc[1] = 1;
 
                 var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
                 var new_location = '/img/avatar/';

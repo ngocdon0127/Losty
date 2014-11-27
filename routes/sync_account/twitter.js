@@ -96,6 +96,7 @@ module.exports  	=	function(req, res){
 														res.status(200).end();
 													} else{
 														me.twitter.id = profile.id;
+							    					me.exist_acc[3]     = 1;
 
 														me.twitter.token_key = access_token_key;
 														me.twitter.token_secret = access_token_secret;

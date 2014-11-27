@@ -1,3 +1,4 @@
+var async                   = require('async');
 var validate_token					=	require('./../../app/validate/validate_token');
 
 var Message               	=	require('./../../models/messages');
@@ -28,25 +29,45 @@ module.exports	=	function(req, res){
 					if (err){
 						res.json({error_code : 401, msg : err.toString()});								// Database cannot find
 						res.status(200).end();
-					} else{
-						var result = messages.slice(start, start + limit);
-						User.findOne({_id : friend_id}, function(err, user_exist){
-							if (err){
-								res.json({error_code : 401, msg : err.toString()});						// Database cannot find
-								res.status(200).end();
-							} else{
-								if (user_exist){
-									res.json({ error_code : 0, 
-										       avatar : user_exist.avatar, 
-										       username : user_exist.username, 
-										       messages : result});
-									res.status(200).end();
-								} else{
-									res.json({error_code : 308, msg : 'User is not exist'});					// User is not exist
-									res.status(200).end();
-								}
+					} else{	
+						async.waterfall([
+
+							function(next){
+								var result = messages.slice(start, start + limit);		
+
+								result.sort(function(a,b){
+									return new Date(b.time) - new Date(a.time);
+								});
+
+								next(null);
+							},
+
+							function(next){
+								User.findOne({_id : friend_id}, function(err, user_exist){
+									if (err){
+										res.json({error_code : 401, msg : err.toString()});						// Database cannot find
+										res.status(200).end();
+										next(null);
+									} else{
+										if (user_exist){
+											res.json({ error_code : 0, 
+												       avatar : user_exist.avatar, 
+												       username : user_exist.username, 
+												       messages : result});
+											res.status(200).end();
+											next(null);
+										} else{
+											res.json({error_code : 308, msg : 'User is not exist'});					// User is not exist
+											res.status(200).end();
+											next(null);
+										}
+									}
+								})									
 							}
-						})	
+
+						], function(err){
+
+						})
 					}
 				})
 			}
