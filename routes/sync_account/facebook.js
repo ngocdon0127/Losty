@@ -31,8 +31,7 @@ function  API(api, callback){
 	      callback(null, data);
       }    
     });
-  }
-
+}
 
 module.exports = function(req, res){	
 	var access_token = '';

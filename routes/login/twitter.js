@@ -11,7 +11,6 @@ var User   							=	require('./../../models/users');
 var util 								= require('util'),
 	twitter 							= require('twitter');
 
-
 var twit;
 var profile, friends;
 var access_token_key, access_token_secret ;
@@ -85,7 +84,7 @@ module.exports  	=	function(req, res){
 								user.type_account = 3;
 
 								// IMAGE NORMAL
-								user.avatar   = profile.profile_image_url;
+								user.avatar   = profile.profile_image_url.replace('_normal', '');
 
 								user.twitter.id = profile.id;
 
