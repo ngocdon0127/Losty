@@ -86,13 +86,13 @@ module.exports  	=	function(req, res){
 										} else{
 											if (user_exist){
 
-												res.json({error_code : 201, msg : 'Tai khoan twitter da ton tai, khong duoc sync'});
+												res.json({error_code : 201, msg : 'Sync not successful due to existing account'});
 												res.status(200).end();
 											} else{
 												// MAKE NEW ACCOUNT
 												User.findOne({_id : user_id}, function(err, me){
 													if (err || !me){
-														res.json({error_code : 401, msg : 'Khong tim duoc user'});
+														res.json({error_code : 401, msg : 'Not found user'});
 														res.status(200).end();
 													} else{
 														me.twitter.id = profile.id;

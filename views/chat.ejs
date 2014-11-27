@@ -24,18 +24,18 @@
 
     if (user_number == 1){
 
-      my_id     = '5462f79b3a022b3926699d84';
-      token     = '$2a$20$0PeBd6ZilAA3FkV/Rx8TGu';
-      friend_id = '5462f7a73a022b3926699d86';
+      my_id     = '5476869741cfce251b81d160';
+      token     = '$2a$20$Jx54zT1OlY/cNajQNaaBVu';
+      friend_id = '54768b5e88580e4c1e41f7f1';
 
     } else{
-      my_id     = '5462f7a73a022b3926699d86';
-      token     = '$2a$20$KAq85EaLMTwhindGOQfIHu';
-      friend_id = '5462f79b3a022b3926699d84';
+      my_id     = '54768b5e88580e4c1e41f7f1';
+      token     = '$2a$20$9eiO76BZArhMGZa4MXuxvO';
+      friend_id = '5476869741cfce251b81d160';
       
     }
 
-    url = 'http://localhost:8080/chat?user_id='+ my_id +'&token=' + token;
+    url = 'http://localhost:3000/chat?user_id='+ my_id +'&token=' + token;
 
     var socket = io.connect(url);
 

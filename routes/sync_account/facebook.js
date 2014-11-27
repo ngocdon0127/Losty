@@ -125,7 +125,7 @@ module.exports = function(req, res){
 							    	res.status(200).end();
 							    } else{
 							    	if ( user_exist){																				// USER IS REALLY EXIST
-							    		res.json({error_code : 201, msg : 'Tai khoan da ton tai, khong duoc phep sync'});
+							    		res.json({error_code : 201, msg : 'Sync not successful due to existing account'});
 							    		res.status(200).end();
 							    	}
 							    	else{						// UPDATE USER
