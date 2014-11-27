@@ -66,7 +66,7 @@ module.exports      =   function(user, res){
                             email : user.email, username : user.username, 
                             id    : user._id  , avatar   : user.avatar, 
                             city : user.city, country : user.country, 
-                            fb_id : user.facebook.id, tw_id : user.twitter.id
+                            fb_id : user.facebook.id, tw_id : user.twitter.id,
                             type_account : user.type_account
                         }, 
                         unread_msg : user.unread_msg,
