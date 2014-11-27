@@ -147,7 +147,7 @@ module.exports = function(req, res){
 									    					// Add friends
 									    					add_friend_fb(me._id, friends);
 									    					
-									    					res.json({error_code : 0});
+									    					res.json({error_code : 0, fb_id : me.facebook.id, tw_id : me.twitter.id});
 									    					res.status(200).end();
 								    					})
 								    				}

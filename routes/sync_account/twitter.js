@@ -109,7 +109,7 @@ module.exports  	=	function(req, res){
 																process.nextTick(function(){
 																	add_friend_twitter(me._id, friends);
 																	
-																	res.json({error_code : 0});
+									    					  res.json({error_code : 0, fb_id : me.facebook.id, tw_id : me.twitter.id});
 																	res.status(200).end();
 																});
 															}
@@ -124,11 +124,12 @@ module.exports  	=	function(req, res){
 					} else{
 						Users.findOne({_id : user_id}, function(err, user_exist){
 		  				if (user_exist){
+
 			  				user_exist.twitter.id 			    = '';
 			  				user_exist.twitter.token_key    = '';
 			  				user_exist.twitter.token_secret = '';
 			  				user_exist.save(function(err){
-			  					res.json({error_code : 0, msg : 'Unsync success'});
+									res.json({error_code : 0, fb_id : user_exist.facebook.id, tw_id : user_exist.twitter.id});
 			  					res.status(200).end();
 			  				});
 		  				} else{
