@@ -8,8 +8,8 @@ module.exports = function(location, callback){
  	  
  	  var country = '';
     var city = '';
-    
-    if (location.lat == '' && location.lng == ''){
+
+    if (typeof location == "undefined" || (location.lat == '' && location.lng == '')){
         callback({city  : '',  country : '' });
         return 1;
     }

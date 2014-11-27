@@ -26,6 +26,8 @@ exports.sync_account				=   require('./sync_account');
 
 exports.edit_profile				=   require('./edit_profile');
 
+exports.deactive_account    =   require('./deactive_account');
+
 exports.index = function(req, res){
     res.json('get /');
 }

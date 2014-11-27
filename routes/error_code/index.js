@@ -79,6 +79,10 @@ module.exports			=	function(req, res){
   	msg = 'Not have enough permission';
   	break;
 
+  case 600:
+    msg = 'Account was deactive';
+    break;
+
 	default:
 	  msg = 'Error_code is incorrect';
 	  break;

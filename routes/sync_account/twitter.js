@@ -1,10 +1,14 @@
 var async								=	require('async');
 
+var Users                 =   require('./../../models/users');
+
 var consumer_key 				=	require('./../../app/authen/auth').consumer_key;
 var consumer_secret			=	require('./../../app/authen/auth').consumer_secret;
 
 var make_token					=	require('./../../app/authen/make_token');
 var add_friend_twitter 	= require('./../../app/add_friend/add_friend_twitter');
+var check_exist_account   =   require('./../../app/check_exist_account');
+
 
 var validate_token      = require('./../../app/validate/validate_token');
 
@@ -37,85 +41,102 @@ module.exports  	=	function(req, res){
 				res.json({error_code : 100, msg : 'Authenticate is incorrect'});
 				res.status(200).end();
 			} else{
-				async.waterfall([
+				check_exist_account(3, user_id, function(check_exist){
+					if (!check_exist){
+						async.waterfall([
 
-					function(next){
+							function(next){
 
-						twit = new twitter({
-							consumer_key: consumer_key,
-						 	consumer_secret: consumer_secret,
-						  access_token_key: access_token_key,
-						  access_token_secret: access_token_secret
-						});
+								twit = new twitter({
+									consumer_key: consumer_key,
+								 	consumer_secret: consumer_secret,
+								  access_token_key: access_token_key,
+								  access_token_secret: access_token_secret
+								});
 
-					  process.nextTick(function(){
-					   	next(null);
-					  })
-					},
+							  process.nextTick(function(){
+							   	next(null);
+							  })
+							},
 
-					function(next){
-						twit.get('/friends/list.json', {include_entities:true}, function(data) {
-						    friends = data.users;
-						    next(null);
-						});
-					},
+							function(next){
+								twit.get('/friends/list.json', {include_entities:true}, function(data) {
+								    friends = data.users;
+								    next(null);
+								});
+							},
 
-					function(next){
-						twit.get('/account/verify_credentials.json' , {include_entities:true}, function(data) {
-						    profile = data;
-		  				  next(null);
-						});
-					}],
+							function(next){
+								twit.get('/account/verify_credentials.json' , {include_entities:true}, function(data) {
+								    profile = data;
+				  				  next(null);
+								});
+							}],
 
-					function(err){
-						if (!friends || !profile){
-							res.json({error_code : 101, msg : 'Access_token is incorrect'});			// Access_token is incorrect
-							res.status(200).end();
-						} else{
-							// LOGIN OR REGISTER
-							User.findOne({'twitter.id' : profile.id}, function(err, user_exist){
-								if (err){
-									res.json({error_code : 401, msg : err.toString()});		//	Database cannot find
+							function(err){
+								if (!friends || !profile){
+									res.json({error_code : 101, msg : 'Access_token is incorrect'});			// Access_token is incorrect
 									res.status(200).end();
 								} else{
-									if (user_exist){
+									// LOGIN OR REGISTER
+									User.findOne({'twitter.id' : profile.id}, function(err, user_exist){
+										if (err){
+											res.json({error_code : 401, msg : err.toString()});		//	Database cannot find
+											res.status(200).end();
+										} else{
+											if (user_exist){
 
-										res.json({error_code : 201, msg : 'Tai khoan twitter da ton tai, khong duoc sync'});
-										res.status(200).end();
-
-									} else{
-										// MAKE NEW ACCOUNT
-
-										User.findOne({_id : user_id}, function(err, me){
-											if (err || !me){
-												res.json({error_code : 401, msg : 'Khong tim duoc user'});
+												res.json({error_code : 201, msg : 'Tai khoan twitter da ton tai, khong duoc sync'});
 												res.status(200).end();
 											} else{
-												me.twitter.id = profile.id;
-
-												me.twitter.token_key = access_token_key;
-												me.twitter.token_secret = access_token_secret;
-
-												me.save(function(err){
-													if (err){
-														res.json({error_code : 402, msg : err.toString()});		//	Database cannot save
+												// MAKE NEW ACCOUNT
+												User.findOne({_id : user_id}, function(err, me){
+													if (err || !me){
+														res.json({error_code : 401, msg : 'Khong tim duoc user'});
 														res.status(200).end();
 													} else{
-														process.nextTick(function(){
-															add_friend_twitter(me._id, friends);
-															
-															res.json({error_code : 0});
-															res.status(200).end();
+														me.twitter.id = profile.id;
+
+														me.twitter.token_key = access_token_key;
+														me.twitter.token_secret = access_token_secret;
+
+														me.save(function(err){
+															if (err){
+																res.json({error_code : 402, msg : err.toString()});		//	Database cannot save
+																res.status(200).end();
+															} else{
+																process.nextTick(function(){
+																	add_friend_twitter(me._id, friends);
+																	
+																	res.json({error_code : 0});
+																	res.status(200).end();
+																});
+															}
 														});
 													}
-												});
+												})
 											}
-										})
-									}
+										}
+									})
 								}
-							})
-						}
-					});			
+						});			
+					} else{
+						Users.findOne({_id : user_id}, function(err, user_exist){
+		  				if (user_exist){
+			  				user_exist.twitter.id 			    = '';
+			  				user_exist.twitter.token_key    = '';
+			  				user_exist.twitter.token_secret = '';
+			  				user_exist.save(function(err){
+			  					res.json({error_code : 0, msg : 'Unsync success'});
+			  					res.status(200).end();
+			  				});
+		  				} else{
+			  					res.json({error_code : 0, msg : 'Account is not exist'});
+			  					res.status(200).end();
+		  				}
+		  			})
+					}
+				});
 			}
 		});
 	}

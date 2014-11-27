@@ -92,6 +92,9 @@ Router_body.post('/edit_profile',				 					routes.edit_profile);
 Router_body.post('/forgot_password', 		 					routes.forgot_password.forgot_password);
 Router_body.post('/reset_password',								routes.forgot_password.reset_password);
 
+// DEACTIVE ACCOUNT
+Router_body.post('/deactive_account',							routes.deactive_account);
+
 // ERROR CODE
 Router_body.get('/error_code/:error_code',				routes.error_code);
 

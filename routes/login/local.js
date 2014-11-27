@@ -36,6 +36,10 @@ module.exports = function(req, res){
                         if (!user_exist.validPassword(password)){
                             res.json({error_code : 302, msg : 'Password is incorrect'});   
                             res.status(200).end();
+                        } else if (!user_exist.active){
+                            res.json({error_code : 600, msg : 'Account was deactive'});   
+                            res.status(200).end();
+                           
                         } else{
                             // login success, make token and res.json token
                             make_token(user_exist, res);
