@@ -41,7 +41,7 @@ module.exports      =   function(user, res){
                             email : user.email, username : user.username, 
                             id    : user._id  , avatar   : user.avatar, 
                             city : user.city, country : user.country, 
-                            exist_acc : user.exist_acc, type_account : type_account
+                            exist_acc : user.exist_acc, type_account : user.type_account
                         }, 
                         unread_msg : user.unread_msg,
                         token : token});
@@ -65,7 +65,7 @@ module.exports      =   function(user, res){
                             email : user.email, username : user.username, 
                             id    : user._id  , avatar   : user.avatar, 
                             city : user.city, country : user.country, 
-                            exist_acc : user.exist_acc, type_account : type_account
+                            exist_acc : user.exist_acc, type_account : user.type_account
                         }, 
                         unread_msg : user.unread_msg,
                         token : token});
