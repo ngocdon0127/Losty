@@ -1,9 +1,13 @@
 var  validate_token					=	require('./../validate/validate_token');
 
-var Message                         =   require('./../../models/messages');
+var Message                          =   require('./../../models/messages');
 var Users                            =   require('./../../models/users');
+ 
+var _                                =   require('underscore');
 
-
+function convert_time_to_GMT(time){
+  return new Date(new Date(time).toGMTString()).toJSON();
+}
 
 function add_users_chat(id_1, id_2){
   Users.findOne({_id : id_1}, function(err, user_exist){
@@ -14,13 +18,27 @@ function add_users_chat(id_1, id_2){
         console.log('User is not exist :', user_exist);
       } else{
         users_chat = user_exist.users_chat;
-        if (users_chat.indexOf(id_2) == -1){
-          user_exist.users_chat.push(id_2);
-          user_exist.save(function(err){
+        // console.log();
+        var id_2_find = _.find(users_chat, function(user_chat){
+          return user_chat._id == id_2;
+        });
+        console.log('id_2 index : ', id_2_find);
+        if (typeof(id_2_find) == 'undefined'){
+          Users.findOne({_id : id_2}, function(err, user_2){
             if (err){
               console.log(err);
+            } else if (!user_2){
+              console.log('User 2 is not exist');
+            } else{
+              console.log('Luu thong tin');
+              user_exist.users_chat.push({id : id_2, username : user_2.username, avatar : user_2.avatar});
+              user_exist.save(function(err){
+                if (err){
+                  console.log(err);
+                }
+              });    
             }
-          });
+          })
         }
       }
     }
@@ -42,7 +60,7 @@ module.exports = function(io){
     var user_id = socket.request._query.user_id;
     var token   = socket.request._query.token;
     console.log('Have connect, user_id : ', user_id, ' , token : ', token);
-    
+
     socket.emit('hello world', {});
 
 
@@ -55,7 +73,7 @@ module.exports = function(io){
 
 		user_sockets[user_id].emit('Online users', list_user);
         socket.broadcast.emit('One user online', user_id);
-        
+        console.log('Authenticate is success. Start to make socket');
         next();
       } else{
         next(new Error('Access denied !!!!'));
@@ -66,7 +84,10 @@ module.exports = function(io){
   chat.on('connection', function(socket){
 
 
-    socket.emit('hello world', {});
+    socket.emit('hello client', {number : 123, object : {a:1, b:2}});
+    socket.on('hello server', function(data){
+      console.log(data);
+    })
 
 // ============================= TYPING ========================================================
 
@@ -114,11 +135,12 @@ module.exports = function(io){
  // ============================= SEND MESSAGE====================================================
 
  	socket.on('Send message', function(data){
+    console.log(data);
  	  var user_send  = data.user_send;
  	  var user_recei = data.user_recei;
  	  var content    = data.content;
  	  var status     = 0;
- 	  var time       = (new Date).toJSON();
+ 	  var time       = convert_time_to_GMT((new Date).toJSON());
 
  	  // SAVE MESSAGE
  	  var message    = new Message;
@@ -160,7 +182,7 @@ module.exports = function(io){
 
  	socket.on('disconnect', function(){
       socket.broadcast.emit('One user off', socket.user_id);
- 	  delete user_sockets[socket.user_id];
+ 	    delete user_sockets[socket.user_id];
       list_user.splice(list_user.indexOf(socket.user_id));
  	})
   })

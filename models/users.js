@@ -105,7 +105,9 @@ var userSchema = mongoose.Schema({
         id           :{
             type         : ObjectId,
             ref          : 'user'
-        }      
+        },
+        username     : String,
+        avatar       : String      
     }],
 
     Friend           : [{   

@@ -13,6 +13,7 @@ module.exports	=	function(req, res){
 		var friend_id 	= data.friend_id;
 		var start     	= data.start;
 		var limit     	= data.limit;
+		var result;
 	}
 	catch(err){
 		res.json({error_code : 201, msg : err.toString()});												//	Input is invalid
@@ -33,11 +34,13 @@ module.exports	=	function(req, res){
 						async.waterfall([
 
 							function(next){
-								var result = messages.slice(start, start + limit);		
+								result = messages;		
 
 								result.sort(function(a,b){
 									return new Date(b.time) - new Date(a.time);
 								});
+
+								result.slice(start, start + limit);
 
 								next(null);
 							},

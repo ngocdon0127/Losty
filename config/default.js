@@ -1,8 +1,8 @@
-// var dev_port 					 = 3000;
-// var dev_domain 			   = 'localhost';
-
 var dev_port 					 = 3000;
-var dev_domain 			   		 = '104.131.69.233';
+var dev_domain 			   = 'localhost';
+
+// var dev_port 					 = 3000;
+// var dev_domain 			   		 = '104.131.69.233';
 
 exports.port					 = dev_port;
 

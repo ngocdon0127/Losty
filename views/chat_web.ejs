@@ -7,7 +7,7 @@
 
 
   <script src="../public/js/jquery-1.10.2.min.js"></script>
-  <script src="http://104.131.69.233:3000/socket.io/socket.io.js"></script>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 
 
   <script type="text/javascript">
@@ -35,14 +35,18 @@
       
     }
 
-    // url = 'http://104.131.69.233:3000/chat?user_id='+ my_id +'&token=' + token;
-    url = 'http://104.131.69.233:3000/chat?user_id=5477232ad1f5a8de31ff227d&token=$2a$20$nMOFkLBO3iFV4WztR5Ojbe'
+    url = 'http://localhost:3000/chat?user_id='+ my_id +'&token=' + token;
+    // url = 'http://localhost:3000/chat?user_id=5477232ad1f5a8de31ff227d&token=$2a$20$nMOFkLBO3iFV4WztR5Ojbe'
 
     // // console.log(url);
     // // url = 'http://104.131.69.233:3000/chat?user_id=54794290c45abd6010e5c885&token=$2a$20$5tzvTHWNzdDI8JPFvIWPXe';
     // url = 'http://104.131.69.233:3000/chat?user_id=5477232ad1f5a8de31ff227d&token=$2a$20$nMOFkLBO3iFV4WztR5Ojbe:3000/socket.io/1/?EIO=2&transport=polling&t=1417234473103';
 
     var socket = io.connect(url);
+
+    socket.on('hello world', function(data){
+      $('.Show').append('<p> Server say Hello </p>');
+    })
 
     // ============================= ONLINE USERS =======================================
     // data : [user_id1, user_id2, ...]

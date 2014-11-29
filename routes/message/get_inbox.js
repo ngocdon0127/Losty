@@ -8,6 +8,8 @@ var Users             = require('./../../models/users');
 var start = 0, 
     limit = 20;
 
+
+
 module.exports 				=	function(req, res){
 	try{
 		var data = req.body;
@@ -15,6 +17,7 @@ module.exports 				=	function(req, res){
 		var user_id = data.user.user_id;
 		var token   = data.user.token;
 		var results = [];
+		var result_msg;
 		// result : [{avatar, id, username, messages : [] }, {}, {}, ...]
 	}
 
@@ -27,6 +30,7 @@ module.exports 				=	function(req, res){
 		validate_token(user_id, token, function(valid){
 			if (valid){
 				Users.findOne({_id : user_id}, function(err, me){
+					console.log(me);
 					if (err){
 
 						res.json({error_code : 201, msg : err.toString()});
@@ -44,30 +48,34 @@ module.exports 				=	function(req, res){
 							function(next){
 								// get message, infor user and push into array
 								users_chat.forEach(function(user_chat){
-									Message.find({$or : [{user_send : me._id, user_recei : user_chat.id}, 
-				          										{user_send : user_chat.id, user_recei : me._id}] }, function(err, messages){
+									console.log(user_chat);
+									console.log('my id and my friend :', me._id, user_chat._id);
+									Messages.find({$or : [{user_send : me._id, user_recei : user_chat._id}, 
+				          										{user_send : user_chat._id, user_recei : me._id}] }, function(err, messages){
 
 				          	async.waterfall([
 				          		function(next){
-
-						          	var result_msg = messages.slice(start, start + limit);		
+				          			console.log(messages);
+						          	result_msg = messages;	
 												result_msg.sort(function(a,b){
 													return new Date(b.time) - new Date(a.time);
 												});
+												result_msg.slice(start, start + limit);	
 
 												process.nextTick(function(){
 													next(null);
 												});
-				          		}
-				          	], function(err){
-				          		results.push({id : user_chat.id, avtar : user_chat.avatar, username : user_chat.username,
-				          								  messages : result_msg});
-				          		});
-				          	});
+							         }
+							      ], function(err){
+											results.push({id : user_chat._id, avtar : user_chat.avatar, username : user_chat.username,
+							          						messages : result_msg});
+											console.log(results);
+							         });
+							      });
 								});
-							  process.nextTick(function(){
-							  	next(null);
-							  });
+								process.nextTick(function(){
+									next(null);
+								});
 							}, 
 
 							function(next){
