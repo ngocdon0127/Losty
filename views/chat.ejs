@@ -7,7 +7,7 @@
 
 
   <script src="../public/js/jquery-1.10.2.min.js"></script>
-  <script src="http://104.131.69.233:3000/socket.io/socket.io.js"></script>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 
 
   <script type="text/javascript">
@@ -24,18 +24,18 @@
 
     if (user_number == 1){
 
-      my_id     = '5476869741cfce251b81d160';
-      token     = '$2a$20$Jx54zT1OlY/cNajQNaaBVu';
-      friend_id = '54768b5e88580e4c1e41f7f1';
+      my_id     = '54794290c45abd6010e5c885';
+      token     = '$2a$20$5tzvTHWNzdDI8JPFvIWPXe';
+      friend_id = '54794298c45abd6010e5c887';
 
     } else{
-      my_id     = '54768b5e88580e4c1e41f7f1';
-      token     = '$2a$20$9eiO76BZArhMGZa4MXuxvO';
-      friend_id = '5476869741cfce251b81d160';
+      my_id     = '54794298c45abd6010e5c887';
+      token     = '$2a$20$bg3oRdze/cHR8mNrklvxu.';
+      friend_id = '54794290c45abd6010e5c885';
       
     }
 
-    url = 'http://104.131.69.233:3000/chat?user_id='+ my_id +'&token=' + token;
+    url = 'http://localhost:3000/chat?user_id='+ my_id +'&token=' + token;
 
     var socket = io.connect(url);
 

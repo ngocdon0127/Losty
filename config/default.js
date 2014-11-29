@@ -1,4 +1,4 @@
-// var dev_port 					 = 8080;
+// var dev_port 					 = 3000;
 // var dev_domain 			   = 'localhost';
 
 var dev_port 					 = 3000;

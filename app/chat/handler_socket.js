@@ -1,7 +1,31 @@
 var  validate_token					=	require('./../validate/validate_token');
 
 var Message                         =   require('./../../models/messages');
-var User                            =   require('./../../models/users');
+var Users                            =   require('./../../models/users');
+
+
+
+function add_users_chat(id_1, id_2){
+  Users.findOne({_id : id_1}, function(err, user_exist){
+    if (err){
+      console.log(err);
+    } else{
+      if (!user_exist) {
+        console.log('User is not exist :', user_exist);
+      } else{
+        users_chat = user_exist.users_chat;
+        if (users_chat.indexOf(id_2) == -1){
+          user_exist.users_chat.push(id_2);
+          user_exist.save(function(err){
+            if (err){
+              console.log(err);
+            }
+          });
+        }
+      }
+    }
+  })
+}
 
 module.exports = function(io){
 
@@ -37,6 +61,9 @@ module.exports = function(io){
   });
  
   chat.on('connection', function(socket){
+
+    
+    socket.emit('hello world', {});
 
 // ============================= TYPING ========================================================
 
@@ -101,12 +128,19 @@ module.exports = function(io){
 	  message.save(function(err){
 	  })	
 
+  // add chater into users_chat of each people
+
+    // into user_send
+    add_users_chat(user_send, user_recei);
+
+    // into user_recei
+    add_users_chat(user_recei, user_send);
     
 
 	  // ADD MESSAGE UNREAD OF USER_RECEI
 
  	  if (user_sockets[user_recei]){
- 		User.findOne({_id : user_send}, function(err, user_exist){
+ 		Users.findOne({_id : user_send}, function(err, user_exist){
  		  user_sockets[user_recei].emit('Send message', 
  			{	user_send : user_send, 
  				user_recei: user_recei,
