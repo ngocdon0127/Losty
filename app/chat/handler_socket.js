@@ -70,6 +70,7 @@ module.exports = function(io){
         user_sockets[user_id] = socket;
         list_user.push(user_id);  
         socket.user_id = user_id;
+        console.log('AUTHENTICATE SUCCESS');
         next();
       } else{
         next(new Error('Access denied !!!!'));
@@ -111,11 +112,15 @@ module.exports = function(io){
 // ============================= READ ALL MESSAGE================================================
 
     // user_send read all messages what user_recei sent to user_send
-    socket.on('readAllMessage', function(data){
-      var user_send = data.user_send;
-      var user_recei = data.user_recei;
+    socket.on('Read messages', function(data){
 
-      Messages.find({$and : [{ user_send : user_recei}, {user_recei : user_send}, { status : 0}]}, 
+      var user_read = data.user_read;
+      var user_sent = data.user_sent;
+
+      console.log(user_read , ' read all messages from ', user_sent);
+
+      // Danh dau tat ca tin nhan user_sent gui cho user_read la status = 1
+      Messages.find({ user_send : user_sent, user_recei : user_read, status : 0}, 
     	function(err, messages_exist){
     		if (messages_exist){
     		  messages_exist.forEach(function(message_exist){
@@ -126,8 +131,21 @@ module.exports = function(io){
     		};
       });
 
-      if (user_sockets[user_recei]){
-    	user_sockets[user_recei].emit('readAllMessage', {user_send : user_send});
+      // Giam so luong tin nhan chua doc cua user_read di
+      Users.findOne({_id : user_read}, function(err, user_exist){
+        if (err){
+          console.log(err);
+        } else{
+          if (user_exist){
+            user_exist.unread_msg -= 1;
+            user_exist.save(function(err){});
+          }
+        }
+      })
+
+      // Neu user_sent online thi gui su kien thong bao
+      if (user_sockets[user_sent]){
+    	user_sockets[user_sent].emit('Read messages', {user_read : user_read, user_sent : user_sent});
       }
     });
 
@@ -140,6 +158,9 @@ module.exports = function(io){
  	  var content    = data.content;
  	  var status     = 0;
  	  var time       = convert_time_to_GMT((new Date).toJSON());
+
+    console.log(user_send , ' sent a message to ', user_recei , ' : ', content);
+
 
     // ADD MESSAGE UNREAD OF USER_RECEI
     Messages.find({user_send : user_send, user_recei : user_recei, status : 0}, function(err, message_exist){

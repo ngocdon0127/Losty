@@ -30,7 +30,7 @@
 
     } else{
       my_id     = '54794298c45abd6010e5c887';
-      token     = '$2a$20$2L9CB2ZuWyGeUhB22zinKO';
+      token     = '$2a$20$v/TpuiGFX1Z0BZT6A5fpq.';
       friend_id = '54794290c45abd6010e5c885';
       
     }
@@ -98,11 +98,11 @@
 
     // ============================= READ ALL MESSAGE =========================================
     function readAllMessage(){
-      socket.emit('readAllMessage', {user_send : my_id, user_recei : friend_id});
+      socket.emit('Read messages', {user_read : my_id, user_sent : friend_id});
     }
 
-    socket.on('readAllMessage', function(data){
-      $('.Show').append('<p>' + data.user_send + ' read all your message </p>');
+    socket.on('Read messages', function(data){
+      $('.Show').append('<p>' + data.user_read + ' read all your message </p>');
     })
 
     // ============================= SEND MESSAGE==============================================
