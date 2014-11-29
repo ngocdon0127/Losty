@@ -32,8 +32,8 @@ module.exports 				=	function(req, res){
 
 		validate_token(user_id, token, function(valid){
 			if (valid){
+				// Find me
 				Users.findOne({_id : user_id}, function(err, me){
-					console.log(me);
 					if (err){
 
 						res.json({error_code : 201, msg : err.toString()});
@@ -51,36 +51,34 @@ module.exports 				=	function(req, res){
 							function(next1){
 								// get message, infor user and push into array
 								users_chat.forEach(function(user_chat){
+
 									var online = 0;
 
+									// Xet tung user chat cung minh, user nao dang online thi online = 1, 
+									// khong thi online = 0
 									Users_online.findOne({id : user_chat.id}, function(err, user_online){
 										if (user_online) online = 1;
 									})
 
-									Messages.find({$or : [{user_send : me._id, user_recei : user_chat.id}, 
-				          										{user_send : user_chat.id, user_recei : me._id}] }, function(err, messages){
-
+									Messages.find({$or : [{user_send : me._id,       user_recei : user_chat.id}, 
+				          										  {user_send : user_chat.id, user_recei : me._id}] }, 
+				          										  function(err, messages){
 				          	async.waterfall([
 				          		function(next2){
+
+				          			// sort message by time
 						          	result_msg = messages;	
 												result_msg.sort(function(a,b){
 													return new Date(b.time) - new Date(a.time);
 												});
 
-												process.nextTick(function(){
-													next2(null);
-												});
-							         },
+												next2(null);
+							        }
 
-							        function(next2){
-							        	// result_msg =  result_msg.slice(start, start + limit);	
-							        	next2(null);
-							        },
 							      ], function(err){
-											results.push({id : user_chat.id, avatar : user_chat.avatar, username : user_chat.username, 
-							          						online : online, messages : result_msg[0]
-							        });
-							        next1(null);
+												results.push({id : user_chat.id, avatar : user_chat.avatar, username : user_chat.username, 
+							          						online : online, messages : result_msg[0]});
+							        	next1(null);
 							      });
 							    });
 								});
@@ -89,19 +87,21 @@ module.exports 				=	function(req, res){
 
 							function(next1){
 								// sort result
+
 								results.sort(function(a, b){
 									return new Date(a.messages.time) - new Date(b.messages.time);
 								})
-								process.nextTick(function(){
-									console.log(results);
+								setTimeout(function(){
 									next1(null);
-								})
+								}, 100)
 							}
 
 						], function(err){
-
-								res.json({error_code : 0, inbox : results});
-								res.status(200).end();
+								setTimeout(function(){
+									res.json({error_code : 0, result : results});
+									res.status(200).end();	
+								}, 10000)
+								
 						})
 					}
 				})
