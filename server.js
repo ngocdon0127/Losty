@@ -115,4 +115,12 @@ var io = require('socket.io').listen(server, {
     transports : ['polling', 'websocket']        // co che su dung socket.io
 });
 
+io.set('transports', ['websocket', 
+                      'flashsocket', 
+                      'htmlfile', 
+                      'xhr-polling', 
+                      'jsonp-polling', 
+                      'polling']);
+
+
 require('./app/chat/handler_socket')(io);

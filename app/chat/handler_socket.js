@@ -57,13 +57,12 @@ module.exports = function(io){
   var chat = io.of('chat');
 
   chat.use(function(socket, next){
-
+    
     var user_id = socket.request._query.user_id;
     var token   = socket.request._query.token;
     console.log('Have connect, user_id : ', user_id, ' , token : ', token);
 
     socket.emit('hello world', {});
-
 
     validate_token(user_id, token, function(valid){
       if (valid){
