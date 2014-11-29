@@ -100,7 +100,7 @@ module.exports 				=	function(req, res){
 								setTimeout(function(){
 									res.json({error_code : 0, result : results});
 									res.status(200).end();	
-								}, 10000)
+								}, 500)
 								
 						})
 					}
