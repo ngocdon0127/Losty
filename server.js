@@ -111,16 +111,16 @@ var server  = app.listen(port, function(){
 
 
 var io = require('socket.io').listen(server, {
-    origins : '*:6789',                          // chap nhan tat ca client ket noi socket.io den server
+    origins : '*:3000',                          // chap nhan tat ca client ket noi socket.io den server
     transports : ['polling', 'websocket']        // co che su dung socket.io
 });
 
-io.set('transports', ['websocket', 
-                      'flashsocket', 
-                      'htmlfile', 
-                      'xhr-polling', 
-                      'jsonp-polling', 
-                      'polling']);
+// io.set('transports', ['websocket', 
+//                       'flashsocket', 
+//                       'htmlfile', 
+//                       'xhr-polling', 
+//                       'jsonp-polling', 
+//                       'polling']);
 
 
 require('./app/chat/handler_socket')(io);
