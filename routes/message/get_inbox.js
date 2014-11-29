@@ -4,9 +4,11 @@ var validate_token    = require('./../../app/validate/validate_token');
 
 var Messages          = require('./../../models/messages');
 var Users             = require('./../../models/users');
+var Users_online    =   require('./../../models/users_online');
+
 
 var start = 0, 
-    limit = 20;
+    limit = 1;
 
 
 
@@ -45,51 +47,59 @@ module.exports 				=	function(req, res){
 
 						async.waterfall([
 
-							function(next){
+							function(next1){
 								// get message, infor user and push into array
 								users_chat.forEach(function(user_chat){
-									console.log('user chat :', user_chat);
-									console.log('my id and my friend :', me._id, user_chat._id);
+									var online = 0;
+
+									Users_online.findOne({id : user_chat.id}, function(err, user_online){
+										if (user_online) online = 1;
+									})
+
 									Messages.find({$or : [{user_send : me._id, user_recei : user_chat.id}, 
 				          										{user_send : user_chat.id, user_recei : me._id}] }, function(err, messages){
 
 				          	async.waterfall([
-				          		function(next){
-				          			console.log(messages);
+				          		function(next2){
 						          	result_msg = messages;	
 												result_msg.sort(function(a,b){
 													return new Date(b.time) - new Date(a.time);
 												});
-												result_msg.slice(start, start + limit);	
 
 												process.nextTick(function(){
-													next(null);
+													next2(null);
 												});
-							         }
+							         },
+
+							        function(next2){
+							        	console.log(result_msg[0]);
+
+							        	// result_msg.slice(start, start + limit);	
+							        	next2(null);
+							        },
 							      ], function(err){
-											results.push({id : user_chat.id, avtar : user_chat.avatar, username : user_chat.username,
-							          						messages : result_msg});
-							         });
+											results.push({id : user_chat.id, avtar : user_chat.avatar, username : user_chat.username, 
+							          						online : online, messages : result_msg[0]
+							        });
+							        next1(null);
+							      });
 							      });
 								});
-								process.nextTick(function(){
-									next(null);
-								});
+
 							}, 
 
-							function(next){
+							function(next1){
 								// sort result
 								results.sort(function(a, b){
 									return new Date(b.messages[0].time) - new Date(a.messages[0].time);
 								})
 								process.nextTick(function(){
 									// console.log(results);
-									next(null);
+									next1(null);
 								})
 							}
 
 						], function(err){
-							console.log('send data : ',results);
 							res.json({error_code : 0, inbox : results});
 							res.status(200).end();
 						})

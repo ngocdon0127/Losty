@@ -1,9 +1,11 @@
 var  validate_token					=	require('./../validate/validate_token');
 
-var Message                          =   require('./../../models/messages');
+var Messages                          =   require('./../../models/messages');
 var Users                            =   require('./../../models/users');
  
 var _                                =   require('underscore');
+
+// ========================================  FUNCTION =============================================
 
 function convert_time_to_GMT(time){
   return new Date(new Date(time).toGMTString()).toJSON();
@@ -22,7 +24,6 @@ function add_users_chat(id_1, id_2){
         var id_2_find = _.find(users_chat, function(user_chat){
           return user_chat.id == id_2;
         });
-        console.log('id_2 index : ', id_2_find);
         if (typeof(id_2_find) == 'undefined'){
           Users.findOne({_id : id_2}, function(err, user_2){
             if (err){
@@ -30,7 +31,6 @@ function add_users_chat(id_1, id_2){
             } else if (!user_2){
               console.log('User 2 is not exist');
             } else{
-              console.log('Luu thong tin');
               user_exist.users_chat.push({id : id_2, username : user_2.username, avatar : user_2.avatar});
               user_exist.save(function(err){
                 if (err){
@@ -47,22 +47,22 @@ function add_users_chat(id_1, id_2){
 
 module.exports = function(io){
   
-
   // list user online
   var list_user = [];
-
   // array socket of online user
   var user_sockets = {};
 
   var chat = io.of('chat');
 
-  chat.use(function(socket, next){
-    
-    var user_id = socket.request._query.user_id;
-    var token   = socket.request._query.token;
-    console.log('Have connect, user_id : ', user_id, ' , token : ', token);
+  var user_id, token;
 
-    socket.emit('hello world', {});
+// ======================================== AUTHENTICATE =============================================
+
+  chat.use(function(socket, next){
+
+    user_id = socket.request._query.user_id;
+    token   = socket.request._query.token;
+    console.log('Have connect, user_id : ', user_id, ' , token : ', token);
 
     validate_token(user_id, token, function(valid){
       if (valid){
@@ -70,10 +70,6 @@ module.exports = function(io){
         user_sockets[user_id] = socket;
         list_user.push(user_id);  
         socket.user_id = user_id;
-
-		user_sockets[user_id].emit('Online users', list_user);
-        socket.broadcast.emit('One user online', user_id);
-        console.log('Authenticate is success. Start to make socket');
         next();
       } else{
         next(new Error('Access denied !!!!'));
@@ -83,11 +79,13 @@ module.exports = function(io){
  
   chat.on('connection', function(socket){
 
-
-    socket.emit('hello client', {number : 123, object : {a:1, b:2}});
-
-    socket.on('hello server', function(data){
-      console.log(data);
+    // SEND UNREAD_MSG
+    Users.findOne({_id : user_id}, function(err, me){
+      if(err){
+        console.log(err);
+      } else{
+        socket.emit('unread_msg', {number : 123, unread_msg : me.unread_msg});    
+      }
     })
 
 // ============================= TYPING ========================================================
@@ -117,7 +115,7 @@ module.exports = function(io){
       var user_send = data.user_send;
       var user_recei = data.user_recei;
 
-      Message.find({$and : [{ user_send : user_recei}, {user_recei : user_send}, { status : 0}]}, 
+      Messages.find({$and : [{ user_send : user_recei}, {user_recei : user_send}, { status : 0}]}, 
     	function(err, messages_exist){
     		if (messages_exist){
     		  messages_exist.forEach(function(message_exist){
@@ -136,35 +134,46 @@ module.exports = function(io){
  // ============================= SEND MESSAGE====================================================
 
  	socket.on('Send message', function(data){
-    console.log(data);
+    // data : {user_send : 'user_id', user_recei : 'user_id', content : '..'
  	  var user_send  = data.user_send;
  	  var user_recei = data.user_recei;
  	  var content    = data.content;
  	  var status     = 0;
  	  var time       = convert_time_to_GMT((new Date).toJSON());
 
- 	  // SAVE MESSAGE
- 	  var message    = new Message;
+    // ADD MESSAGE UNREAD OF USER_RECEI
+    Messages.find({user_send : user_send, user_recei : user_recei, status : 0}, function(err, message_exist){
+      if (err){
+        console.log(err.toString());
+      } else {
+        if (!message_exist){
+          Users.findOne({_id : user_recei}, function(err, user_exist){
+            user_exist.unread_msg ++;
+            user_exist.save(function(err){
+              if (err)
+                console.log(err.toString());
+            })
+          })
+        }
+      }
+    });
 
+
+ 	  // SAVE MESSAGE
+ 	  var message    = new Messages;
 	  message.user_send 	= user_send;
 	  message.user_recei	= user_recei;
-	  message.content  	= content;
+	  message.content  	  = content;
 	  message.status      = status;
 	  message.time        = time;
 	  message.save(function(err){
 	  })	
 
-  // add chater into users_chat of each people
-
-    // into user_send
+    // add chater into users_chat of each people
     add_users_chat(user_send, user_recei);
-
-    // into user_recei
     add_users_chat(user_recei, user_send);
     
-
-	  // ADD MESSAGE UNREAD OF USER_RECEI
-
+    // User_recei online -> send msg, avatar, username user_send
  	  if (user_sockets[user_recei]){
  		Users.findOne({_id : user_send}, function(err, user_exist){
  		  user_sockets[user_recei].emit('Send message', 
@@ -178,7 +187,8 @@ module.exports = function(io){
  			});
  		})
 	  }
-    })
+  })
+
  // ============================= DISCONNECT=======================================================
 
  	socket.on('disconnect', function(){

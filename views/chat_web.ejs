@@ -7,7 +7,7 @@
 
 
   <script src="../public/js/jquery-1.10.2.min.js"></script>
-  <script src="http://localhost:6789/socket.io/socket.io.js"></script>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 
 
   <script type="text/javascript">
@@ -25,17 +25,17 @@
     if (user_number == 1){
 
       my_id     = '54794290c45abd6010e5c885';
-      token     = '$2a$20$5tzvTHWNzdDI8JPFvIWPXe';
+      token     = '$2a$20$DHjIz8kJo1qVqNcdUMU/7u';
       friend_id = '54794298c45abd6010e5c887';
 
     } else{
       my_id     = '54794298c45abd6010e5c887';
-      token     = '$2a$20$bg3oRdze/cHR8mNrklvxu.';
+      token     = '$2a$20$2L9CB2ZuWyGeUhB22zinKO';
       friend_id = '54794290c45abd6010e5c885';
       
     }
 
-    url = 'http://localhost:6789/chat?user_id='+ my_id +'&token=' + token;
+    url = 'http://localhost:3000/chat?user_id='+ my_id +'&token=' + token;
     
     // url = 'http://localhost:3000/chat?user_id=5477232ad1f5a8de31ff227d&token=$2a$20$nMOFkLBO3iFV4WztR5Ojbe'
 

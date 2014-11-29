@@ -15,10 +15,25 @@
 
 var bcrypt          =   require('bcrypt-nodejs');
 var UserAuthen      =   require('./../../models/user_authens');
+var Users_online    =   require('./../../models/users_online');
 
 module.exports      =   function(user, res){
     var user_id     =   user._id;
     var token       =   bcrypt.genSaltSync(20);
+
+    Users_online.findOne({id : user_id}, function(err, user_online){
+        console.log(user_online);
+        if (err){
+            console.log(err);
+        } else{
+            if (!user_online){
+                console.log('Make new user');
+                var new_user_online = new Users_online();
+                new_user_online.id = user_id;
+                new_user_online.save(function(err){console.log(new_user_online)});
+            }
+        }
+    })
 
     UserAuthen.findOne({user_id : user_id}, function(err, user_authen_exist){
         if (err){

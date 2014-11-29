@@ -1,6 +1,8 @@
 var UserAuthen			=	require('./../../models/user_authens');
 var validate_token  = 	require('./../../app/validate/validate_token');
 var validator       =   require('validator');
+var Users_online    =   require('./../../models/users_online');
+
 
 module.exports = function(req, res){
 	// data : {"user": { "user_id" : "5445bbb95f00451d08016a4f", "token" : "$2a$20$b17NqQiebNug4/h9EnLizO" }}
@@ -23,6 +25,13 @@ module.exports = function(req, res){
 			
 			validate_token(user_id, token, function(valid){	
 				if (valid){
+
+			    Users_online.remove({user_id : user_id}, function(err, number){
+			        if (err){
+			            console.log(err);
+			        } else{}
+			    })
+
 					UserAuthen.remove({user_id : user_id, token : token}, function(err){
 						if (err){
 							res.json({error_code : 403, msg : err.toString()});			//	Database cannot remove
