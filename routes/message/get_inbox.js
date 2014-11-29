@@ -78,7 +78,7 @@ module.exports 				=	function(req, res){
 							        	next2(null);
 							        },
 							      ], function(err){
-											results.push({id : user_chat.id, avtar : user_chat.avatar, username : user_chat.username, 
+											results.push({id : user_chat.id, avatar : user_chat.avatar, username : user_chat.username, 
 							          						online : online, messages : result_msg[0]
 							        });
 							        next1(null);
