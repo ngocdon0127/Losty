@@ -136,7 +136,7 @@ module.exports = function(io){
         if (err){
           console.log(err);
         } else{
-          if (user_exist){
+          if (user_exist && user_exist > 0){
             user_exist.unread_msg -= 1;
             user_exist.save(function(err){});
           }

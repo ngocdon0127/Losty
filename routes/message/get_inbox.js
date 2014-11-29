@@ -18,8 +18,6 @@ module.exports 				=	function(req, res){
 		// data : {user : {user_id, token }}
 		var user_id = data.user.user_id;
 		var token   = data.user.token;
-		var results = [];
-		var result_msg;
 		// result : [{avatar, id, username, messages : [] }, {}, {}, ...]
 	}
 
@@ -29,6 +27,9 @@ module.exports 				=	function(req, res){
 	}
 
 	finally{
+		var results = [];
+		var result_msg;
+
 		validate_token(user_id, token, function(valid){
 			if (valid){
 				Users.findOne({_id : user_id}, function(err, me){
@@ -72,9 +73,7 @@ module.exports 				=	function(req, res){
 							         },
 
 							        function(next2){
-							        	console.log(result_msg[0]);
-
-							        	// result_msg.slice(start, start + limit);	
+							        	// result_msg =  result_msg.slice(start, start + limit);	
 							        	next2(null);
 							        },
 							      ], function(err){
@@ -83,7 +82,7 @@ module.exports 				=	function(req, res){
 							        });
 							        next1(null);
 							      });
-							      });
+							    });
 								});
 
 							}, 
@@ -91,17 +90,18 @@ module.exports 				=	function(req, res){
 							function(next1){
 								// sort result
 								results.sort(function(a, b){
-									return new Date(b.messages[0].time) - new Date(a.messages[0].time);
+									return new Date(a.messages.time) - new Date(b.messages.time);
 								})
 								process.nextTick(function(){
-									// console.log(results);
+									console.log(results);
 									next1(null);
 								})
 							}
 
 						], function(err){
-							res.json({error_code : 0, inbox : results});
-							res.status(200).end();
+
+								res.json({error_code : 0, inbox : results});
+								res.status(200).end();
 						})
 					}
 				})

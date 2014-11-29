@@ -40,12 +40,19 @@ module.exports	=	function(req, res){
 									return new Date(b.time) - new Date(a.time);
 								});
 
-								result.slice(start, start + limit);
+								result = result.slice(start, start + limit);
 
-								next(null);
+								process.nextTick(function(){
+									next(null);
+								})
 							},
 
 							function(next){
+
+								result.sort(function(a,b){
+									return new Date(a.time) - new Date(b.time);
+								});
+								
 								User.findOne({_id : friend_id}, function(err, user_exist){
 									if (err){
 										res.json({error_code : 401, msg : err.toString()});						// Database cannot find
