@@ -107,7 +107,7 @@ var server  = app.listen(port, function(){
     console.log('Server started at port : ' + port);
 })
 
-var io = require('socket.io').listen(3000);
+var io = require('socket.io').listen(server);
 
 
 // var io = require('socket.io').listen(server, {
