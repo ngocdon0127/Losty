@@ -48,10 +48,10 @@ module.exports 				=	function(req, res){
 							function(next){
 								// get message, infor user and push into array
 								users_chat.forEach(function(user_chat){
-									console.log(user_chat);
+									console.log('user chat :', user_chat);
 									console.log('my id and my friend :', me._id, user_chat._id);
-									Messages.find({$or : [{user_send : me._id, user_recei : user_chat._id}, 
-				          										{user_send : user_chat._id, user_recei : me._id}] }, function(err, messages){
+									Messages.find({$or : [{user_send : me._id, user_recei : user_chat.id}, 
+				          										{user_send : user_chat.id, user_recei : me._id}] }, function(err, messages){
 
 				          	async.waterfall([
 				          		function(next){
@@ -67,9 +67,8 @@ module.exports 				=	function(req, res){
 												});
 							         }
 							      ], function(err){
-											results.push({id : user_chat._id, avtar : user_chat.avatar, username : user_chat.username,
+											results.push({id : user_chat.id, avtar : user_chat.avatar, username : user_chat.username,
 							          						messages : result_msg});
-											console.log(results);
 							         });
 							      });
 								});
@@ -84,11 +83,13 @@ module.exports 				=	function(req, res){
 									return new Date(b.messages[0].time) - new Date(a.messages[0].time);
 								})
 								process.nextTick(function(){
+									// console.log(results);
 									next(null);
 								})
 							}
 
 						], function(err){
+							console.log('send data : ',results);
 							res.json({error_code : 0, inbox : results});
 							res.status(200).end();
 						})

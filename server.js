@@ -102,7 +102,17 @@ Router_body.get('/error_code/:error_code',				routes.error_code);
 
 // =================================================== LISTEN BY IP AND PORT ========================
 
-var io = require('socket.io').listen(app.listen(port, function(){
-    console.log('Server is running at http://%s:%s', ip, port);
-    require('./app/chat/handler_socket')(io);
-}));
+
+var server  = app.listen(port, function(){
+    console.log('Server started at port : ' + port);
+})
+
+// var io = require('socket.io').listen(6789);
+
+
+var io = require('socket.io').listen(server, {
+    origins : '*:6789',                          // chap nhan tat ca client ket noi socket.io den server
+    transports : ['polling', 'websocket']        // co che su dung socket.io
+});
+
+require('./app/chat/handler_socket')(io);

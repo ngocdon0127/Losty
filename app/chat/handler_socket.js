@@ -20,7 +20,7 @@ function add_users_chat(id_1, id_2){
         users_chat = user_exist.users_chat;
         // console.log();
         var id_2_find = _.find(users_chat, function(user_chat){
-          return user_chat._id == id_2;
+          return user_chat.id == id_2;
         });
         console.log('id_2 index : ', id_2_find);
         if (typeof(id_2_find) == 'undefined'){
@@ -46,6 +46,7 @@ function add_users_chat(id_1, id_2){
 }
 
 module.exports = function(io){
+  
 
   // list user online
   var list_user = [];
@@ -85,6 +86,7 @@ module.exports = function(io){
 
 
     socket.emit('hello client', {number : 123, object : {a:1, b:2}});
+
     socket.on('hello server', function(data){
       console.log(data);
     })
