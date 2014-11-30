@@ -163,7 +163,8 @@ module.exports = function(io){
 
 
     // ADD MESSAGE UNREAD OF USER_RECEI
-    Messages.find({user_send : user_send, user_recei : user_recei, status : 0}, function(err, message_exist){
+    Messages.findOne({user_send : user_send, user_recei : user_recei, status : 0}, function(err, message_exist){
+      console.log(message_exist);
       if (err){
         console.log(err.toString());
       } else {
