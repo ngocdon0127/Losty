@@ -161,7 +161,6 @@ module.exports = function(io){
 
     console.log(user_send , ' sent a message to ', user_recei , ' : ', content);
 
-
     // ADD MESSAGE UNREAD OF USER_RECEI
     Messages.findOne({user_send : user_send, user_recei : user_recei, status : 0}, function(err, message_exist){
       console.log(message_exist);
@@ -217,6 +216,7 @@ module.exports = function(io){
  // ============================= DISCONNECT=======================================================
 
  	socket.on('disconnect', function(){
+      console.log(socket.user_id + ' disconnect');
       socket.broadcast.emit('One user off', socket.user_id);
  	    delete user_sockets[socket.user_id];
       list_user.splice(list_user.indexOf(socket.user_id));
