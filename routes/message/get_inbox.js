@@ -97,7 +97,7 @@ module.exports 				=	function(req, res){
 
 						], function(err){
 								console.log(results);
-								res.json({error_code : 0, result : results});
+								res.json({error_code : 0, inbox : results});
 								res.status(200).end();	
 						})
 					}
