@@ -88,7 +88,7 @@ module.exports 				=	function(req, res){
 							function(next1){
 								console.log(results);
 								results.sort(function(a, b){
-									return new Date(a.messages.time) - new Date(b.messages.time);
+									return new Date(b.messages.time) - new Date(a.messages.time);
 								})
 								setTimeout(function(){
 									next1(null);	
