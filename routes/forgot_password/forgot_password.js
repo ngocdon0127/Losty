@@ -1,4 +1,4 @@
-var send_mail			=	require('./../../app/send_mail/send_mail');
+var send_mail			=	require('./../../app/send_mail/send_mail_forgot_password');
 var bcrypt             = require('bcrypt-nodejs');
 
 var Reset_key     = require('./../../models/reset_keys');

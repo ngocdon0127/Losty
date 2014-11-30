@@ -6,6 +6,8 @@ var   validate_extension = require('./../../app/validate/validate_extension');
 var   validate_location  = require('./../../app/validate/validate_location');
 var   reverseGeocode     = require('./../../app/map/reverseGeocode');
 var   make_token         = require('./../../app/authen/make_token');
+var   send_mail_register = require('./../../app/send_mail/send_mail_register');
+
 
 var   User               = require('./../../models/users');
 
@@ -103,10 +105,12 @@ module.exports = function(req, res) {
                       user.save(function(err){
                         if (err){
                           console.log(err);
+
                           res.json({error_code : 402, msg : err.toString()});// Database cannot save
                           res.status(200).end();
                         } else{
                           process.nextTick(function(){
+                            send_mail_register(email, username);
                             make_token(user, res);
                           })
                         }                                         
