@@ -85,7 +85,7 @@ module.exports = function(io){
       if(err){
         console.log(err);
       } else{
-        socket.emit('unread_msg', {number : 123, unread_msg : me.unread_msg});    
+        socket.emit('unread_msg', {unread_msg : me.unread_msg});    
       }
     })
 
@@ -140,6 +140,8 @@ module.exports = function(io){
             console.log('Da giam so luong tin nhan');
             user_exist.unread_msg -= 1;
             user_exist.save(function(err){});
+            socket.emit('unread_msg', {unread_msg : user_exist.unread_msg});    
+
           }
         }
       })
@@ -200,17 +202,22 @@ module.exports = function(io){
     
     // User_recei online -> send msg, avatar, username user_send
  	  if (user_sockets[user_recei]){
- 		Users.findOne({_id : user_send}, function(err, user_exist){
- 		  user_sockets[user_recei].emit('Send message', 
- 			{	user_send : user_send, 
- 				user_recei: user_recei,
- 				content   : content,
- 				status    : status,
- 				time      : time,
- 				username  : user_exist.username,
- 				avatar    : user_exist.avatar
- 			});
- 		})
+   		Users.findOne({_id : user_send}, function(err, user_exist){
+
+        Users.findOne({_id : user_recei}, function(err, user_recei_exist){
+          user_sockets[user_recei].emit('unread_msg' , {unread_msg : user_recei_exist.unread_msg})
+        })
+
+   		  user_sockets[user_recei].emit('Send message', 
+   			{	user_send : user_send, 
+   				user_recei: user_recei,
+   				content   : content,
+   				status    : status,
+   				time      : time,
+   				username  : user_exist.username,
+   				avatar    : user_exist.avatar
+   			});
+   		})
 	  }
   })
 
