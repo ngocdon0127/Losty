@@ -10,8 +10,6 @@ var Users_online    =   require('./../../models/users_online');
 var start = 0, 
     limit = 1;
 
-
-
 module.exports 				=	function(req, res){
 	try{
 		var data = req.body;
@@ -78,30 +76,29 @@ module.exports 				=	function(req, res){
 							      ], function(err){
 												results.push({id : user_chat.id, avatar : user_chat.avatar, username : user_chat.username, 
 							          						online : online, messages : result_msg[0]});
-							        	next1(null);
 							      });
 							    });
 								});
 
+							  setTimeout(function(){
+							  	next1(null);
+							  }, 100)
 							}, 
 
 							function(next1){
-								// sort result
-
 								results.sort(function(a, b){
 									return new Date(a.messages.time) - new Date(b.messages.time);
 								})
 								setTimeout(function(){
-									next1(null);
+									next1(null);	
 								}, 100)
+								
 							}
 
 						], function(err){
-								setTimeout(function(){
-									res.json({error_code : 0, result : results});
-									res.status(200).end();	
-								}, 1000)
-								
+								console.log(results);
+								res.json({error_code : 0, result : results});
+								res.status(200).end();	
 						})
 					}
 				})
