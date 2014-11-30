@@ -69,8 +69,8 @@ module.exports 				=	function(req, res){
 												result_msg.sort(function(a,b){
 													return new Date(b.time) - new Date(a.time);
 												});
-
-												next2(null);
+												next2(null);	
+												
 							        }
 
 							      ], function(err){

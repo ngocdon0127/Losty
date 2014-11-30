@@ -136,7 +136,8 @@ module.exports = function(io){
         if (err){
           console.log(err);
         } else{
-          if (user_exist && user_exist > 0){
+          if (user_exist && user_exist.unread_msg > 0){
+            console.log('Da giam so luong tin nhan');
             user_exist.unread_msg -= 1;
             user_exist.save(function(err){});
           }
