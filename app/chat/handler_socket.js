@@ -169,10 +169,13 @@ module.exports = function(io){
       } else {
         if (!message_exist){
           Users.findOne({_id : user_recei}, function(err, user_exist){
+            console.log('Da them tin nhan chua doc');
+
             user_exist.unread_msg ++;
             user_exist.save(function(err){
               if (err)
                 console.log(err.toString());
+              console.log(user_exist);
             })
           })
         }
