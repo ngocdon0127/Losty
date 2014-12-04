@@ -144,6 +144,7 @@ module.exports = function(req, res) {
                         // SAVE ITEM
                         item.user.id       = user_exits._id;
                         item.user.avatar   = user_exits.avatar;
+                        item.user.avatar_small = user_exits.avatar_small;
                         item.user.username = user_exits.username;
                         item.user.city     = user_exits.city;
                         item.user.country  = user_exits.country;

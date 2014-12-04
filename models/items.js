@@ -75,7 +75,8 @@ var itemSchema = mongoose.Schema({
         avatar       : String,
         username     : String,
         city         : String,
-        country      : String
+        country      : String,
+        avatar_small : String
     },
 
     people_view      : [{

@@ -30,7 +30,7 @@ module.exports   		=	function(user_id, friends){
 
 									user_exist.Friend.push({id           :  user._id,
 										 					avatar       :  user.avatar,
-										 					avatar_small : user.avatar_small
+										 					avatar_small : user.avatar_small,
 										 					username     :  user.username
 										 				   });
 
