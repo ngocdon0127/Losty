@@ -70,7 +70,8 @@ module.exports		=	function(req, res){
 
 										item_exist.people_view.push({
 												id 			: user_id, 
-												avatar 	: user_exist.avatar, 
+												avatar 	: user_exist.avatar,
+												avatar_small : user_exist.avatar_small, 
 												username: user_exist.username});
 
 										item_exist.save(function(err){
