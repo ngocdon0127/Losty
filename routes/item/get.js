@@ -27,6 +27,4 @@ module.exports = function(req, res){
 		res.json({error_code : 201, msg : 'Item_id is invalid'});
 		res.status(200).end();
 	}
-	
-
 }
