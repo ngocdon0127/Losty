@@ -11,6 +11,11 @@ var itemSchema = mongoose.Schema({
         required     : true,
     },
 
+    image_link_small : {
+    	 	type         : String,
+    	 	required     : true
+    },
+
     title            : {
         type         : String,
         required     : true,
@@ -83,6 +88,9 @@ var itemSchema = mongoose.Schema({
         },
         username     : {
             type         : String,
+        },
+        avatar_small : {
+            type         : String
         }
     }]
 });

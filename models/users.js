@@ -11,6 +11,11 @@ var userSchema = mongoose.Schema({
         default      : 'http://localhost:8080/img/avatar/default-avatar.png'
     },
 
+    avatar_small     : {
+        type         : String,
+        default      : 'http://localhost:8080/img/avatar/default-avatar.png'
+    },    
+
     username         : {
         type         : String,
         required     : true
@@ -118,7 +123,8 @@ var userSchema = mongoose.Schema({
         },
 
         avatar       : String,
-        username     : String
+        username     : String,
+        avatar_small : String
     }],
 
     exist_acc        : [0, 0, 0, 0],

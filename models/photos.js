@@ -10,6 +10,10 @@ var photoSchema = mongoose.Schema({
         type        : String
     },
 
+    image_link_small: {
+        type        : String
+    },
+
     image_link      : {
     	type        : String
     },

@@ -74,8 +74,10 @@ module.exports 				=	function(req, res){
 							        }
 
 							      ], function(err){
-												results.push({id : user_chat.id, avatar : user_chat.avatar, username : user_chat.username, 
-							          						online : online, messages : result_msg[0]});
+												results.push({id : user_chat.id, avatar : user_chat.avatar, 
+																		  avatar_small : user_char.avatar_small, 
+																			username : user_chat.username,                
+																			online : online, messages : result_msg[0]});
 							      });
 							    });
 								});

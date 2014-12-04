@@ -62,6 +62,7 @@ module.exports	=	function(req, res){
 										if (user_exist){
 											res.json({ error_code : 0, 
 												       avatar : user_exist.avatar, 
+												       avatar_small : user_exist.avatar_small,
 												       username : user_exist.username, 
 												       messages : result});
 											res.status(200).end();

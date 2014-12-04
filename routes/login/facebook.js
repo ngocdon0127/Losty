@@ -152,6 +152,7 @@ module.exports = function(req, res){
 			    				user.exist_acc[2]     = 1;
 			    				user.email    				= profile.email;
 			    				user.avatar   				= avatar;
+			    				user.avatar_small     = avatar;
 			    				user.facebook.email   = profile.email;
 			    				user.facebook.id 			= profile.id;
 			    				user.facebook.token 	= access_token;

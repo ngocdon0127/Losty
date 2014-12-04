@@ -19,6 +19,8 @@ var   formidable         = require('formidable'),
 var   mime               = require('mime'),
 	    validator          = require('validator');
 
+var   resize             = require('./../../app/file/resize');
+
 var   bcrypt             = require('bcrypt-nodejs');
  
 function validate_username(username){
@@ -93,6 +95,9 @@ module.exports = function(req, res) {
                       res.status(200).end();
                     } else{
                       user.avatar = domain + new_location + file_name;
+                      resize(user.avatar, function(avatar_small){
+                        user.avatar_small = avatar_small;
+                      })
                     }
                   });
 

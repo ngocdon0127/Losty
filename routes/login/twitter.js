@@ -86,6 +86,7 @@ module.exports  	=	function(req, res){
 
 								// IMAGE NORMAL
 								user.avatar   = profile.profile_image_url.replace('_normal', '');
+								user.avatar_small = user.avatar   = profile.profile_image_url.replace('_normal', '');
 
 								user.twitter.id = profile.id;
 

@@ -1,5 +1,6 @@
 var   domain             = require('./../../config/default').domain_default;
- 
+
+var   resize             = require('./../../app/file/resize');
 var   url                = require('url');
 var   mime               = require('mime');
 var   validator          = require('validator');
@@ -17,6 +18,8 @@ var   bcrypt             = require('bcrypt-nodejs');
 var   Item               = require('./../../models/items');
 var   User               = require('./../../models/users');
 var   Categores          = require('./../../models/categores');
+var   resize             = require('./../../app/file/resize');
+
 
 var   moment             = require('moment-timezone');
 
@@ -123,6 +126,10 @@ module.exports = function(req, res) {
                   item.reward         = reward;
                   item.report         = report;
                   item.image_link     = domain + new_location + file_name;
+                  
+                  resize(item.image_link, function(image_link_small){
+                    item.image_link_small = image_link_small;
+                  })
                   item.date_lost      = convert_time_to_GMT(date_lost);
                   item.time_post      = convert_time_to_GMT((new Date).toJSON());
 

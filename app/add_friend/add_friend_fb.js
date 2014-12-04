@@ -24,11 +24,13 @@ module.exports   		=	function(user_id, friends){
 
 									user.Friend.push({id 	   : user_exist._id, 
 													  avatar   : user_exist.avatar, 
-													  username : user_exist.username
+													  username : user_exist.username,
+													  avatar_small : user_exist.avatar_small
 													});
 
 									user_exist.Friend.push({id           :  user._id,
 										 					avatar       :  user.avatar,
+										 					avatar_small : user.avatar_small
 										 					username     :  user.username
 										 				   });
 

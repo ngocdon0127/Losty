@@ -8,6 +8,8 @@ var Photo               = require('./../../models/photos');
 
 var fs                  = require('fs');
 var validator           = require('validator');
+var   resize            = require('./../../app/file/resize');
+
 
 
 module.exports 			=	function(req, res){
@@ -22,7 +24,7 @@ module.exports 			=	function(req, res){
 		var photo_id   = data.photo_id;
 		var name  	   = data.name;
 		var image_link = data.image_link;
-        var extension  = data.extension; 
+    var extension  = data.extension; 
 
 	}
 	catch(err){
@@ -62,6 +64,9 @@ module.exports 			=	function(req, res){
 							            res.status(200).end()
 									} else{
 										photo.image_link = domain + new_location + file_name;
+										resize(photo.image_link, function(image_link_small){
+											photo.image_link_small = image_link_small
+										})
 										photo.user_id    = user_id;
 										photo.save(function(err){
 											if (err){

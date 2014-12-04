@@ -10,7 +10,9 @@ var   async                     = require('async');
 var   bcrypt             				= require('bcrypt-nodejs');
 var   make_token                = require('./../../app/authen/make_token');
 
-var remove_file          				= require('./../../app/file/remove');
+var 	remove_file          			= require('./../../app/file/remove');
+var   resize             			  = require('./../../app/file/resize');
+
 
 
 module.exports								=	function(req, res){
@@ -50,7 +52,6 @@ module.exports								=	function(req, res){
 					function(next){	
 						if (image_link != '' && fs.existsSync(image_link)){
 							// Update avatar
-							console.log('Start to copy');
 
 							var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime()  + '.' + extension;
 				      var new_location = '/img/avatar/';
@@ -82,8 +83,13 @@ module.exports								=	function(req, res){
 								// 	remove(user_exist.avatar);
 								// }
 								console.log(img_server);
-								if (img_server != '')
+								if (img_server != ''){
 									user_exist.avatar = img_server;
+									resize(user_exist.avatar, function(avatar_small){
+										user_exist.avatar_small = avatar_small;
+									})
+
+								}
 								user_exist.email  = email;
 								user_exist.username = username;
 	              if (password != '')
@@ -94,7 +100,8 @@ module.exports								=	function(req, res){
 
 	              	res.json({error_code : 0 , user : {
 	                            email : user_exist.email, username : user_exist.username, 
-	                            id    : user_exist._id  , avatar   : user_exist.avatar
+	                            id    : user_exist._id  , avatar   : user_exist.avatar,
+	                            avatar_small : user_exist.avatar_small
 	                        } });
 	              	res.status(200).end();
 	              });

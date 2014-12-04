@@ -57,7 +57,8 @@ module.exports      =   function(user, res){
                             id    : user._id  , avatar   : user.avatar, 
                             city : user.city, country : user.country, 
                             fb_id : user.facebook.id, tw_id : user.twitter.id,
-                            type_account : user.type_account
+                            type_account : user.type_account,
+                            avatar_small : user.avatar_small
                         }, 
                         unread_msg : user.unread_msg,
                         token : token});
@@ -80,6 +81,7 @@ module.exports      =   function(user, res){
                         user : {
                             email : user.email, username : user.username, 
                             id    : user._id  , avatar   : user.avatar, 
+                            avatar_small : user.avatar_small,
                             city : user.city, country : user.country, 
                             fb_id : user.facebook.id, tw_id : user.twitter.id,
                             type_account : user.type_account
