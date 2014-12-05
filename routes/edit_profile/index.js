@@ -82,36 +82,39 @@ module.exports								=	function(req, res){
 								// if (img_server != ''){
 								// 	remove(user_exist.avatar);
 								// }
-								console.log(img_server);
-								if (img_server != ''){
-									user_exist.avatar = img_server;
-									resize(user_exist.avatar, function(avatar_small){
-										user_exist.avatar_small = avatar_small;
-									})
+								async.waterfall([
+									function(next2){
+										user_exist.email  = email;
+										user_exist.username = username;										
 
-								}
-								user_exist.email  = email;
-								user_exist.username = username;
-	              if (password != '')
-	              	user_exist.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+										if (img_server != ''){
+											user_exist.avatar = img_server;
+											resize(user_exist.avatar, function(avatar_small){
+												user_exist.avatar_small = avatar_small;
+												next2(null);
+											})
+										}
+									}
+								], function(err){
+		              if (password != '')
+		              	user_exist.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 
-	              process.nextTick(function(){
-	              	user_exist.save(function(err){});
+		              process.nextTick(function(){
+		              	user_exist.save(function(err){});
 
-	              	res.json({error_code : 0 , user : {
-	                            email : user_exist.email, username : user_exist.username, 
-	                            id    : user_exist._id  , avatar   : user_exist.avatar,
-	                            avatar_small : user_exist.avatar_small
-	                        } });
-	              	res.status(200).end();
-	              });
+		              	res.json({error_code : 0 , user : {
+		                            email : user_exist.email, username : user_exist.username, 
+		                            id    : user_exist._id  , avatar   : user_exist.avatar,
+		                            avatar_small : user_exist.avatar_small
+		                        } });
+		              	res.status(200).end();
+		              });
+								});
 							}
 						})
 						}
 					], function(err){
-
 					});
-
 			}
 		})
 	}
