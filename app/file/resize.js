@@ -8,7 +8,7 @@ var gm = require('gm');
 
 module.exports 					=	function(url_, callback){
 	console.log('./public/small_size' + url.parse(url_).path);
-
+	console.log('Full URL : ', process.env.PATH.split(path.delimiter));
 	gm('./public' + url.parse(url_).path)
 		.resize(120, 120)
 		.autoOrient()
