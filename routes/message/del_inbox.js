@@ -18,8 +18,8 @@ module.exports             = function(req, res){
 	finally{
 		validate_token(user_id, token, function(valid){
 			if (valid){
-				Messages.remove({$or : [{user_send : user_id,       user_recei : user_chat.id}, 
-				          						{user_send : user_chat.id, user_recei : user_id}] }, 
+				Messages.remove({$or : [{user_send : user_id,       user_recei : user_chat}, 
+				          						{user_send : user_chat, user_recei : user_id}] }, 
 				          						function(err, number){
 				    if (err){
 				    	res.json({error_code : 201, msg : err.toString()});
