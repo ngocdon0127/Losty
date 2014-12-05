@@ -78,6 +78,7 @@ Router_body.post('/get_friends',			   					routes.friend.get);				// api get fri
 // GET MESSAGE
 Router_body.post('/get_messages',		     					routes.message.get);			// api get messages
 Router_body.post('/get_inbox',   		     					routes.message.get_inbox);			// api get inbox
+Router_body.post('/del_inbox',										routes.message.del_inbox);
 
 
 // SYNC ACCOUNT
