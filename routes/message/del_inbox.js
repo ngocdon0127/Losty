@@ -9,7 +9,7 @@ module.exports             = function(req, res){
 		var data = req.body;
 		var user_id = data.user.user_id;
 		var token = data.user.token;
-		var user_chat = data.user.user_chat;
+		var user_chat = data.user_chat;
 	}
 	catch(err){
 		res.json({error_code : 201, msg : err.toString()});
