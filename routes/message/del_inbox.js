@@ -16,7 +16,7 @@ module.exports             = function(req, res){
 		res.status(200).end();
 	}
 	finally{
-		validate_token(user_id, user_chat, function(valid){
+		validate_token(user_id, token, function(valid){
 			if (valid){
 				Messages.remove({$or : [{user_send : user_id,       user_recei : user_chat.id}, 
 				          						{user_send : user_chat.id, user_recei : user_id}] }, 
