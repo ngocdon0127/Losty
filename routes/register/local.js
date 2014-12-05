@@ -20,7 +20,7 @@ var   mime               = require('mime'),
 	    validator          = require('validator');
 
 var   resize             = require('./../../app/file/resize');
-
+var   async              = require('async');
 var   bcrypt             = require('bcrypt-nodejs');
  
 function validate_username(username){
@@ -86,43 +86,53 @@ module.exports = function(req, res) {
 
                 var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
                 var new_location = '/img/avatar/';
+                async.waterfall([
+                	function(next){
+		                if (avatar_link != ''){
+		                  fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
+		                    if (err){
+		                      res.json({error_code : 202, msg : err.toString()});
+		                      res.status(200).end();
+		                    } else{
+		                      user.avatar = domain + new_location + file_name;
+		                      resize(user.avatar, function(avatar_small){
+		                        user.avatar_small = avatar_small;
+		                        console.log(avatar_small);
+		                        next(null);
+		                      })
+		                    }
+		                  })
+		                } else{
+		                	next(null);
+		                }
+                	}
+                ], function(err){
+	                process.nextTick(function(){
+	                  reverseGeocode(location, function(data){
+	                    user.city    = data.city;
+	                    user.country = data.country;
 
+	                    process.nextTick(function(){
+	                      user.save(function(err){
+	                        if (err){
+	                          console.log(err);
 
-                if (avatar_link != '')
-                  fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
-                    if (err){
-                      res.json({error_code : 202, msg : err.toString()});
-                      res.status(200).end();
-                    } else{
-                      user.avatar = domain + new_location + file_name;
-                      resize(user.avatar, function(avatar_small){
-                        user.avatar_small = avatar_small;
-                      })
-                    }
-                  });
-
-                process.nextTick(function(){
-                  reverseGeocode(location, function(data){
-                    user.city    = data.city;
-                    user.country = data.country;
-
-                    process.nextTick(function(){
-                      user.save(function(err){
-                        if (err){
-                          console.log(err);
-
-                          res.json({error_code : 402, msg : err.toString()});// Database cannot save
-                          res.status(200).end();
-                        } else{
-                          process.nextTick(function(){
-                            send_mail_register(email, username);
-                            make_token(user, res);
-                          })
-                        }                                         
-                      });                                
-                    });
-                  });                  
+	                          res.json({error_code : 402, msg : err.toString()});// Database cannot save
+	                          res.status(200).end();
+	                        } else{
+	                          process.nextTick(function(){
+	                            send_mail_register(email, username);
+	                            make_token(user, res);
+	                          })
+	                        }                                         
+	                      });                                
+	                    });
+	                  });                  
+	                })
                 })
+
+
+
               }
           })
         }

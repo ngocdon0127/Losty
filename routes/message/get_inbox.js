@@ -74,10 +74,12 @@ module.exports 				=	function(req, res){
 							        }
 
 							      ], function(err){
-												results.push({id : user_chat.id, avatar : user_chat.avatar, 
-																		  avatar_small : user_chat.avatar_small, 
-																			username : user_chat.username,                
-																			online : online, messages : result_msg[0]});
+							      	  if (messages.length != 0){
+													results.push({id : user_chat.id, avatar : user_chat.avatar, 
+																			  avatar_small : user_chat.avatar_small, 
+																				username : user_chat.username,                
+																				online : online, messages : result_msg[0]});
+							      	  }
 							      });
 							    });
 								});

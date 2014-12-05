@@ -14,6 +14,7 @@ var   formidable         = require('formidable'),
 var   validate_token     = require('./../../app/validate/validate_token');
 
 var   bcrypt             = require('bcrypt-nodejs');
+var   async              = require('async');
 
 var   Item               = require('./../../models/items');
 var   User               = require('./../../models/users');
@@ -117,68 +118,72 @@ module.exports = function(req, res) {
                   res.status(200).end();
                 } else {
                   var item            = new Item();
-                  item.category_id    = category_id;
-                  item.category       = category;
-                  item.title          = title;
-                  item.description    = description;
-                  item.type           = type;
-                  item.location       = location;
-                  item.reward         = reward;
-                  item.report         = report;
-                  item.image_link     = domain + new_location + file_name;
-                  
-                  resize(item.image_link, function(image_link_small){
-                    item.image_link_small = image_link_small;
-                  })
-                  item.date_lost      = convert_time_to_GMT(date_lost);
-                  item.time_post      = convert_time_to_GMT((new Date).toJSON());
-
-                  // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
-                  console.log('find user');
-                  User.findOne({_id : user_id}, function(err, user_exits){
-                    if (err){
-                      res.json({error_code : 401, msg : err.toString()});   // database cannot find
-                      res.status(200).end();
-                    } else{
-                      if (user_exits){                                
-                        // SAVE ITEM
-                        item.user.id       = user_exits._id;
-                        item.user.avatar   = user_exits.avatar;
-                        item.user.avatar_small = user_exits.avatar_small;
-                        item.user.username = user_exits.username;
-                        item.user.city     = user_exits.city;
-                        item.user.country  = user_exits.country;
-                        // SAVE ITEM
-                        item.save(function(err){
-                          if (err){
-                            res.json({error_code : 402, msg : err.toString()});
-                            res.status(200).end();
-                          }
-                          else {
-                            process.nextTick(function(){
-                              // SAVE ITEM IN INFOR USER
-                              user_exits.Item.push(item._id);
-                              user_exits.save(function(err){
-                                if (err){
-                                  res.json({error_code : 402, msg : err.toString()});
-                                  res.status(200).end();
-                                } else{
-                                	console.log('save');
-                                }
-                              })
-                              res.json({error_code : 0, item : item});
-                              res.status(200).end();   
-                            })   
-                          }
-                        })
-                      } else{
-                      	res.json({error_code : 308, msg : 'User is not exist'});
-                      	res.status(200).end();
-                      }
+                  async.waterfall([
+                    function(next){
+                      item.category_id    = category_id;
+                      item.category       = category;
+                      item.title          = title;
+                      item.description    = description;
+                      item.type           = type;
+                      item.location       = location;
+                      item.reward         = reward;
+                      item.report         = report;
+                      item.image_link     = domain + new_location + file_name;
+                      item.date_lost      = convert_time_to_GMT(date_lost);
+                      item.time_post      = convert_time_to_GMT((new Date).toJSON());
+                      
+                      resize(item.image_link, function(image_link_small){
+                        item.image_link_small = image_link_small;
+                        next(null);
+                      })
                     }
-                  })
+                  ],function(err){
+                    // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
+                    User.findOne({_id : user_id}, function(err, user_exits){
+                      if (err){
+                        res.json({error_code : 401, msg : err.toString()});   // database cannot find
+                        res.status(200).end();
+                      } else{
+                        if (user_exits){                                
+                          // SAVE ITEM
+                          item.user.id       = user_exits._id;
+                          item.user.avatar   = user_exits.avatar;
+                          item.user.avatar_small = user_exits.avatar_small;
+                          item.user.username = user_exits.username;
+                          item.user.city     = user_exits.city;
+                          item.user.country  = user_exits.country;
+                          // SAVE ITEM
+                          item.save(function(err){
+                            if (err){
+                              res.json({error_code : 402, msg : err.toString()});
+                              res.status(200).end();
+                            }
+                            else {
+                              process.nextTick(function(){
+                                // SAVE ITEM IN INFOR USER
+                                user_exits.Item.push(item._id);
+                                user_exits.save(function(err){
+                                  if (err){
+                                    res.json({error_code : 402, msg : err.toString()});
+                                    res.status(200).end();
+                                  } else{
+                                    console.log('save');
+                                  }
+                                })
+                                res.json({error_code : 0, item : item});
+                                res.status(200).end();   
+                              })   
+                            }
+                          })
+                        } else{
+                          res.json({error_code : 308, msg : 'User is not exist'});
+                          res.status(200).end();
+                        }
+                      }
+                    })
+                  });
                 }
-              })
+              })  
             } else{                     // =========== UPDATE ITEM=====================  
               Item.findOne({_id : item_id}, function(err, item_exist){
                 if (err){

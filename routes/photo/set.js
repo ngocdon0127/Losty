@@ -9,6 +9,7 @@ var Photo               = require('./../../models/photos');
 var fs                  = require('fs');
 var validator           = require('validator');
 var   resize            = require('./../../app/file/resize');
+var async               = require('async');
 
 
 
@@ -63,40 +64,46 @@ module.exports 			=	function(req, res){
 							            res.json({error_code : 202, msg : err.toString()});     //  Image link is incorrect
 							            res.status(200).end()
 									} else{
-										photo.image_link = domain + new_location + file_name;
-										resize(photo.image_link, function(image_link_small){
-											photo.image_link_small = image_link_small
-										})
-										photo.user_id    = user_id;
-										photo.save(function(err){
-											if (err){
-									            res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
-									            res.status(200).end()			  //  save
-											} else{
-												process.nextTick(function(){
-													res.json({error_code : 0, photo : photo});
-													res.status(200).end();
+										async.waterfall([
+											function(next){
+												photo.image_link = domain + new_location + file_name;
+												photo.user_id    = user_id;
 
-													// SAVE PHOTO INTO USER INFOR
-													User.findOne({_id : user_id}, 
-													function(err, user_exist){
-														if (err){
-															console.log(err);
-														} else{
-															user_exist.Photo.push(photo._id);
-															user_exist.save(function(err){
-																if (err){
-																	console.log(err);
-																}
-															});
-														}
-													})
+												resize(photo.image_link, function(image_link_small){
+													photo.image_link_small = image_link_small
+													next(null);
 												})
 											}
+										], function(err){
+											photo.save(function(err){
+												if (err){
+										            res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
+										            res.status(200).end()			  //  save
+												} else{
+													process.nextTick(function(){
+														res.json({error_code : 0, photo : photo});
+														res.status(200).end();
+
+														// SAVE PHOTO INTO USER INFOR
+														User.findOne({_id : user_id}, 
+														function(err, user_exist){
+															if (err){
+																console.log(err);
+															} else{
+																user_exist.Photo.push(photo._id);
+																user_exist.save(function(err){
+																	if (err){
+																		console.log(err);
+																	}
+																});
+															}
+														})
+													})
+												}
+											});
 										});
 									}
 								})
-
 						}
 					} else{							 // Update photo
 						Photo.findOne({_id : photo_id}, function(err, photo_exist){
