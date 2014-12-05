@@ -3,6 +3,7 @@ var url = require('url');
 var domain = require('./../../config/default').domain_default;
 var im = require('imagemagick');
 var gm = require('gm');
+var path = require('path');
 
 
 
