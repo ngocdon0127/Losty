@@ -112,7 +112,8 @@ var userSchema = mongoose.Schema({
             ref          : 'user'
         },
         username     : String,
-        avatar       : String      
+        avatar       : String,
+        avatar_small : String      
     }],
 
     Friend           : [{   
