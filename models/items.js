@@ -16,6 +16,12 @@ var itemSchema = mongoose.Schema({
     	 	required     : true
     },
 
+    image_link_normal : {
+            type         : String,
+            required     : true
+    },
+
+
     title            : {
         type         : String,
         required     : true,
