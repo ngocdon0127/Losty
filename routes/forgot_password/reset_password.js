@@ -34,10 +34,10 @@ module.exports    = function(req, res){
 
 				Users.findOne({email : email}, function(err, user_exist){
 					if (err){
-						res.json({message : 'Have error : '+ err.toString()});
+						res.render('reset_password_success.ejs');
 						res.status(200).end();
 					} else if(!user_exist){
-						res.json({message : 'Have error : Email is not exist'});
+						res.render('reset_password_success.ejs');
 						res.status(200).end();
 					} else{
 						user_exist.local.password =  bcrypt.hashSync(new_password, bcrypt.genSaltSync(8), null);
