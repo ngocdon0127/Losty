@@ -43,7 +43,7 @@ module.exports    = function(req, res){
 						user_exist.local.password =  bcrypt.hashSync(new_password, bcrypt.genSaltSync(8), null);
 						user_exist.save(function(err){
 							console.log('password : ', new_password);
-							res.json({error_code : 0});
+							res.render('reset_password_success.ejs');
 							res.status(200).end();
 						});
 					}
