@@ -49,9 +49,7 @@ module.exports 				=	function(req, res){
 							function(next1){
 								// get message, infor user and push into array
 								users_chat.forEach(function(user_chat){
-
 									var online = 0;
-
 									// Xet tung user chat cung minh, user nao dang online thi online = 1, 
 									// khong thi online = 0
 									Users_online.findOne({id : user_chat.id}, function(err, user_online){
@@ -63,7 +61,6 @@ module.exports 				=	function(req, res){
 				          										  function(err, messages){
 				          	async.waterfall([
 				          		function(next2){
-
 				          			// sort message by time
 						          	result_msg = messages;	
 												result_msg.sort(function(a,b){
@@ -90,18 +87,15 @@ module.exports 				=	function(req, res){
 							}, 
 
 							function(next1){
-								console.log(results);
 								results.sort(function(a, b){
 									return new Date(b.messages.time) - new Date(a.messages.time);
 								})
 								setTimeout(function(){
 									next1(null);	
 								}, 100)
-								
 							}
 
 						], function(err){
-								console.log(results);
 								res.json({error_code : 0, inbox : results});
 								res.status(200).end();	
 						})
