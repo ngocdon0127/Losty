@@ -31,7 +31,7 @@ function add_users_chat(id_1, id_2){
             } else if (!user_2){
               console.log('User 2 is not exist');
             } else{
-              user_exist.users_chat.push({id : id_2, username : user_2.username, avatar : user_2.avatar, avatar_small = user_2.avatar_small});
+              user_exist.users_chat.push({id : id_2, username : user_2.username, avatar : user_2.avatar, avatar_small : user_2.avatar_small});
               user_exist.save(function(err){
                 if (err){
                   console.log(err);
