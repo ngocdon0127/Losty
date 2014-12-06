@@ -20,6 +20,8 @@ var   Item               = require('./../../models/items');
 var   User               = require('./../../models/users');
 var   Categores          = require('./../../models/categores');
 var   resize             = require('./../../app/file/resize');
+var   resize_normal      = require('./../../app/file/resize_normal');
+
 
 
 var   moment             = require('moment-timezone');
@@ -136,6 +138,12 @@ module.exports = function(req, res) {
                         item.image_link_small = image_link_small;
                         next(null);
                       })
+                    }, 
+                    function(next){
+                      resize_normal(item.image_link, function(image_link_normal){
+                        item.image_link_normal = image_link_normal;
+                        next(null);
+                      });
                     }
                   ],function(err){
                     // SAVE AVATAR, USERNAME AND CITY, COUNTRY USER
