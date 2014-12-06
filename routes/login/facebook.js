@@ -86,6 +86,7 @@ module.exports = function(req, res){
 			},
 			function( next){
 			    API("/me/friends", function(err, data){											// GET FRIENDS
+			    	console.log(data);
 			    	if (err){
 			    		console.log(err);
 			       	res.json({error_code : 600, msg : err.message});			//	Have error
