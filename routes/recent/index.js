@@ -75,7 +75,7 @@ module.exports = function(req, res){
 										console.log('Remove ', items[i].title);
 										items.splice(i, 1);
 									};
-								})
+								}
 
 								next(null);
 							},
