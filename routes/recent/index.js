@@ -60,7 +60,9 @@ module.exports = function(req, res){
 								 	return distance(location, a.location) - distance(location, b.location);
 								})
 
-								next(null);
+								setInterval(function(){
+									next(null);
+								}, 100);
 							},
 
 							function(next){
