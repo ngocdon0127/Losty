@@ -62,7 +62,7 @@ module.exports = function(req, res){
 
 								setInterval(function(){
 									next(null);
-								}, 100);
+								}, 1000);
 							},
 
 							function(next){
@@ -70,7 +70,7 @@ module.exports = function(req, res){
 								console.log('********************');
 								console.log('item : ', items);
 
-								for (var i = 0 ; i  <= items.length ; i ++){
+								for (var i = 0 ; i  < items.length ; i ++){
 									console.log(i, ' : ', items[i].title)
 									console.log(distance(items[i].location, location));
 									if (distance(items[i].location, location) > distance_max){
