@@ -65,12 +65,12 @@ module.exports = function(req, res){
 
 							function(next){
 								for (var i = 0 ; i  < items.length ; i ++){
+									console.log(items[i].title)
 									console.log(distance(items[i].location, location));
 									if (distance(items[i].location, location) > distance_max){
 										items.splice(i, 1);
 									};
 								};
-								console.log(items);
 								next(null);
 							},
 
