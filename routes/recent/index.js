@@ -68,6 +68,7 @@ module.exports = function(req, res){
 									console.log(items[i].title)
 									console.log(distance(items[i].location, location));
 									if (distance(items[i].location, location) > distance_max){
+										console.log('Remove ', items[i].title);
 										items.splice(i, 1);
 									};
 								};
