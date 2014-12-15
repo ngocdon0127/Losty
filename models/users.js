@@ -8,12 +8,12 @@ var userSchema = mongoose.Schema({
 
     avatar           : {
         type         : String,
-        default      : 'http://localhost:8080/img/avatar/default-avatar.png'
+        default      : 'http://104.131.69.233:3000/img/avatar/default-avatar.png'
     },
 
     avatar_small     : {
         type         : String,
-        default      : 'http://localhost:8080/img/avatar/default-avatar.png'
+        default      : 'http://104.131.69.233:3000/img/avatar/default-avatar.png'
     },    
 
     username         : {

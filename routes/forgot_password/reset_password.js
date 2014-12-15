@@ -34,7 +34,7 @@ module.exports    = function(req, res){
 
 				Users.findOne({email : email}, function(err, user_exist){
 					if (err){
-						res.render('reset_password_success.ejs');
+						res.render('reset_password_success.ejs'); 
 						res.status(200).end();
 					} else if(!user_exist){
 						res.render('reset_password_success.ejs');

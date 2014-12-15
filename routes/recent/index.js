@@ -1,11 +1,14 @@
 // ================================ RETURN ITEMS NEAR USER ==========================
 
+
 var Item  	   					= require('./../../models/items');
 
 var distance   					= require('./../../app/map/distance');
 var validate_token 			= require('./../../app/validate/validate_token');
 var validate_location 	= require('./../../app/validate/validate_location');
 var async								= require('async');
+
+var distance_max        = 100.0;
 
 // Rounding num with ext numbers
 function round_f(num,ext){
@@ -53,12 +56,23 @@ module.exports = function(req, res){
 						async.waterfall([
 							function(next){	
 
-   								items.sort(function(a, b){
+   							items.sort(function(a, b){
 								 	return distance(location, a.location) - distance(location, b.location);
 								})
 
 								next(null);
 							},
+
+							function(next){
+								for (var i = 0 ; i  < items.length ; i ++){
+									if (distance(items[i].location, location) > distance_max){
+										items.splice(i, 1);
+									};
+								};
+								console.log(items);
+								next(null);
+							},
+
 							function(next){
 								
 								distances = [];
