@@ -68,7 +68,9 @@ module.exports = function(req, res){
 							function(next){
 
 								console.log('********************');
-								console.log('item : ', items);
+								items.forEach(function(item){
+									console.log(item.title);
+								});
 								var i = 0
 								items.forEach(function(item){
 									console.log(i, ' : ', item.title);
