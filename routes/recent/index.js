@@ -69,15 +69,17 @@ module.exports = function(req, res){
 
 								console.log('********************');
 								console.log('item : ', items);
-
-								for (var i = 0 ; i  < items.length ; i ++){
-									console.log(i, ' : ', items[i].title)
+								var i = 0
+								items.forEach(function(item){
+									console.log(i, ' : ', item.title);
 									console.log(distance(items[i].location, location));
-									if (distance(items[i].location, location) > distance_max){
-										console.log('Remove ', items[i].title);
+									if (distance(item.location, location) > distance_max){
+										console.log('Remove ', item.title);
 										items.splice(i, 1);
 									};
-								};
+									i = i + 1;
+								})
+
 								next(null);
 							},
 
