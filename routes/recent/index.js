@@ -68,18 +68,13 @@ module.exports = function(req, res){
 							function(next){
 
 								console.log('********************');
-								items.forEach(function(item){
-									console.log(item.title);
-								});
-								var i = 0
-								items.forEach(function(item){
+								for (var i = items.length - 1 ; i >= 0 ; i --){
 									console.log(i, ' : ', item.title);
 									console.log(distance(items[i].location, location));
-									if (distance(item.location, location) > distance_max){
-										console.log('Remove ', item.title);
+									if (distance(items[i].location, location) > distance_max){
+										console.log('Remove ', items[i].title);
 										items.splice(i, 1);
 									};
-									i = i + 1;
 								})
 
 								next(null);
