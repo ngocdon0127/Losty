@@ -48,7 +48,7 @@ module.exports           =    function(req, res){
 							if (item.title.toLowerCase().indexOf(title.toLowerCase()) != -1){
 								console.log('distance : ', distance(item.location, location));
 								if (distance(item.location, location) <= distance_max){
-									if (check_day(item.date_lost, date_lost)){
+									if (check_day(new Date(item.date_lost), new Date(date_lost) ) ){
 										items.push(item);
 									}
 								}
