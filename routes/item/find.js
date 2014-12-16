@@ -10,7 +10,12 @@ function convert_time_to_GMT(time){
 }
 
 function check_day(time1, time2){
-	return 1
+	if (time1.getMonth() == time2.getMonth() && 
+			time1.getDate()  == time2.getDate() && 
+			time1.getFullYear() == time2.getFullYear())
+			return 1
+	else 
+			return 0
 }
 
 module.exports           =    function(req, res){
