@@ -10,6 +10,10 @@ function convert_time_to_GMT(time){
 }
 
 function check_day(time1, time2){
+	console.log(time1.getMonth(), time2.getMonth());
+	console.log(time1.getDate(), time2.getDate());
+	console.log(time1.getFullYear(), time2.getFullYear());
+
 	if (time1.getMonth() == time2.getMonth() && 
 			time1.getDate()  == time2.getDate() && 
 			time1.getFullYear() == time2.getFullYear())
