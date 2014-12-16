@@ -10,7 +10,6 @@ function convert_time_to_GMT(time){
 }
 
 function check_day(time1, time2){
-	console.log('Date search :', time2);
 	console.log(time1.getMonth(), time2.getMonth());
 	console.log(time1.getDate(), time2.getDate());
 	console.log(time1.getFullYear(), time2.getFullYear());
@@ -33,7 +32,6 @@ module.exports           =    function(req, res){
 		var location 		= data.location;
 		var category_id = data.category_id;
 		var date_lost 	= convert_time_to_GMT(data.date);
-		console.log('Date lost conver to GMT : ', date_lost);
 		var title     	= data.title;
 		var type 				= data.type;
 	}
@@ -54,7 +52,7 @@ module.exports           =    function(req, res){
 							if (item.title.toLowerCase().indexOf(title.toLowerCase()) != -1){
 								console.log('distance : ', distance(item.location, location));
 								if (distance(item.location, location) <= distance_max){
-									if (check_day(new Date(item.date_lost), new Date(date_lost) ) ){
+									if (check_day(new Date(item.date_lost), date_lost ) ){
 										items.push(item);
 									}
 								}
