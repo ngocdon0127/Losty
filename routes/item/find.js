@@ -32,6 +32,7 @@ module.exports           =    function(req, res){
 		var location 		= data.location;
 		var category_id = data.category_id;
 		var date_lost 	= convert_time_to_GMT(data.date);
+		console.log('Date lost conver to GMT : ', date_lost);
 		var title     	= data.title;
 		var type 				= data.type;
 	}
