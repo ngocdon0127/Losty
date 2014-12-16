@@ -12,12 +12,11 @@ module.exports 			=	function(req, res){
     var form = new formidable.IncomingForm();
 
     form.parse(req, function(err, fields, files) { 
+      console.log(files);
       if (err){
-        console.log('Alo');
         res.json({error_code : 201, msg : err.toString()});         //  Input is invalid
         res.status(200).end();
       }
-      console.log('Alo');
     });
 
     form.on('error', function(err) {
@@ -28,6 +27,8 @@ module.exports 			=	function(req, res){
     });
 
     form.on('end', function(fields, files){
+      
+      console.log('This.openedFiles : ', this.openedFiles);
       if (!this.openedFiles[0]){
         res.json({error_code : 201, msg : 'File is incorrect'});    //  Input is invalid
         res.status(200).end();

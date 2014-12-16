@@ -51,6 +51,7 @@ Router_body.post('/login_twitter',		   					routes.login.twitter);			// api logi
 Router_formdata.post('/upload_photo',	   					routes.upload_photo);			// api upload photo, return link '/tmp'
 
 // UPLOAD PHOTO_ITEM
+Router_formdata.post('/set_multi_photo',					routes.photo.set_multi);	// api upload multi photo
 Router_body.post('/set_photo',   			 	 					routes.photo.set);				// api set photo
 Router_body.post('/del_photo',					 					routes.photo.del);				// api del photo
 Router_body.get('/get_photo/:photo_id',  					routes.photo.get);				// api get photo

@@ -8,7 +8,7 @@ var Photo               = require('./../../models/photos');
 
 var fs                  = require('fs');
 var validator           = require('validator');
-var   resize            = require('./../../app/file/resize');
+var resize              = require('./../../app/file/resize');
 var async               = require('async');
 
 
@@ -55,7 +55,7 @@ module.exports 			=	function(req, res){
 								photo.name = name;
 								var file_name = Math.floor(Math.random() * 1000000 + 1) + 
 												new Date().getTime() + '.' + extension;
-		                        var new_location = '/img/photo/';
+		            var new_location = '/img/photo/';
 
 		                        // SAVE PHOTO
 								fs.rename(image_link, './public' + new_location + file_name, 
@@ -83,21 +83,6 @@ module.exports 			=	function(req, res){
 													process.nextTick(function(){
 														res.json({error_code : 0, photo : photo});
 														res.status(200).end();
-
-														// SAVE PHOTO INTO USER INFOR
-														User.findOne({_id : user_id}, 
-														function(err, user_exist){
-															if (err){
-																console.log(err);
-															} else{
-																user_exist.Photo.push(photo._id);
-																user_exist.save(function(err){
-																	if (err){
-																		console.log(err);
-																	}
-																});
-															}
-														})
 													})
 												}
 											});
