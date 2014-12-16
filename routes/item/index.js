@@ -11,5 +11,8 @@ exports.del							= 	require('./del');
 // search item
 exports.search  				=   require('./search');
 
+// find item
+exports.find  	  			=   require('./find');
+
 // add_people_view
 exports.add_people_view = 	require('./add_people_view');

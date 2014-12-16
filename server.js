@@ -66,6 +66,9 @@ Router_body.post('/add_people_view',     					routes.item.add_people_view);				/
 // SEARCH ITEM BY KEYWORD
 Router_body.post('/search_item', 		     					routes.item.search);			// api search item
 
+// FIND ITEM BY CATEGORY, TITLE, LOCATION AND DATE
+Router_body.post('/find_item', 		     			   		routes.item.find);			  // api find item
+
 // CREATE, UPDATE, VIEW, REMOVE CATEGORES
 Router_body.post('/set_a_category', 		 					routes.category.set);			// api create,update categores   (ONLY ADMIN)
 Router_body.get('/get_categores',  		   					routes.category.get);			// api get categores

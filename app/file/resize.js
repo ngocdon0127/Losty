@@ -2,9 +2,11 @@ var fs = require('fs');
 var url = require('url');
 var domain = require('./../../config/default').domain_default;
 var im = require('imagemagick');
-var gm = require('gm').subClass({ imageMagick: true });
-// var gm = require('gm');
 
+var gm = require('gm').subClass({ imageMagick: true });	    // gm with server
+
+// var gm = require('gm');																			// gm with location
+	
 module.exports 					=	function(url_, callback){
 	gm('./public' + url.parse(url_).path)
 		.resize(120, 120)
