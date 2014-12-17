@@ -84,7 +84,7 @@ module.exports								=	function(req, res){
 								// }
 								async.waterfall([
 									function(next2){
-										if (email != ''){
+										if (email != user_exist.email){
 											User.findOne({email : email}, function(err, user_exist2){
 												if (user_exist2){
 													res.json({error_code : 200, msg : 'Email is really exist'});
@@ -98,8 +98,9 @@ module.exports								=	function(req, res){
 														user_exist.avatar = img_server;
 														resize(user_exist.avatar, function(avatar_small){
 															user_exist.avatar_small = avatar_small;
+															next2(null);
 														});
-														next2(null);
+														
 													} else{
 														next2(null);
 													}
