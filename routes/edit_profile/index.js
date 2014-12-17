@@ -93,7 +93,9 @@ module.exports								=	function(req, res){
 													res.status(200).end();
 													return 1;
 												} else{
+													console.log(user_exist2);
 													user_exist.email  = email;
+													next2(null);
 												}												
 											})
 										} else{
