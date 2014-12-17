@@ -84,26 +84,30 @@ module.exports								=	function(req, res){
 								// }
 								async.waterfall([
 									function(next2){
-										User.findOne({email : email}, function(err, user_exist){
-											if (user_exist){
-												res.json({error_code : 200, msg : 'Email is really exist'});
-												res.status(200).end();
-												return 1;
-											} else{
-												user_exist.email  = email;
-												user_exist.username = username;										
-
-												if (img_server != ''){
-													user_exist.avatar = img_server;
-													resize(user_exist.avatar, function(avatar_small){
-														user_exist.avatar_small = avatar_small;
-													});
-													next2(null);
+										if (email != ''){
+											User.findOne({email : email}, function(err, user_exist2){
+												if (user_exist2){
+													res.json({error_code : 200, msg : 'Email is really exist'});
+													res.status(200).end();
+													return 1;
 												} else{
-													next2(null);
-												}
-											}												
-										})
+													user_exist.email  = email;
+													user_exist.username = username;										
+
+													if (img_server != ''){
+														user_exist.avatar = img_server;
+														resize(user_exist.avatar, function(avatar_small){
+															user_exist.avatar_small = avatar_small;
+														});
+														next2(null);
+													} else{
+														next2(null);
+													}
+												}												
+											})
+										} else{
+											next2(null);
+										}
 									}
 								], function(err){
 		              if (password != '')
