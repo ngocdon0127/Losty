@@ -24,7 +24,7 @@ module.exports 			=	function(req, res){
         res.json({error_code : 201, msg : err.toString()});         //  Input is invalid
         res.status(200).end();
       } else{
-      	console.log(fields);
+      	console.log('Fields : ', fields);
         var user_id = fields.user_id;
         var token   = fields.token;
         console.log(user_id, token);
