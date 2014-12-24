@@ -11,8 +11,6 @@ var async               = require('async');
 
 var   validate_token= require('./../../app/validate/validate_token');
 
-var form = new formidable.IncomingForm();
-
 module.exports 			=	function(req, res){ 
 
   // PARSE FORM-DATA
