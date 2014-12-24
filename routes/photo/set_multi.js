@@ -24,6 +24,7 @@ module.exports 			=	function(req, res){
         res.json({error_code : 201, msg : err.toString()});         //  Input is invalid
         res.status(200).end();
       } else{
+      	console.log(fields);
         var user_id = fields.user_id;
         var token   = fields.token;
         console.log(user_id, token);
@@ -85,18 +86,6 @@ module.exports 			=	function(req, res){
     });
 
     form.on('end', function(fields, files){
-      
-      // console.log('This.openedFiles : ', this.openedFiles);
-      // if (!this.openedFiles[0]){
-      //   res.json({error_code : 201, msg : 'File is incorrect'});    //  Input is invalid
-      //   res.status(200).end();
-      // } else{
-      //   var temp_path	=	this.openedFiles[0].path;
-      //   var extension   =   mime.extension(this.openedFiles[0].type).toLowerCase();                   
-      //   res.json({error_code : 0, image_link : temp_path, extension : extension});
-      //   res.status(200).end();
-      // } 
-
     })
   }
   catch(err){
@@ -106,6 +95,5 @@ module.exports 			=	function(req, res){
   finally{
     res.json({error_code : 0});             //  Input is invalid
     res.status(200).end();
-
   }
 }	
