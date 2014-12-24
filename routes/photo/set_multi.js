@@ -12,8 +12,8 @@ var async               = require('async');
 var   validate_token= require('./../../app/validate/validate_token');
 
 module.exports 			=	function(req, res){ 
+	// console.log(req);
 
-  // PARSE FORM-DATA
   try{
     var form = new formidable.IncomingForm();
 
@@ -23,6 +23,7 @@ module.exports 			=	function(req, res){
         res.status(200).end();
       } else{
       	console.log('Fields : ', fields);
+      	console.log('Files : ', files);
         var user_id = fields.user_id;
         var token   = fields.token;
         console.log(user_id, token);
@@ -31,6 +32,7 @@ module.exports 			=	function(req, res){
             res.json({error_code : 100, msg : 'Authenticate is not success'});
             res.status(200).end();
           } else{
+          	console.log('Foreach files');
             Object.keys(files).forEach(function(name){
               var temp_path   =   files[name].path;
               var extension   =   mime.extension(files[name].type).toLowerCase();  
@@ -84,14 +86,21 @@ module.exports 			=	function(req, res){
     });
 
     form.on('end', function(fields, files){
+    	console.log('end');
+    	setTimeout(function(){
+	    	res.json({error_code : 0});            
+	    	res.status(200).end();
+    	}, 1000);
+
     })
   }
+
   catch(err){
     res.json({error_code : 201, msg : err.toString()});             //  Input is invalid
     res.status(200).end();
   }
+
   finally{
-    res.json({error_code : 0});             //  Input is invalid
-    res.status(200).end();
+  	console.log('finally');
   }
 }	
