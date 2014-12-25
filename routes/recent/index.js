@@ -67,10 +67,8 @@ module.exports = function(req, res){
 
 							function(next){
 
-								console.log('********************');
 								for (var i = items.length - 1 ; i >= 0 ; i --){
 									if (distance(items[i].location, location) > distance_max){
-										console.log('Remove ', items[i].title);
 										items.splice(i, 1);
 									};
 								}
@@ -85,7 +83,8 @@ module.exports = function(req, res){
 								process.nextTick(function(){
 									
 									items.forEach(function(item){
-										distances.push(round_f(distance(location, item.location), 1 ));
+										// Convert km to miles
+										distances.push(round_f ( distance(location, item.location) / 1.609, 1 ));
 									})
 
 									process.nextTick(function(){

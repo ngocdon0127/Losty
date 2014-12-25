@@ -16,3 +16,6 @@ exports.find  	  			=   require('./find');
 
 // add_people_view
 exports.add_people_view = 	require('./add_people_view');
+
+// list my item
+exports.list 						= 	require('./list');

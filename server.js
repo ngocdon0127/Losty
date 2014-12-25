@@ -58,6 +58,7 @@ Router_body.get('/get_photo/:photo_id',  					routes.photo.get);				// api get p
 Router_body.post('/get_photos',				   					routes.photo.getAll);			// api get all photos
 
 // CREATE, UPDATE, VIEW, REMOVE ITEMS
+Router_body.post('/list_item', 			   				  	routes.item.list);       	// api create, update an item
 Router_body.post('/set_an_item', 			   					routes.item.set);       	// api create, update an item
 Router_body.get('/get_an_item/:item_id', 					routes.item.get);				// api get an  item
 Router_body.post('/del_an_item', 		     					routes.item.del);				// api del an  item

@@ -8,9 +8,6 @@ var gm = require('gm').subClass({ imageMagick: true });	    // gm with server
 // var gm = require('gm');																			// gm with location
 	
 module.exports 					=	function(url_, callback){
-	console.log('url : "./public' + url.parse(url_).path, '"');
-	console.log('./public/small_size' + url.parse(url_).path);
-
 	gm('./public' + url.parse(url_).path)
 		.resize(120, 120)
 		.autoOrient()
