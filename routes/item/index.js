@@ -19,3 +19,6 @@ exports.add_people_view = 	require('./add_people_view');
 
 // list my item
 exports.list 						= 	require('./list');
+
+// delete item
+exports.del 						= 	require('./del');

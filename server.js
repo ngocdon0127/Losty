@@ -1,4 +1,4 @@
-// ==================================================SETUP TOOL NEED===================================
+// =====================================SETUP TOOL NEED===================================
 var express         =   require('express');
 var app             =   express();
 var ip              =   'localhost';
@@ -15,13 +15,13 @@ var routes   		= require('./routes');
 
 var db_url   		= require('./config/default').database;
 
-// ==================================================CONFIGURATION===================================
+// ============================CONFIGURATION===================================
 
 mongoose.connect(db_url); // connect to our database
 
-require('./config/index.js')(app, Router_raw, Router_formdata, Router_body);  //  all config
+require('./config/index.js')(app, Router_raw, Router_formdata, Router_body);
 
-// ================================================= API ============================================
+// ============================ API ============================================
 
 app.get('/api/login_fb',								 function(req, res){
 	res.render('login_fb');
@@ -35,54 +35,52 @@ app.get('/api/reset_password/:resetKey',		 function(req, res){
 	res.render('reset_password', {reset_key : req.params.resetKey});
 })
 
-
 // REGISTER, LOGIN, LOGOUT LOCAL 
-Router_body.post('/login', 		  			 	 					routes.login.local);          	// api login with local account
-Router_body.post('/register', 					 					routes.register.local);       	// api register with local account
-Router_body.post('/logout', 		  		   					routes.logout);					// api logout 
+Router_body.post('/login', 		  			 	 					routes.login.local);         
+Router_body.post('/register', 					 					routes.register.local);      
+Router_body.post('/logout', 		  		   					routes.logout);					
 
 // REGISTER, LOGIN, LOGOUT FACEBOOK
-Router_body.post('/login_fb',         	 					routes.login.facebook);         // api login with facebook
+Router_body.post('/login_fb',         	 					routes.login.facebook); 
 
 // REGISTER, LOGIN, LOGOUT TWITTER
-Router_body.post('/login_twitter',		   					routes.login.twitter);			// api login with twitter
+Router_body.post('/login_twitter',		   					routes.login.twitter);	
 
 // UPLOAD PHOTO
-Router_formdata.post('/upload_photo',	   					routes.upload_photo);			// api upload photo, return link '/tmp'
+Router_formdata.post('/upload_photo',	   					routes.upload_photo);		
 
 // UPLOAD PHOTO_ITEM
-Router_formdata.post('/set_multi_photo',					routes.photo.set_multi);	// api upload multi photo
-Router_body.post('/set_photo',   			 	 					routes.photo.set);				// api set photo
-Router_body.post('/del_photo',					 					routes.photo.del);				// api del photo
-Router_body.get('/get_photo/:photo_id',  					routes.photo.get);				// api get photo
-Router_body.post('/get_photos',				   					routes.photo.getAll);			// api get all photos
+Router_formdata.post('/set_multi_photo',					routes.photo.set_multi);
+Router_body.post('/set_photo',   			 	 					routes.photo.set);			
+Router_body.post('/del_photo',					 					routes.photo.del);			
+Router_body.get('/get_photo/:photo_id',  					routes.photo.get);			
+Router_body.post('/get_photos',				   					routes.photo.getAll);		
 
 // CREATE, UPDATE, VIEW, REMOVE ITEMS
-Router_body.post('/list_item', 			   				  	routes.item.list);       	// api create, update an item
-Router_body.post('/set_an_item', 			   					routes.item.set);       	// api create, update an item
-Router_body.get('/get_an_item/:item_id', 					routes.item.get);				// api get an  item
-Router_body.post('/del_an_item', 		     					routes.item.del);				// api del an  item
-Router_body.post('/add_people_view',     					routes.item.add_people_view);				// api del an  item
+Router_body.post('/del_item', 			   				  	routes.item.del);       
+Router_body.post('/list_item', 			   				  	routes.item.list);       
+Router_body.post('/set_an_item', 			   					routes.item.set);      
+Router_body.get('/get_an_item/:item_id', 					routes.item.get);			
+Router_body.post('/add_people_view',     					routes.item.add_people_view);	
 
 // SEARCH ITEM BY KEYWORD
-Router_body.post('/search_item', 		     					routes.item.search);			// api search item
+Router_body.post('/search_item', 		     					routes.item.search);		
 
 // FIND ITEM BY CATEGORY, TITLE, LOCATION AND DATE
-Router_body.post('/find_item', 		     			   		routes.item.find);			  // api find item
+Router_body.post('/find_item', 		     			   		routes.item.find);			
 
 // CREATE, UPDATE, VIEW, REMOVE CATEGORES
-Router_body.post('/set_a_category', 		 					routes.category.set);			// api create,update categores   (ONLY ADMIN)
-Router_body.get('/get_categores',  		   					routes.category.get);			// api get categores
+Router_body.post('/set_a_category', 		 					routes.category.set);			
+Router_body.get('/get_categores',  		   					routes.category.get);		
 
 // REQUEST RECENT
-Router_body.post('/recent',				 	     					routes.recent);					// api request recent
-
+Router_body.post('/recent',				 	     					routes.recent);				
 // GET FRIENDS
-Router_body.post('/get_friends',			   					routes.friend.get);				// api get friends
+Router_body.post('/get_friends',			   					routes.friend.get);		
 
 // GET MESSAGE
-Router_body.post('/get_messages',		     					routes.message.get);			// api get messages
-Router_body.post('/get_inbox',   		     					routes.message.get_inbox);			// api get inbox
+Router_body.post('/get_messages',		     					routes.message.get);			
+Router_body.post('/get_inbox',   		     					routes.message.get_inbox);
 Router_body.post('/del_inbox',										routes.message.del_inbox);
 
 
@@ -91,7 +89,7 @@ Router_body.post('/sync_fb',						 					routes.sync_account.facebook);
 Router_body.post('/sync_tw',						 					routes.sync_account.twitter);
 
 // MAKE FRIEND
-Router_body.post('/make_friend',				 					routes.friend.make);			// api make friends
+Router_body.post('/make_friend',				 					routes.friend.make);			
 
 // EDIT PROFILE
 Router_body.post('/edit_profile',				 					routes.edit_profile);	
@@ -106,7 +104,7 @@ Router_body.post('/deactive_account',							routes.deactive_account);
 // ERROR CODE
 Router_body.get('/error_code/:error_code',				routes.error_code);
 
-// =================================================== LISTEN BY IP AND PORT ========================
+// =================================== LISTEN BY IP AND PORT ========================
 
 
 var server  = app.listen(port, function(){
@@ -114,19 +112,5 @@ var server  = app.listen(port, function(){
 })
 
 var io = require('socket.io').listen(server);
-
-
-// var io = require('socket.io').listen(server, {
-//     origins : '*:3000',                          // chap nhan tat ca client ket noi socket.io den server
-//     transports : ['polling', 'websocket']        // co che su dung socket.io
-// });
-
-// io.set('transports', ['websocket', 
-//                       'flashsocket', 
-//                       'htmlfile', 
-//                       'xhr-polling', 
-//                       'jsonp-polling', 
-//                       'polling']);
-
 
 require('./app/chat/handler_socket')(io);
