@@ -42,7 +42,7 @@ module.exports           =    function(req, res){
 		var date_lost 	= convert_time_to_GMT(data.date);
 		var title     	= data.title;
 		var type 				= data.type;
-		var timezone    = data.timezone;
+		var timezone    = parseInt(data.timezone);
 	}
 	catch(err){
 		res.json({error_code : 200, msg : 'Input is invalid'});
@@ -61,7 +61,7 @@ module.exports           =    function(req, res){
 							if (item.title.toLowerCase().indexOf(title.toLowerCase()) != -1){
 								console.log('distance : ', distance(item.location, location));
 								if (distance(item.location, location) <= distance_max){
-									if (check_day(item.date_lost, date_lost , int(timezone)) ){
+									if (check_day(item.date_lost, date_lost , timezone) ){
 										items.push(item);
 									}
 								}
