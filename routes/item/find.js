@@ -9,7 +9,12 @@ function convert_time_to_GMT(time){
 	return new Date(new Date(time).toGMTString()).toJSON();
 }
 
-function check_day(time1, time2){
+function check_day(time1, time2, timezone){
+	time1 = new Date(time1);
+	time2 = new Date(time2);
+	// convert time1 and time2 to TIMEZONE of user
+	time1.setHours(time1.getHours() + timezone + 5);
+	time2.setHours(time1.getHours() + timezone + 5);
 	console.log(time1.getMonth(), time2.getMonth());
 	console.log(time1.getDate(), time2.getDate());
 	console.log(time1.getFullYear(), time2.getFullYear());
@@ -34,6 +39,7 @@ module.exports           =    function(req, res){
 		var date_lost 	= convert_time_to_GMT(data.date);
 		var title     	= data.title;
 		var type 				= data.type;
+		var timezone    = data.timezone;
 	}
 	catch(err){
 		res.json({error_code : 200, msg : 'Input is invalid'});
@@ -52,7 +58,7 @@ module.exports           =    function(req, res){
 							if (item.title.toLowerCase().indexOf(title.toLowerCase()) != -1){
 								console.log('distance : ', distance(item.location, location));
 								if (distance(item.location, location) <= distance_max){
-									if (check_day(new Date(item.date_lost), date_lost ) ){
+									if (check_day(item.date_lost, date_lost , timezone) ){
 										items.push(item);
 									}
 								}
