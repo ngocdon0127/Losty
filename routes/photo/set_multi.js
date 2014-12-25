@@ -24,8 +24,8 @@ module.exports 			=	function(req, res){
       } else{
       	console.log('Fields : ', fields);
       	console.log('Files : ', files);
-        var user_id = fields.user_id;
-        var token   = fields.token;
+        var user_id = fields['user[user_id]'];
+        var token   = fields['user[token]'];
         console.log(user_id, token);
         validate_token(user_id, token, function(valid){
           if (!valid){
@@ -66,7 +66,7 @@ module.exports 			=	function(req, res){
                           res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
                           res.status(200).end()       //  save
                         } else{
-                          console.log('save photo success');
+                          console.log('save photo successsss');
                         }
                       });
                     });
