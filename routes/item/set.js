@@ -145,6 +145,9 @@ module.exports = function(req, res) {
 	    				next(null);
 	    			} else{
               var new_location = '/img/item/';
+              var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
+                              + '.' + extension;
+
 	            fs.rename(image_link, './public' + new_location + file_name, function(err) {
 	              if (err) {
 	                res.json({error_code : 306, msg : err.toString()});       // Image is not exist
