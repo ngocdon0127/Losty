@@ -170,7 +170,6 @@ module.exports = function(req, res) {
 
 	    		// make item
 	    		function(next){
-	          var item            = new Item();    			
 	          item.category_id    = category_id;
 	          item.category       = category;
 	          item.title          = title;
