@@ -7,6 +7,8 @@ var Photo               = require('./../../models/photos');
 
 var domain              = require('./../../config/default').domain_default;
 var resize              = require('./../../app/file/resize');
+var resize_normal       = require('./../../app/file/resize_normal');
+
 var async               = require('async');
 
 var   validate_token= require('./../../app/validate/validate_token');
@@ -56,8 +58,11 @@ module.exports 			=	function(req, res){
                         photo.user_id    = user_id;
 
                         resize(photo.image_link, function(image_link_small){
-                          photo.image_link_small = image_link_small
-                          next(null);
+                          photo.image_link_small = image_link_small;
+                          resize_normal(photo.image_link, function(image_link_normal){
+                            photo.image_link_normal = image_link_normal;
+                            next(null);
+                          })
                         })
                       }
                     ], function(err){

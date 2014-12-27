@@ -18,6 +18,10 @@ var photoSchema = mongoose.Schema({
     	type        : String
     },
 
+    image_link_normal : {
+        type        : String
+    },
+
     user_id         : {
     	type        : ObjectId,
     	ref         : 'users'

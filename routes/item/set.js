@@ -86,9 +86,9 @@ module.exports = function(req, res) {
       var reward      = data.reward;
       var report      = data.report;
 
-      var image_link_small_server = '';
-      var image_link_server = '';
-      var image_link_normal_server = '';
+      var image_link_small_server = data.image_link_small;
+      var image_link_server = data.image_link;
+      var image_link_normal_server = data.image_link_normal;
 
     }
     catch(err){
@@ -141,8 +141,6 @@ module.exports = function(req, res) {
 	    		// make image_link_server , image_link_small_server, image_link_normal_server
 	    		function(next){
 	    			if (img_from_photo){
-	    				image_link_server = image_link;
-	    				image_link_small_server = image_link_small;
 	    				next(null);
 	    			} else{
               var new_location = '/img/item/';
