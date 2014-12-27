@@ -43,25 +43,13 @@ module.exports			=	function(req, res){
 									res.status(200).end();
 								} else{
 									// ITEM IS EXIST
-									if (item_exist.user_id != user_id){
+									if (item_exist.user.id != user_id){
 										// ITEM KHONG PHAI CUA USER
 										res.json({error_code : 500, msg : 'Not have enough permission'});	// Not have permission
 										res.status(200).end();
 									} else{
 										// ITEM LA CUA USER, TIEN HANH XOA ITEM VA XOA THONG TIN TREN USER
 
-										// REMOVE ITEM IN INFOR OF USER
-										User.findOne({_id : user_id},function(err, user_exist){
-											if (err){
-												
-												res.json({error_code : 401, msg : err.toString()});	//Database cannot find
-												res.status(200).end();
-												return 1;
-											} else{
-												user_exist.Item.pull(item_id);
-												user_exist.save(function(err){ });		
-											}
-										});
 										// REMOVE IMAGE OF ITEM
 			                fs.unlink(  './public' + url.parse(item_exist.image_link).path , function(err){
 			                  if (err){
@@ -70,6 +58,7 @@ module.exports			=	function(req, res){
 			                     return 1;
 			                  }
 			                })
+			                
 										// REMOVE ITEM
 										Item.remove({_id : item_id}, function(err, number){
 											if (err){
