@@ -97,8 +97,9 @@ module.exports = function(req, res) {
     }
     finally{
     	if (create){
-	    	async.waterfall([
+    		var item            = new Item();    			
 
+	    	async.waterfall([
 	    		// validate fields
 	    		function(next){
 			      if ( !validator.isAlphanumeric(user_id) || 
