@@ -144,6 +144,7 @@ module.exports = function(req, res) {
 	    				image_link_small_server = image_link_small;
 	    				next(null);
 	    			} else{
+              var new_location = '/img/item/';
 	            fs.rename(image_link, './public' + new_location + file_name, function(err) {
 	              if (err) {
 	                res.json({error_code : 306, msg : err.toString()});       // Image is not exist
