@@ -180,8 +180,8 @@ module.exports = function(req, res) {
 	          item.reward         = reward;
 	          item.report         = report;
 	          item.image_link     = image_link_server;
-	          item.item_link_small = image_link_small_server;
-	          item.item_link_normal = image_link_normal_server;
+	          item.image_link_small = image_link_small_server;
+	          item.image_link_normal = image_link_normal_server;
 	          item.date_lost      = convert_time_to_GMT(date_lost);
 	          item.time_post      = convert_time_to_GMT((new Date).toJSON());
 
