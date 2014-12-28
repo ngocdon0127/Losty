@@ -95,11 +95,122 @@ module.exports = function(req, res) {
       res.status(200).end();
     }
     finally{
-    		var item = new Item();
-    		Item.findOne({_id : item_id}, function(err, item_exist){
-    			if (item_exist){
-	    			if (item_exist.user.id == user_id){
-							item = item_exist;
+    		Item.findOne({_id : item_id}, function(err, item){
+    			if (item){
+	    			if (item.user.id == user_id){
+
+				    	async.waterfall([
+				    		// validate fields
+				    		function(next){
+						      if ( !validator.isAlphanumeric(user_id) || 
+						          (item_id != "" && !validator.isAlphanumeric(item_id) ) ||     
+						           !validator.isAlphanumeric(category_id) ){
+						        res.json({error_code : 201, 
+						                  msg : 'format of user_id or item_id or category_id or location is incorrect'});       
+						        res.status(200).end();
+						        return 1;
+						      }  else{
+						      	next(null);
+						      }
+				    		},
+
+				    		// validate token
+				    		function(next){
+				    			validate_token(user_id, token, function(valid){
+				    				if (!valid){
+					            res.json({error_code : 100, msg : 'Authenticate is incorrect'});       // Authenticate is incorrect
+					            res.status(200).end();
+					            return 1;
+				    				} else{
+				    					next(null);
+				    				}
+				    			})
+				    		}, 
+
+				    		// make image_link_server , image_link_small_server, image_link_normal_server
+				    		function(next){
+				    			if (img_from_photo){
+				    				next(null);
+				    			} else{
+			              var new_location = '/img/item/';
+			              var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
+			                              + '.' + extension;
+
+				            fs.rename(image_link, './public' + new_location + file_name, function(err) {
+				              if (err) {
+				                res.json({error_code : 306, msg : err.toString()});       // Image is not exist
+				                res.status(200).end();
+				                return 1;
+											} else{
+				                image_link_server  = domain + new_location + file_name;
+				                resize(image_link_server, function(image_link_small){
+				                  image_link_small_server = image_link_small;
+								          resize_normal(image_link_server, function(image_link_normal){
+								            image_link_normal_server = image_link_normal;
+								            next(null);
+								          });
+				                 })
+											}
+				            })
+				    			}
+				    		},
+
+				    		// make item
+				    		function(next){
+				          item.category_id    = category_id;
+				          item.category       = category;
+				          item.title          = title;
+				          item.description    = description;
+				          item.type           = type;
+				          item.location       = location;
+				          item.reward         = reward;
+				          item.report         = report;
+				          item.image_link     = image_link_server;
+				          item.image_link_small = image_link_small_server;
+				          item.image_link_normal = image_link_normal_server;
+				          item.date_lost      = convert_time_to_GMT(date_lost);
+				          item.time_post      = convert_time_to_GMT((new Date).toJSON());
+
+				          next(null);
+				    		},
+
+				    		// add user infor 
+				    		function(next){
+				          User.findOne({_id : user_id}, function(err, user_exits){
+				            if (err){
+				             	res.json({error_code : 401, msg : err.toString()});
+				              res.status(200).end();
+				              return 1;
+				            } else{
+				              if (user_exits){                                
+				                item.user.id       = user_exits._id;
+				                item.user.avatar   = user_exits.avatar;
+				                item.user.avatar_small = user_exits.avatar_small;
+				                item.user.username = user_exits.username;
+				                item.user.city     = user_exits.city;
+				               	item.user.country  = user_exits.country;
+				               	next(null);
+				                
+				              } else{
+				                res.json({error_code : 308, msg : 'User is not exist'});
+				                res.status(200).end();
+				                return 1;
+				              }
+				            }
+				        	})
+				    		}
+				    	], function(err){
+				    		item.save(function(err){
+				    			if (err){
+				    				res.json({error_code : 402, msg : err.toString()});
+				    				res.status(200).end();
+				    			} else{
+			              res.json({error_code : 0, msg : item});
+			              res.status(200).end();
+				    			}
+				    		})
+				    	});
+
 						} else{
 							res.json({error_code : 500, msg : 'Not have enough permission'});
 							res.status(200).end();
@@ -111,117 +222,7 @@ module.exports = function(req, res) {
 					}
     		})  			
 
-	    	async.waterfall([
-	    		// validate fields
-	    		function(next){
-			      if ( !validator.isAlphanumeric(user_id) || 
-			          (item_id != "" && !validator.isAlphanumeric(item_id) ) ||     
-			           !validator.isAlphanumeric(category_id) ){
-			        res.json({error_code : 201, 
-			                  msg : 'format of user_id or item_id or category_id or location is incorrect'});       
-			        res.status(200).end();
-			        return 1;
-			      }  else{
-			      	next(null);
-			      }
-	    		},
 
-	    		// validate token
-	    		function(next){
-	    			validate_token(user_id, token, function(valid){
-	    				if (!valid){
-		            res.json({error_code : 100, msg : 'Authenticate is incorrect'});       // Authenticate is incorrect
-		            res.status(200).end();
-		            return 1;
-	    				} else{
-	    					next(null);
-	    				}
-	    			})
-	    		}, 
-
-	    		// make image_link_server , image_link_small_server, image_link_normal_server
-	    		function(next){
-	    			if (img_from_photo){
-	    				next(null);
-	    			} else{
-              var new_location = '/img/item/';
-              var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
-                              + '.' + extension;
-
-	            fs.rename(image_link, './public' + new_location + file_name, function(err) {
-	              if (err) {
-	                res.json({error_code : 306, msg : err.toString()});       // Image is not exist
-	                res.status(200).end();
-	                return 1;
-								} else{
-	                image_link_server  = domain + new_location + file_name;
-	                resize(image_link_server, function(image_link_small){
-	                  image_link_small_server = image_link_small;
-					          resize_normal(image_link_server, function(image_link_normal){
-					            image_link_normal_server = image_link_normal;
-					            next(null);
-					          });
-	                 })
-								}
-	            })
-	    			}
-	    		},
-
-	    		// make item
-	    		function(next){
-	          item.category_id    = category_id;
-	          item.category       = category;
-	          item.title          = title;
-	          item.description    = description;
-	          item.type           = type;
-	          item.location       = location;
-	          item.reward         = reward;
-	          item.report         = report;
-	          item.image_link     = image_link_server;
-	          item.image_link_small = image_link_small_server;
-	          item.image_link_normal = image_link_normal_server;
-	          item.date_lost      = convert_time_to_GMT(date_lost);
-	          item.time_post      = convert_time_to_GMT((new Date).toJSON());
-
-	          next(null);
-	    		},
-
-	    		// add user infor 
-	    		function(next){
-	          User.findOne({_id : user_id}, function(err, user_exits){
-	            if (err){
-	             	res.json({error_code : 401, msg : err.toString()});
-	              res.status(200).end();
-	              return 1;
-	            } else{
-	              if (user_exits){                                
-	                item.user.id       = user_exits._id;
-	                item.user.avatar   = user_exits.avatar;
-	                item.user.avatar_small = user_exits.avatar_small;
-	                item.user.username = user_exits.username;
-	                item.user.city     = user_exits.city;
-	               	item.user.country  = user_exits.country;
-	               	next(null);
-	                
-	              } else{
-	                res.json({error_code : 308, msg : 'User is not exist'});
-	                res.status(200).end();
-	                return 1;
-	              }
-	            }
-	        	})
-	    		}
-	    	], function(err){
-	    		item.save(function(err){
-	    			if (err){
-	    				res.json({error_code : 402, msg : err.toString()});
-	    				res.status(200).end();
-	    			} else{
-              res.json({error_code : 0, msg : item});
-              res.status(200).end();
-	    			}
-	    		})
-	    	});
     }
 }
 
