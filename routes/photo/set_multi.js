@@ -34,56 +34,57 @@ module.exports 			=	function(req, res){
           	console.log('Foreach files');
             var i = 0;
             console.log(files);
-            Object.keys(files).forEach(function(name){
-              var temp_path   =   files[name].path;
-              var extension   =   mime.extension(files[name].type).toLowerCase();  
+            if (Object.keys(files).length > 0)
+              Object.keys(files).forEach(function(name){
+                var temp_path   =   files[name].path;
+                var extension   =   mime.extension(files[name].type).toLowerCase();  
 
-              var photo       =   new Photo;
-              photo.name      =   name;
-              var new_location = '/img/photo/';
+                var photo       =   new Photo;
+                photo.name      =   name;
+                var new_location = '/img/photo/';
 
-              var file_name = Math.floor(Math.random() * 1000000 + 1) + 
-                        new Date().getTime() + '.' + extension;
+                var file_name = Math.floor(Math.random() * 1000000 + 1) + 
+                          new Date().getTime() + '.' + extension;
 
-              fs.rename(temp_path, './public' + new_location + file_name, 
-                function(err){
-                  if (err){
-                    res.json({error_code : 202, msg : err.toString()});     //  Image link is incorrect
-                    res.status(200).end()
-                  } else{
-                    async.waterfall([
-                      function(next){
-                        photo.image_link = domain + new_location + file_name;
-                        photo.user_id    = user_id;
+                fs.rename(temp_path, './public' + new_location + file_name, 
+                  function(err){
+                    if (err){
+                      res.json({error_code : 202, msg : err.toString()});     //  Image link is incorrect
+                      res.status(200).end()
+                    } else{
+                      async.waterfall([
+                        function(next){
+                          photo.image_link = domain + new_location + file_name;
+                          photo.user_id    = user_id;
 
-                        resize(photo.image_link, function(image_link_small){
-                          photo.image_link_small = image_link_small;
-                          resize_normal(photo.image_link, function(image_link_normal){
-                            photo.image_link_normal = image_link_normal;
-                            next(null);
+                          resize(photo.image_link, function(image_link_small){
+                            photo.image_link_small = image_link_small;
+                            resize_normal(photo.image_link, function(image_link_normal){
+                              photo.image_link_normal = image_link_normal;
+                              next(null);
+                            })
                           })
-                        })
-                      }
-                    ], function(err){
-                      photo.save(function(err){
-
-                        if (err){
-                          res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
-                          res.status(200).end()       //  save
-                        } else{
-                          console.log('save photo successsss');
-                          i = i + 1;
-                          if (i == Object.keys(files).length){
-                            res.json({error_code : 0});
-                            res.status(200).end();
-                            return 1;
-                          }
                         }
+                      ], function(err){
+                        photo.save(function(err){
+
+                          if (err){
+                            res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
+                            res.status(200).end()       //  save
+                          } else{
+                            console.log('save photo successsss');
+                            i = i + 1;
+                            if (i == Object.keys(files).length){
+                              res.json({error_code : 0});
+                              res.status(200).end();
+                              return 1;
+                            }
+                          }
+                        });
                       });
-                    });
-                  }
-              })
-            })           
+                    }
+                })
+              })           
           }
         })
       }
