@@ -34,7 +34,7 @@ module.exports 			=	function(req, res){
           	console.log('Foreach files');
             var i = 0;
             console.log(files);
-            if (Object.keys(files).length > 0)
+            if (Object.keys(files).length > 0){
               Object.keys(files).forEach(function(name){
                 var temp_path   =   files[name].path;
                 var extension   =   mime.extension(files[name].type).toLowerCase();  
@@ -84,7 +84,11 @@ module.exports 			=	function(req, res){
                       });
                     }
                 })
-              })           
+              })    
+            } else{
+               res.json({error_code : 0});
+               res.status(200).end();
+            }       
           }
         })
       }
