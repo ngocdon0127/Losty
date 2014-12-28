@@ -65,6 +65,14 @@ module.exports 			=	function(req, res){
                       }
                     ], function(err){
                       photo.save(function(err){
+
+                        i = i + 1;
+                        if (i == Object.keys(files).length - 1){
+                          res.json({error_code : 0});
+                          res.status(200).end();
+                          return 1;
+                        }
+
                         if (err){
                           res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
                           res.status(200).end()       //  save
@@ -75,14 +83,6 @@ module.exports 			=	function(req, res){
                     });
                   }
               })
-
-              i = i + 1;
-              if (i == Object.keys(files).length - 1){
-                res.json({error_code : 0});
-                res.status(200).end();
-                return 1;
-              }
-
             })           
           }
         })
