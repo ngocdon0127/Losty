@@ -96,14 +96,20 @@ module.exports = function(req, res) {
     }
     finally{
     		var item = new Item();
+    		console.log(item_id);
     		Item.findOne({_id : item_id}, function(err, item_exist){
     			console.log(item_exist);
-    			if (item_exist.user.id == user_id){
-						item = item_exist;
+    			if (item_exist){
+	    			if (item_exist.user.id == user_id){
+							item = item_exist;
+						} else{
+							res.json({error_code : 500, msg : 'Not have enough permission'});
+							res.status(200).end();
+							return 1;
+						}
 					} else{
-						res.json({error_code : 500, msg : 'Not have enough permission'});
-						res.status(200).end();
-						return 1;
+							res.json({error_code : 500, msg : 'Not have enough permission'});
+							res.status(200).end();
 					}
     		})  			
 
