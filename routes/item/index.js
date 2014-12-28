@@ -22,3 +22,6 @@ exports.list 						= 	require('./list');
 
 // delete item
 exports.del 						= 	require('./del');
+
+// edit item
+exports.edit						= 	require('./edit');

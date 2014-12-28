@@ -31,7 +31,6 @@ function check_category_exist(category_id, cb){
     	cb(0);
     }
     else if(category_exist){
-    	console.log(category_exist);
       cb(1, category_exist.name);    
     } else{
       cb(0);
@@ -60,8 +59,6 @@ module.exports = function(req, res) {
         
       var token       = data.user.token;
       var user_id     = data.user.user_id;
-      var create      = data.create;
-      var img_from_photo = parseInt(data.img_from_photo);
 
       var item_id     = data.item_id;
       var category_id = data.category_id;
@@ -74,13 +71,14 @@ module.exports = function(req, res) {
       		res.json({error_code : 201, msg : 'Categores is not exist'});
       		res.status(200).end();
       	}
-      })
+      });
+
+      var img_from_photo = data.img_from_photo;
 
       var title       = data.title;
       var description = data.description;
       var type        = data.type;
       var image_link  = data.image_link;
-      var image_link_small = data.image_link_small;
       var extension   = data.extension;
       var location    = data.location;
       var date_lost   = data.date_lost;
@@ -93,13 +91,20 @@ module.exports = function(req, res) {
 
     }
     catch(err){
-    	console.log(err);
       res.json({error_code : 201, msg : err.toString()});             
       res.status(200).end();
     }
     finally{
-    	if (create){
-    		var item            = new Item();    			
+    		var item = new Item();
+    		Item.findOne({_id : item_id}, function(err, item_exist){
+    			if (item_exist.user.id == user_id){
+						item = item_exist;
+					} else{
+						res.json({error_code : 500, msg : 'Not have enough permission'});
+						res.status(200).end();
+						return 1;
+					}
+    		})  			
 
 	    	async.waterfall([
 	    		// validate fields
@@ -134,7 +139,6 @@ module.exports = function(req, res) {
 	    			if (img_from_photo){
 	    				next(null);
 	    			} else{
-	    				console.log('make image small and normal');
               var new_location = '/img/item/';
               var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
                               + '.' + extension;
@@ -203,7 +207,6 @@ module.exports = function(req, res) {
 	        	})
 	    		}
 	    	], function(err){
-	    		console.log(item);
 	    		item.save(function(err){
 	    			if (err){
 	    				res.json({error_code : 402, msg : err.toString()});
@@ -214,9 +217,6 @@ module.exports = function(req, res) {
 	    			}
 	    		})
 	    	});
-			} else{
-				// UPDATE ITEM
-			}
     }
 }
 

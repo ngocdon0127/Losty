@@ -60,6 +60,7 @@ Router_body.post('/get_photos',				   					routes.photo.getAll);
 Router_body.post('/del_item', 			   				  	routes.item.del);       
 Router_body.post('/list_item', 			   				  	routes.item.list);       
 Router_body.post('/set_an_item', 			   					routes.item.set);      
+Router_body.post('/edit_item', 			   						routes.item.edit);      
 Router_body.get('/get_an_item/:item_id', 					routes.item.get);			
 Router_body.post('/add_people_view',     					routes.item.add_people_view);	
 
