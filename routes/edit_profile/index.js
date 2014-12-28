@@ -115,14 +115,15 @@ module.exports								=	function(req, res){
 		              	user_exist.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 
 		              process.nextTick(function(){
-		              	user_exist.save(function(err){console.log('User infor saved')});
-
-		              	res.json({error_code : 0 , user : {
-		                            email : user_exist.email, username : user_exist.username, 
-		                            id    : user_exist._id  , avatar   : user_exist.avatar,
-		                            avatar_small : user_exist.avatar_small
-		                        } });
-		              	res.status(200).end();
+		              	user_exist.save(function(err){
+		              		console.log('User infor saved')
+			              	res.json({error_code : 0 , user : {
+			                            email : user_exist.email, username : user_exist.username, 
+			                            id    : user_exist._id  , avatar   : user_exist.avatar,
+			                            avatar_small : user_exist.avatar_small
+			                        } });
+			              	res.status(200).end();
+		              	});
 		              });
 								});
 							}
