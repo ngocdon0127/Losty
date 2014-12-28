@@ -73,7 +73,7 @@ module.exports = function(req, res) {
       	}
       });
 
-      var img_from_photo = data.img_from_photo;
+      var img_from_photo = parseInt(data.img_from_photo);
 
       var title       = data.title;
       var description = data.description;
@@ -96,9 +96,7 @@ module.exports = function(req, res) {
     }
     finally{
     		var item = new Item();
-    		console.log(item_id);
     		Item.findOne({_id : item_id}, function(err, item_exist){
-    			console.log(item_exist);
     			if (item_exist){
 	    			if (item_exist.user.id == user_id){
 							item = item_exist;
