@@ -97,6 +97,7 @@ module.exports = function(req, res) {
     finally{
     		var item = new Item();
     		Item.findOne({_id : item_id}, function(err, item_exist){
+    			console.log(item_exist);
     			if (item_exist.user.id == user_id){
 						item = item_exist;
 					} else{
