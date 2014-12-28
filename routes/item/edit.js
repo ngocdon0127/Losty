@@ -200,6 +200,7 @@ module.exports = function(req, res) {
 				        	})
 				    		}
 				    	], function(err){
+				    		console.log("ITEM BEFORE SAVE : ", item);
 				    		item.save(function(err){
 				    			if (err){
 				    				res.json({error_code : 402, msg : err.toString()});

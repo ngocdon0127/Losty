@@ -33,6 +33,7 @@ module.exports 			=	function(req, res){
           } else{
           	console.log('Foreach files');
             var i = 0;
+            console.log(files);
             Object.keys(files).forEach(function(name){
               var temp_path   =   files[name].path;
               var extension   =   mime.extension(files[name].type).toLowerCase();  
