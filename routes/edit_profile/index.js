@@ -73,15 +73,11 @@ module.exports								=	function(req, res){
 					}, 
 
 					function(next){
-						console.log('Save user infor');
 						User.findOne({_id : user_id}, function(err, user_exist){
 							if (err || !user_exist){
 								res.json({error_code : 201, msg : 'User is not exist'});
 								res.status(200).end();
 							} else{
-								// if (img_server != ''){
-								// 	remove(user_exist.avatar);
-								// }
 								async.waterfall([
 									function(next2){
 										user_exist.username = username;
@@ -119,7 +115,7 @@ module.exports								=	function(req, res){
 		              	user_exist.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 
 		              process.nextTick(function(){
-		              	user_exist.save(function(err){});
+		              	user_exist.save(function(err){console.log('User infor saved')});
 
 		              	res.json({error_code : 0 , user : {
 		                            email : user_exist.email, username : user_exist.username, 
