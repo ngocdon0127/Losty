@@ -24,17 +24,15 @@ module.exports 			=	function(req, res){
         res.json({error_code : 201, msg : err.toString()});         //  Input is invalid
         res.status(200).end();
       } else{
-      	console.log('Fields : ', fields);
-      	console.log('Files : ', files);
         var user_id = fields['user[user_id]'];
         var token   = fields['user[token]'];
-        console.log(user_id, token);
         validate_token(user_id, token, function(valid){
           if (!valid){
             res.json({error_code : 100, msg : 'Authenticate is not success'});
             res.status(200).end();
           } else{
           	console.log('Foreach files');
+            var i = 0;
             Object.keys(files).forEach(function(name){
               var temp_path   =   files[name].path;
               var extension   =   mime.extension(files[name].type).toLowerCase();  
@@ -76,7 +74,15 @@ module.exports 			=	function(req, res){
                       });
                     });
                   }
-                })
+              })
+
+              i = i + 1;
+              if (i == Object.keys(files).length - 1){
+                res.json({error_code : 0});
+                res.status(200).end();
+                return 1;
+              }
+
             })           
           }
         })
@@ -92,11 +98,6 @@ module.exports 			=	function(req, res){
 
     form.on('end', function(fields, files){
     	console.log('end');
-    	setTimeout(function(){
-	    	res.json({error_code : 0});            
-	    	res.status(200).end();
-    	}, 1000);
-
     })
   }
 

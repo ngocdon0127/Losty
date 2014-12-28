@@ -70,13 +70,15 @@ module.exports			=	function(req, res){
 										});
 
 										// REMOVE IMAGE OF ITEM
-			              fs.unlink(  './public' + url.parse(photo_exist.image_link).path , function(err){
-			                if (err){
-			                  res.json({error_code : 306, msg : err.toString()})	//	image is not exist
-			                  res.status(200).end();
-			                  return 1;
-			                }
-			              })
+			              // fs.unlink(  './public' + url.parse(photo_exist.image_link).path , function(err){
+			              //   if (err){
+			              //     res.json({error_code : 306, msg : err.toString()})	//	image is not exist
+			              //     res.status(200).end();
+			              //     return 1;
+			              //   }
+			              // })
+
+
 										// REMOVE ITEM
 										Photo.remove({_id : photo_id}, function(err, number){
 											if (err){

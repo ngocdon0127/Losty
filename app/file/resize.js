@@ -16,7 +16,7 @@ module.exports 					=	function(url_, callback){
 				console.log(err);
 			}
 			else{
-				console.log('RESIZE SUCCESS');
+				console.log('Resize small photo success');
 				callback(domain + '/small_size' + url.parse(url_).path);
 			}
 		})

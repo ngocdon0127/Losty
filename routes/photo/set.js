@@ -64,7 +64,7 @@ module.exports 			=	function(req, res){
 								function(err){
 									if (err){
 							            res.json({error_code : 202, msg : err.toString()});     //  Image link is incorrect
-							            res.status(200).end()
+							            res.status(200).end();
 									} else{
 										async.waterfall([
 											function(next){
@@ -77,12 +77,12 @@ module.exports 			=	function(req, res){
 															photo.image_link_normal = image_link_normal;
 															next(null);		
 													})
-													
 												})
 											}
 										], function(err){
 											photo.save(function(err){
 												if (err){
+																console.log(err);
 										            res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
 										            res.status(200).end()			  //  save
 												} else{
