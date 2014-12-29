@@ -218,7 +218,7 @@ module.exports = function(req, res) {
 							return 1;
 						}
 					} else{
-							res.json({error_code : 500, msg : 'Not have enough permission'});
+							res.json({error_code : 200, msg : 'Item is not exist'});
 							res.status(200).end();
 					}
     		})  			

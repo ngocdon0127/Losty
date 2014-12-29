@@ -46,6 +46,7 @@ module.exports           =    function(req, res){
 	}
 	finally{
 		var items = [];
+		
 		Items.find({type : type, category_id : category_id}, function(err, items_exist){
 			if (err){
 				res.json({error_code : 401, msg : err.toString()});
