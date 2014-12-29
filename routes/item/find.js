@@ -12,6 +12,8 @@ function convert_time_to_GMT(time){
 function check_day(time1, time2, timezone){
 	time1 = new Date(time1);
 	time2 = new Date(time2);
+	console.log(new Date(time2));
+
 	// convert time1 and time2 to TIMEZONE of user
 	time1.setHours(time1.getHours() + timezone + 5);
 	time2.setHours(time2.getHours() + timezone + 5);
