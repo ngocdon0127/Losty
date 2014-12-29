@@ -100,8 +100,10 @@ module.exports  	=	function(req, res){
 										res.status(200).end();
 									} else{
 										process.nextTick(function(){
-											make_token(user, res);
-											add_friend_twitter(user._id, friends);
+											
+											add_friend_twitter(user._id, friends, cb(){
+												make_token(user, res);	
+											});
 										});
 									}
 								});
