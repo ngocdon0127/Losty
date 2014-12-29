@@ -72,6 +72,16 @@ module.exports = function(req, res){
 			    }
 			  });
 			},
+
+
+			function( next){																								// GET PROFILE
+			    API("/me/permissions", function(err, data){
+			    		console.log(data);
+			    		next(null);		
+  	
+			    });
+			},
+
 			function( next){																								// GET PROFILE
 			    API("/me", function(err, data){
 			    	if (err){
