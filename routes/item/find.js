@@ -10,17 +10,11 @@ function convert_time_to_GMT(time){
 }
 
 function check_day(time1, time2, timezone){
-	console.log(timezone);
 	time1 = new Date(time1);
 	time2 = new Date(time2);
 	// convert time1 and time2 to TIMEZONE of user
-	console.log(time1, time2);
 	time1.setHours(time1.getHours() + timezone + 5);
 	time2.setHours(time1.getHours() + timezone + 5);
-	console.log(time1, time2);
-	console.log(time1.getMonth(), time2.getMonth());
-	console.log(time1.getDate(), time2.getDate());
-	console.log(time1.getFullYear(), time2.getFullYear());
 
 	if (time1.getMonth() == time2.getMonth() && 
 			time1.getDate()  == time2.getDate() && 
@@ -61,7 +55,9 @@ module.exports           =    function(req, res){
 							if (item.title.toLowerCase().indexOf(title.toLowerCase()) != -1){
 								console.log('distance : ', distance(item.location, location));
 								if (distance(item.location, location) <= distance_max){
+									console.log('Pass check distance');
 									if (check_day(item.date_lost, date_lost , timezone) ){
+										console.log('Check pass time');
 										items.push(item);
 									}
 								}
@@ -69,7 +65,7 @@ module.exports           =    function(req, res){
 						})
 						setTimeout(function(){
 							next(null);						
-						}, 100);
+						}, 1000);
 					}
 					],function(err){
 						res.json({error_code : 0, items : items});
