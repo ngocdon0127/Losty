@@ -51,6 +51,7 @@ module.exports           =    function(req, res){
 				res.json({error_code : 401, msg : err.toString()});
 				res.status(200).end();
 			} else{
+				console.log('items_exist : ', items_exist);
 				async.waterfall([
 					function(next){
 						items_exist.forEach(function(item){
