@@ -1,0 +1,95 @@
+@font-face{
+	font-family: 'Open Sans Semi Bold';
+	src: url('../fonts/open_sans/OpenSans-Semibold.ttf');
+}
+@font-face{
+	font-family: 'Open Sans Bold Italic';
+	src: url('../fonts/open_sans/OpenSans-BoldItalic.ttf');
+}
+@font-face{
+	font-family: 'Open Sans Bold';
+	src: url('../fonts/open_sans/OpenSans-Bold.ttf');
+}
+@font-face{
+	font-family: 'Open Sans';
+	src: url('../fonts/open_sans/OpenSans-Regular.ttf');
+}
+@font-face{
+	font-family: 'Proxima Nova';
+	src: url('../fonts/Mark Simonson - Proxima Nova Regular.otf');
+}
+@font-face{
+	font-family: 'Proxima Nova Bold';
+	src: url('../fonts/Mark Simonson - Proxima Nova Bold.otf');
+}
+@font-face{
+	font-family: 'Proxima Nova Semi Bold';
+	src: url('../fonts/Mark Simonson - Proxima Nova Semibold.otf');
+}
+#privacy_policy,#terms_and_conditions{
+	width: 320px;
+	margin: 0px auto;
+	border: 1px solid #ddd;
+	min-height: 1000px;
+}
+.navigator{
+	height: 50px;
+	background: #f8f8f8;
+	position: relative!important;
+}
+.ct{
+	padding: 25px 10px;
+}
+.header{
+	line-height: 50px;
+	font-size: 17px;
+	font-family: 'Proxima Nova Semi Bold';
+}
+.title{
+	font-family: 'Proxima Nova Bold';
+	font-size: 12px;
+}
+.content{
+	font-family: 'Proxima Nova';
+	font-size: 12px;
+}
+.privacy_header{
+	line-height: 50px;
+	font-size: 17px;
+	font-family: 'Open Sans Semi Bold';
+}
+.privacy_title{
+	font-family: 'Open Sans Bold';
+	font-size: 9px;
+}
+.privacy_first_title{
+	font-family: 'Open Sans Bold Italic';
+	font-size: 9px;
+}
+.privacy_content{
+	font-family: 'Open Sans';
+	font-size: 9px;
+}
+.forward, .close{
+	position: absolute!important;
+	top: 10px;
+	width: 28px;
+	height: 28px;
+	background-size: 100% 100%!important;
+}
+.forward{
+	background: url('../images/forward.png');
+	left: 10px;
+}
+.close{
+	background: url('../images/close.png');
+	right: 10px;
+}
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.text-center {
+  text-align: center;
+}
