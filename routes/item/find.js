@@ -11,20 +11,12 @@ function convert_time_to_GMT(time){
 
 function check_day(time1, time2, timezone){
 	time1 = new Date(time1);
-	console.log('Before ', time2);
 	time2 = new Date(time2);
-	console.log('After ', time2);
 
 	// convert time1 and time2 to TIMEZONE of user
 	time1.setHours(time1.getHours() + timezone + 5);
 	time2.setHours(time2.getHours() + timezone + 5);
 
-	console.log(time1);
-	console.log(time2);
-
-	console.log(time1.getMonth(), time2.getMonth());
-	console.log(time1.getDate(),  time2.getDate());
-	console.log(time1.getFullYear(),  time2.getFullYear());
 
 	if (time1.getMonth() == time2.getMonth() && 
 			time1.getDate()  == time2.getDate() && 
@@ -44,7 +36,6 @@ module.exports           =    function(req, res){
 		var location 		= data.location;
 		var category_id = data.category_id;
 		var date_lost 	= data.date;
-		console.log(date_lost);
 		var title     	= data.title;
 		var type 				= data.type;
 		var timezone    = parseInt(data.timezone);
