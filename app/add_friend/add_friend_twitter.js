@@ -19,7 +19,8 @@ module.exports   		=	function(user_id, friends){
 								if (user_exist){
 									user.Friend.push({id 	   : user_exist._id, 
 													  avatar   : user_exist.avatar, 
-													  username : user_exist.username
+													  username : user_exist.username,
+													  avatar_small : user_exist.avatar_small;
 													});
 
 									user_exist.save(function(err){
