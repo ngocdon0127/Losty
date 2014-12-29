@@ -1,7 +1,7 @@
 var User                = require('./../../models/users');
 var async               = require('async');
 
-module.exports   		=	function(user_id, friends){
+module.exports   		=	function(user_id, friends, cb){
 	console.log('Add friends');
 	console.log(friends);
 	User.findOne({_id : user_id}, function(err, user){
@@ -52,11 +52,13 @@ module.exports   		=	function(user_id, friends){
 						if (err){
 							res.json({error_code : 402, msg : err.toString()});
 	    				res.status(200).end();			//	database cannot save
-
+	    				next(null);
 						};
 					})
 				}	
-			], function(err){})			
+			], function(err){
+				cb();
+			})			
 		}
 	})
 }

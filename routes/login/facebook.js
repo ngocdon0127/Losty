@@ -180,8 +180,10 @@ module.exports = function(req, res){
 					    					} else{
 					    						process.nextTick(function(){
 					    							// Add friends
-					    							add_friend_fb(user._id, friends);
-					    							make_token(user, res);
+					    							console.log('Di tim ban');
+					    							add_friend_fb(user._id, friends, function(){
+					    								make_token(user, res);	
+					    							});
 					    						})
 					    					}
 					    				})                               
