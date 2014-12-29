@@ -2,7 +2,8 @@ var User                = require('./../../models/users');
 var async               = require('async');
 
 module.exports   		=	function(user_id, friends){
-
+	console.log('Add friends');
+	console.log(friends);
 	User.findOne({_id : user_id}, function(err, user){
 		if (err){
 			res.json({error_code : 401, msg : err.toString()});
@@ -21,7 +22,7 @@ module.exports   		=	function(user_id, friends){
 								console.log(err);
 							} else{
 								if (user_exist){
-
+									console.log('Friends : ', user_exist);
 									user.Friend.push({id 	   : user_exist._id, 
 													  avatar   : user_exist.avatar, 
 													  username : user_exist.username,
