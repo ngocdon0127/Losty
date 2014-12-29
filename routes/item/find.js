@@ -43,6 +43,7 @@ module.exports           =    function(req, res){
 		var location 		= data.location;
 		var category_id = data.category_id;
 		var date_lost 	= data.date;
+		console.log(date_lost);
 		var title     	= data.title;
 		var type 				= data.type;
 		var timezone    = parseInt(data.timezone);
