@@ -87,7 +87,9 @@ module.exports = function(io){
       if(err){
         console.log(err);
       } else{
-        socket.emit('unread_msg', {unread_msg : me.unread_msg});    
+      	if (me){
+        	socket.emit('unread_msg', {unread_msg : me.unread_msg});    
+       	}
       }
     })
 
