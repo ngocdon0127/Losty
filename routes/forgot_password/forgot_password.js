@@ -33,7 +33,7 @@ module.exports			=	function(req, res){
 					}
 				})
 			} else{
-				res.json({error_code : 200}, msg :'User is not exist');
+				res.json({error_code : 200, msg :'User is not exist'});
 				res.status(200).end();
 			}
 		});
