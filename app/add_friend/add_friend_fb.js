@@ -6,10 +6,12 @@ module.exports   		=	function(user_id, friends, cb){
 		if (err){
 			res.json({error_code : 401, msg : err.toString()});
 	    res.status(200).end();			//	database cannot find
+	    return 1;
 		}
 		else if (!user){
 			res.json({error_code : 401, msg : 'User is not exist'});
 	    res.status(200).end();			//	database cannot find
+	    return 1;
 		}
 		else {
 			async.waterfall([
@@ -38,12 +40,14 @@ module.exports   		=	function(user_id, friends, cb){
 	    								res.status(200).end();			//	database cannot save
 	    								cb();
 										}
-										next(null);
 									})
 								}
 							}
 						})
 					});
+					setTimeout(function(){
+						next(null);	
+					}, 1000)
 				},
 				function(next){
 					user.save(function(err){
