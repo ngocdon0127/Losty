@@ -31,6 +31,10 @@ app.get('/api/terms_and_conditions',		 function(req, res){
 	res.render('terms_and_conditions');
 })
 
+app.get('/api/about_us',		 						 function(req, res){
+	res.render('about_us');
+})
+
 app.get('/api/login_fb',								 function(req, res){
 	res.render('login_fb');
 })

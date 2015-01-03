@@ -54,6 +54,8 @@ module.exports   		=	function(user_id, friends, cb){
 						if (err){
 							res.json({error_code : 402, msg : err.toString()});
 	    				res.status(200).end();			//	database cannot save
+	    				cb();
+	    				return 1;
 						};
 						next(null);
 					})
