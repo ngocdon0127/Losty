@@ -11,7 +11,7 @@ module.exports 					=	function(url_, callback){
 		.autoOrient()
 		.write('./public/normal_size' + url.parse(url_).path, function (err) {
 			if (err) {
-				console.log(err);
+				console.log('Error : ', err);
 			}
 			else{
 				console.log('Resize normal photo success');

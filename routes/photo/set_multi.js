@@ -71,6 +71,7 @@ module.exports 			=	function(req, res){
                           if (err){
                             res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
                             res.status(200).end()       //  save
+                            return 1;
                           } else{
                             console.log('save photo successsss');
                             i = i + 1;
