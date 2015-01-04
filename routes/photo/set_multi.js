@@ -74,6 +74,7 @@ module.exports 			=	function(req, res){
                           } else{
                             console.log('save photo successsss');
                             i = i + 1;
+                            console.log(i);
                             if (i == Object.keys(files).length){
                               res.json({error_code : 0});
                               res.status(200).end();
