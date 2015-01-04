@@ -67,7 +67,6 @@ module.exports 			=	function(req, res){
                         }
                       ], function(err){
                         photo.save(function(err){
-
                           if (err){
                             res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
                             res.status(200).end()       //  save
