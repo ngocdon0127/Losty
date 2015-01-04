@@ -26,7 +26,7 @@
 	font-family: 'Proxima Nova Semi Bold';
 	src: url('../fonts/Mark Simonson - Proxima Nova Semibold.otf');
 }
-#privacy_policy,#terms_and_conditions{
+#privacy_policy,#terms_and_conditions, #contact_us{
 	width: 100%;
 	margin: 0px auto;
 	border: 1px solid #ddd;
