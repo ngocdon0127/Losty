@@ -10,13 +10,13 @@ module.exports 					=	function(url_, type, callback){
 	gm('./public' + url.parse(url_).path)
 		.resize(640, 640)
 		.autoOrient()
-		.write('./public/img/normal_size' + type + path.basename(url_), function (err) {
+		.write('./public/img/normal_size/' + type +  '/' + path.basename(url_), function (err) {
 			if (err) {
 				console.log('Error : ', err);
 			}
 			else{
 				console.log('Resize normal photo success');
-				callback(domain + '/img/normal_size' + type + path.basename(url_));
+				callback(domain + '/img/normal_size/' + type + '/' + path.basename(url_));
 			}
 		})
 }

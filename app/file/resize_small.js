@@ -11,13 +11,13 @@ module.exports 					=	function(url_, type,  callback){
 	gm('./public' + url.parse(url_).path)
 		.resize(120, 120)
 		.autoOrient()
-		.write('./public/img/small_size' + type + path.basename(url_), function (err) {
+		.write('./public/img/small_size/' + type + '/' + path.basename(url_), function (err) {
 			if (err) {
 				console.log('Error : ', err);
 			}
 			else{
 				console.log('Resize small photo success');
-				callback(domain + '/img/small_size' + type + path.basename(url_));
+				callback(domain + '/img/small_size/' + type + '/' + path.basename(url_));
 			}
 		})
 }
