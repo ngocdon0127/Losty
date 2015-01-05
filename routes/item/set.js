@@ -137,7 +137,7 @@ module.exports = function(req, res) {
               var new_location = '/img/full_size/item/';
               var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
                               + '.' + extension;
-
+              console.log('./public' + new_location + file_name);
 	            fs.rename(image_link, './public' + new_location + file_name, function(err) {
 	              if (err) {
 	                res.json({error_code : 306, msg : err.toString()});       // Image is not exist
