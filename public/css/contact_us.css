@@ -1,0 +1,33 @@
+@font-face{
+	font-family: 'Proxima Nova';
+	src: url('../fonts/Mark Simonson - Proxima Nova Regular.otf');
+}
+
+#contact-us{
+	width: 100%;
+	margin: 20px 0px 0px 0px;
+	padding: 0 10px;
+	font-family: 'Proxima Nova';
+}
+.title p,.content p{
+	font-size: 14px;
+}
+.title p{
+	color: #000;
+	margin: 0px;
+}
+.content p{
+	color: #006898;
+	line-height: 36px;
+	margin: 0px;
+}
+#contact-us .block{
+	margin-top: 25px;
+}
+.last-block{
+	font-size: 14px;
+}
+.last-block p{
+	margin: 0px;
+	margin-top: 7px;
+}
