@@ -102,7 +102,7 @@ module.exports								=	function(req, res){
 
 										if (img_server != ''){
 											user_exist.avatar = img_server;
-											resize_small(user_exist.avatar, function(avatar_small){
+											resize_small(user_exist.avatar, 'avatar', function(avatar_small){
 												user_exist.avatar_small = avatar_small;
 												next2(null);
 											});			

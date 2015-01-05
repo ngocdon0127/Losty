@@ -145,9 +145,9 @@ module.exports = function(req, res) {
 	                return 1;
 								} else{
 	                image_link_server  = domain + new_location + file_name;
-	                resize_small(image_link_server, function(image_link_small){
+	                resize_small(image_link_server, 'item', function(image_link_small){
 	                  image_link_small_server = image_link_small;
-					          resize_normal(image_link_server, function(image_link_normal){
+					          resize_normal(image_link_server, 'item', function(image_link_normal){
 					            image_link_normal_server = image_link_normal;
 					            next(null);
 					          });

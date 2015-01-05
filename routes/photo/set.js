@@ -71,9 +71,9 @@ module.exports 			=	function(req, res){
 												photo.image_link = domain + new_location + file_name;
 												photo.user_id    = user_id;
 
-												resize_small(photo.image_link, function(image_link_small){
+												resize_small(photo.image_link, 'photo', function(image_link_small){
 													photo.image_link_small = image_link_small;
-													resize_normal(photo.image_link, function(image_link_normal){
+													resize_normal(photo.image_link, 'photo', function(image_link_normal){
 															photo.image_link_normal = image_link_normal;
 															next(null);		
 													})

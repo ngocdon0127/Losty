@@ -95,7 +95,7 @@ module.exports = function(req, res) {
 		                      res.status(200).end();
 		                    } else{
 		                      user.avatar = domain + new_location + file_name;
-		                      resize_small(user.avatar, function(avatar_small){
+		                      resize_small(user.avatar, 'avatar', function(avatar_small){
 		                        user.avatar_small = avatar_small;
 		                        console.log(avatar_small);
 		                        next(null);
