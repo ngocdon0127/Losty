@@ -51,13 +51,13 @@ module.exports			=	function(req, res){
 										// ITEM LA CUA USER, TIEN HANH XOA ITEM VA XOA THONG TIN TREN USER
 
 										// REMOVE IMAGE OF ITEM
-			                fs.unlink(  './public' + url.parse(item_exist.image_link).path , function(err){
-			                  if (err){
-			                    res.json({error_code : 306, msg : err.toString()});
-			                    res.status(200).end();
-			                     return 1;
-			                  }
-			                })
+			                // fs.unlink(  './public' + url.parse(item_exist.image_link).path , function(err){
+			                //   if (err){
+			                //     res.json({error_code : 306, msg : err.toString()});
+			                //     res.status(200).end();
+			                //      return 1;
+			                //   }
+			                // })
 			                
 										// REMOVE ITEM
 										Item.remove({_id : item_id}, function(err, number){

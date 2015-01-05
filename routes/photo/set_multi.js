@@ -6,7 +6,7 @@ var   formidable    = require('formidable'),
 var Photo               = require('./../../models/photos');                
 
 var domain              = require('./../../config/default').domain_default;
-var resize              = require('./../../app/file/resize');
+var resize_small        = require('./../../app/file/resize_small');
 var resize_normal       = require('./../../app/file/resize_normal');
 
 var async               = require('async');
@@ -41,7 +41,7 @@ module.exports 			=	function(req, res){
 
                 var photo       =   new Photo;
                 photo.name      =   name;
-                var new_location = '/img/photo/';
+                var new_location = '/img/full_size/photo/';
 
                 var file_name = Math.floor(Math.random() * 1000000 + 1) + 
                           new Date().getTime() + '.' + extension;
@@ -57,7 +57,7 @@ module.exports 			=	function(req, res){
                           photo.image_link = domain + new_location + file_name;
                           photo.user_id    = user_id;
 
-                          resize(photo.image_link, function(image_link_small){
+                          resize_small(photo.image_link, function(image_link_small){
                             photo.image_link_small = image_link_small;
                             resize_normal(photo.image_link, function(image_link_normal){
                               photo.image_link_normal = image_link_normal;

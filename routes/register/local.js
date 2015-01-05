@@ -19,7 +19,7 @@ var   formidable         = require('formidable'),
 var   mime               = require('mime'),
 	    validator          = require('validator');
 
-var   resize             = require('./../../app/file/resize');
+var   resize_small       = require('./../../app/file/resize_small');
 var   async              = require('async');
 var   bcrypt             = require('bcrypt-nodejs');
  
@@ -85,7 +85,7 @@ module.exports = function(req, res) {
                 user.exist_acc[1] = 1;
 
                 var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
-                var new_location = '/img/avatar/';
+                var new_location = '/img/full_size/avatar/';
                 async.waterfall([
                 	function(next){
 		                if (avatar_link != ''){
@@ -95,7 +95,7 @@ module.exports = function(req, res) {
 		                      res.status(200).end();
 		                    } else{
 		                      user.avatar = domain + new_location + file_name;
-		                      resize(user.avatar, function(avatar_small){
+		                      resize_small(user.avatar, function(avatar_small){
 		                        user.avatar_small = avatar_small;
 		                        console.log(avatar_small);
 		                        next(null);
@@ -160,7 +160,7 @@ module.exports = function(req, res) {
             });
 
             var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
-            var new_location = '/img/avatar/';
+            var new_location = '/img/full_size/avatar/';
 
             fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
               if (err){

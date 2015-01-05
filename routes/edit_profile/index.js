@@ -11,7 +11,7 @@ var   bcrypt             				= require('bcrypt-nodejs');
 var   make_token                = require('./../../app/authen/make_token');
 
 var 	remove_file          			= require('./../../app/file/remove');
-var   resize             			  = require('./../../app/file/resize');
+var   resize_small             	= require('./../../app/file/resize_small');
 
 
 
@@ -54,7 +54,7 @@ module.exports								=	function(req, res){
 							// Update avatar
 
 							var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime()  + '.' + extension;
-				      var new_location = '/img/avatar/';
+				      var new_location = '/img/full_size/avatar/';
 				      // SAVE IMAGE
 				      fs.rename(image_link, './public' + new_location + file_name, function(err) {
 				      	if (err) {
@@ -102,7 +102,7 @@ module.exports								=	function(req, res){
 
 										if (img_server != ''){
 											user_exist.avatar = img_server;
-											resize(user_exist.avatar, function(avatar_small){
+											resize_small(user_exist.avatar, function(avatar_small){
 												user_exist.avatar_small = avatar_small;
 												next2(null);
 											});			

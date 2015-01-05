@@ -8,7 +8,7 @@ var Photo               = require('./../../models/photos');
 
 var fs                  = require('fs');
 var validator           = require('validator');
-var resize              = require('./../../app/file/resize');
+var resize_small        = require('./../../app/file/resize_small');
 var resize_normal       = require('./../../app/file/resize_normal');
 
 var async               = require('async');
@@ -57,7 +57,7 @@ module.exports 			=	function(req, res){
 								photo.name = name;
 								var file_name = Math.floor(Math.random() * 1000000 + 1) + 
 												new Date().getTime() + '.' + extension;
-		            var new_location = '/img/photo/';
+		            var new_location = '/img/full_size/photo/';
 
 		                        // SAVE PHOTO
 								fs.rename(image_link, './public' + new_location + file_name, 
@@ -71,7 +71,7 @@ module.exports 			=	function(req, res){
 												photo.image_link = domain + new_location + file_name;
 												photo.user_id    = user_id;
 
-												resize(photo.image_link, function(image_link_small){
+												resize_small(photo.image_link, function(image_link_small){
 													photo.image_link_small = image_link_small;
 													resize_normal(photo.image_link, function(image_link_normal){
 															photo.image_link_normal = image_link_normal;

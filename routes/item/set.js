@@ -1,6 +1,5 @@
 var   domain             = require('./../../config/default').domain_default;
 
-var   resize             = require('./../../app/file/resize');
 var   url                = require('url');
 var   mime               = require('mime');
 var   validator          = require('validator');
@@ -19,7 +18,7 @@ var   async              = require('async');
 var   Item               = require('./../../models/items');
 var   User               = require('./../../models/users');
 var   Categores          = require('./../../models/categores');
-var   resize             = require('./../../app/file/resize');
+var   resize_small       = require('./../../app/file/resize_small');
 var   resize_normal      = require('./../../app/file/resize_normal');
 
 
@@ -135,7 +134,7 @@ module.exports = function(req, res) {
 	    				next(null);
 	    			} else{
 	    				console.log('make image small and normal');
-              var new_location = '/img/item/';
+              var new_location = '/img/full_size/item/';
               var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() 
                               + '.' + extension;
 
@@ -146,7 +145,7 @@ module.exports = function(req, res) {
 	                return 1;
 								} else{
 	                image_link_server  = domain + new_location + file_name;
-	                resize(image_link_server, function(image_link_small){
+	                resize_small(image_link_server, function(image_link_small){
 	                  image_link_small_server = image_link_small;
 					          resize_normal(image_link_server, function(image_link_normal){
 					            image_link_normal_server = image_link_normal;
