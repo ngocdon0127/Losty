@@ -2,7 +2,6 @@
 
 
 var Item  	   					= require('./../../models/items');
-
 var distance   					= require('./../../app/map/distance');
 var validate_token 			= require('./../../app/validate/validate_token');
 var validate_location 	= require('./../../app/validate/validate_location');

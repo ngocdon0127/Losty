@@ -16,9 +16,11 @@ module.exports = function(req, res){
             res.status(200).end();
         }
         finally{
-            if (!validator.isEmail(email) || !validator.isLength(password, 6, 25) ||
-                !validator.isAlphanumeric(password)){
-                res.json({error_code : 201, msg : 'Email or Length of password or format of password is incorrect'});                     // input is invalid
+            if (!validator.isEmail(email)){
+            	res.json({error_code : 201, msg : 'Email is incorrect'});
+            	res.status(200).end();
+            } else if (!validator.isLength(password, 6, 25) || !validator.isAlphanumeric(password)){
+                res.json({error_code : 201, msg : 'Format of password is incorrect'});        
                 res.status(200).end();
             } else{
                 // VALIDATE IS SUCCESS
