@@ -1,6 +1,30 @@
 @font-face{
+	font-family: 'Open Sans Semi Bold';
+	src: url('../fonts/open_sans/OpenSans-Semibold.ttf');
+}
+@font-face{
+	font-family: 'Open Sans Bold Italic';
+	src: url('../fonts/open_sans/OpenSans-BoldItalic.ttf');
+}
+@font-face{
+	font-family: 'Open Sans Bold';
+	src: url('../fonts/open_sans/OpenSans-Bold.ttf');
+}
+@font-face{
+	font-family: 'Open Sans';
+	src: url('../fonts/open_sans/OpenSans-Regular.ttf');
+}
+@font-face{
 	font-family: 'Proxima Nova';
 	src: url('../fonts/Mark Simonson - Proxima Nova Regular.otf');
+}
+@font-face{
+	font-family: 'Proxima Nova Bold';
+	src: url('../fonts/Mark Simonson - Proxima Nova Bold.otf');
+}
+@font-face{
+	font-family: 'Proxima Nova Semi Bold';
+	src: url('../fonts/Mark Simonson - Proxima Nova Semibold.otf');
 }
 body{
 	margin: 0px;
@@ -20,6 +44,7 @@ body{
 .title p{
 	color: #000;
 	margin: 0px;
+	font-family: 'Proxima Nova Bold';
 }
 .content p{
 	color: #006898;
