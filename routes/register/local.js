@@ -54,8 +54,14 @@ module.exports = function(req, res) {
   finally{
 
     // ==== VALIDATE extension, user_id, item_id(if have), location, category_id ====
-    if ( !validate_username(username) ||  !validator.isEmail(email)){
-      res.json({error_code : 201, msg : 'Username or Email is incorrect'});       //   Input is invalid
+    if ( !validate_username(username)) {
+      res.json({error_code : 201, msg : 'Username is incorrect'});      
+      res.status(200).end();
+    } else if ( !validator.isEmail(email)){
+      res.json({error_code : 201, msg : 'Email is incorrect'});      
+      res.status(200).end();
+    } else if (!validator.isLength(password, 6, 25) || !validator.isAlphanumeric(password)){
+      res.json({error_code : 201, msg : 'Format of password is incorrect'});       
       res.status(200).end();
     }
     else {

@@ -7,7 +7,6 @@ var gm = require('gm').subClass({ imageMagick: true });	    // gm with server
 // var gm = require('gm');																			// gm with location
 	
 module.exports 					=	function(url_, type,  callback){
-	console.log(url.parse(url_).path);
 	gm('./public' + url.parse(url_).path)
 		.resize(120, 120)
 		.autoOrient()
@@ -16,7 +15,6 @@ module.exports 					=	function(url_, type,  callback){
 				console.log('Error : ', err);
 			}
 			else{
-				console.log('Resize small photo success');
 				callback(domain + '/img/small_size/' + type + '/' + path.basename(url_));
 			}
 		})
