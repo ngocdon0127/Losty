@@ -9,8 +9,10 @@ body{
 #contact-us{
 	width: 100%;
 	margin: 20px 0px 0px 0px;
-	padding: 0 10px;
 	font-family: 'Proxima Nova';
+}
+#contact-us > *{
+	padding-left: 10px;
 }
 .title p,.content p{
 	font-size: 14px;
