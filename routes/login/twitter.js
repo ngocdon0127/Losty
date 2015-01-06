@@ -102,6 +102,7 @@ module.exports  	=	function(req, res){
 										process.nextTick(function(){
 											
 											add_friend_twitter(user._id, friends, function(){
+												console.log('register success');
 												make_token(user, res);	
 											});
 										});

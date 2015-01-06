@@ -15,7 +15,6 @@ module.exports 					=	function(url_, type, callback){
 				console.log('Error : ', err);
 			}
 			else{
-				console.log('Resize normal photo success');
 				callback(domain + '/img/normal_size/' + type + '/' + path.basename(url_));
 			}
 		})

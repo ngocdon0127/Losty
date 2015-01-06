@@ -7,6 +7,7 @@ module.exports   		=	function(user_id, friends, cb){
 	User.findOne({_id : user_id}, function(err, user){
 		if (err || !user){
 			console.log(err);
+			cb();
 		}
 		else {
 			async.waterfall([
@@ -26,6 +27,7 @@ module.exports   		=	function(user_id, friends, cb){
 									user_exist.save(function(err){
 										if (err){
 											console.log(err);
+											cb();
 											return 1;
 										} else{
 											console.log(err);
