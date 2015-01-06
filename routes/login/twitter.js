@@ -99,13 +99,12 @@ module.exports  	=	function(req, res){
 										res.json({error_code : 402, msg : err.toString()});		//	Database cannot save
 										res.status(200).end();
 									} else{
-										process.nextTick(function(){
-											
+											console.log('add friends');
+
 											add_friend_twitter(user._id, friends, function(){
 												console.log('register success');
 												make_token(user, res);	
 											});
-										});
 									}
 								});
 							}
