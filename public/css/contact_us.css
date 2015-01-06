@@ -2,7 +2,10 @@
 	font-family: 'Proxima Nova';
 	src: url('../fonts/Mark Simonson - Proxima Nova Regular.otf');
 }
-
+body{
+	margin: 0px;
+	padding: 0px;
+}
 #contact-us{
 	width: 100%;
 	margin: 20px 0px 0px 0px;
