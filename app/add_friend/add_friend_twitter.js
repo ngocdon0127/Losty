@@ -11,7 +11,7 @@ module.exports   		=	function(user_id, friends, cb){
 		}
 		else {
 			async.waterfall([
-				function(next){
+				function(next){ 
 					friends.forEach(function(friend){
 						User.findOne({'twitter.id' : friend.id }, function(err, user_exist){
 							if (err){
@@ -29,16 +29,15 @@ module.exports   		=	function(user_id, friends, cb){
 											console.log(err);
 											cb();
 											return 1;
-										} else{
-											console.log(err);
-											next(null);
 										}
-										
 									})
 								}
 							}
 						})
 					});
+					setTimeout(function(){
+						next(null);
+					}, 1000);
 				},
 				function(next){
 					user.save(function(err){
