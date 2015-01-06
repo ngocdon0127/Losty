@@ -49,7 +49,7 @@ module.exports 			=	function(req, res){
                 fs.rename(temp_path, './public' + new_location + file_name, 
                   function(err){
                     if (err){
-                      res.json({error_code : 202, msg : err.toString()});     //  Image link is incorrect
+                      res.json({error_code : 202, msg : err.toString()});   
                       res.status(200).end()
                     } else{
                       async.waterfall([
@@ -68,24 +68,25 @@ module.exports 			=	function(req, res){
                       ], function(err){
                         photo.save(function(err){
                           if (err){
-                            res.json({error_code : 402, msg : err.toString()});     //  Database cannot 
-                            res.status(200).end()       //  save
+                            res.json({error_code : 402, msg : err.toString()});    
+                            res.status(200).end()     
                             return 1;
                           } else{
                             console.log('save photo successsss');
                             i = i + 1;
                             console.log(i);
-                            if (i == Object.keys(files).length){
-                              res.json({error_code : 0});
-                              res.status(200).end();
-                              return 1;
-                            }
                           }
                         });
                       });
                     }
                 })
-              })    
+              })   
+              setTimeout(function(){
+                process.nextTick(function(){
+                  res.json({error_code : 0});
+                  res.status(200).end();
+                })
+              }, 1000) 
             } else{
                res.json({error_code : 0});
                res.status(200).end();
