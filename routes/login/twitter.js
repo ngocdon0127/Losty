@@ -1,5 +1,6 @@
 var async								=	require('async');
 
+var reverseGeocode  		= 	require('./../../app/map/reverseGeocode');
 var consumer_key 				=	require('./../../app/authen/auth').consumer_key;
 var consumer_secret			=	require('./../../app/authen/auth').consumer_secret;
 
@@ -20,6 +21,8 @@ module.exports  	=	function(req, res){
 		var data  = req.body;
 		access_token_key    = data.access_token_key;
 		access_token_secret = data.access_token_secret;
+		var location     = req.body.location;
+
 	}
 	catch(err){
 		res.json({error_code : 201, msg : err.toString()});						//	Input is invalid
@@ -91,21 +94,25 @@ module.exports  	=	function(req, res){
 
 								user.twitter.token_key = access_token_key;
 								user.twitter.token_secret = access_token_secret;
-								user.country 						= profile.location;
-								user.city 							= '';
+								//user.country 						= profile.location;
+								//user.city 							= '';
 
-								user.save(function(err){
-									if (err){
-										res.json({error_code : 402, msg : err.toString()});		//	Database cannot save
-										res.status(200).end();
-									} else{
-											console.log('add friends');
+				    		reverseGeocode(location, function(data){
+	                user.city    = data.city;
+	                user.country = data.country;
+									user.save(function(err){
+										if (err){
+											res.json({error_code : 402, msg : err.toString()});		//	Database cannot save
+											res.status(200).end();
+										} else{
+												console.log('add friends');
 
-											add_friend_twitter(user._id, friends, function(){
-												console.log('register success');
-												make_token(user, res);	
-											});
-									}
+												add_friend_twitter(user._id, friends, function(){
+													console.log('register success');
+													make_token(user, res);	
+												});
+										}
+									});
 								});
 							}
 						}
