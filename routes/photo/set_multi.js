@@ -56,6 +56,7 @@ module.exports 			=	function(req, res){
                         function(next){
                           photo.image_link = domain + new_location + file_name;
                           photo.user_id    = user_id;
+                          i = i + 1;
                           console.log('resize : ', i);
                           resize_small(photo.image_link, 'photo', function(image_link_small){
                             photo.image_link_small = image_link_small;
@@ -73,7 +74,7 @@ module.exports 			=	function(req, res){
                             return 1;
                           } else{
                             console.log('save photo successsss');
-                            i = i + 1;
+                            
                             console.log(i);
                             if (i == Object.keys(files).length){
                               res.json({error_code : 0});
