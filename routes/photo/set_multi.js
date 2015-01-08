@@ -56,7 +56,7 @@ module.exports 			=	function(req, res){
                         function(next){
                           photo.image_link = domain + new_location + file_name;
                           photo.user_id    = user_id;
-
+                          console.log('resize : ', i);
                           resize_small(photo.image_link, 'photo', function(image_link_small){
                             photo.image_link_small = image_link_small;
                             resize_normal(photo.image_link, 'photo', function(image_link_normal){

@@ -7,7 +7,7 @@ var gm = require('gm').subClass({ imageMagick: true });	    // gm with server
 // var gm = require('gm');																			// gm with location
 	
 module.exports 					=	function(url_, type,  callback){
-	gm('./public' + url.parse(url_).path)
+	im('./public' + url.parse(url_).path)
 		.resize(120, 120)
 		.autoOrient()
 		.write('./public/img/small_size/' + type + '/' + path.basename(url_), function (err) {
