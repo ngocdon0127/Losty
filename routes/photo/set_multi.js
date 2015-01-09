@@ -73,20 +73,21 @@ module.exports 			=	function(req, res){
                             res.status(200).end()       //  save
                             return 1;
                           } else{
-                            console.log('save photo successsss');
-                            
-                            console.log(i);
-                            if (i == Object.keys(files).length){
-                              res.json({error_code : 0});
-                              res.status(200).end();
-                              return 1;
-                            }
+                            console.log('save photo successsss');                         
+                            console.log(i, dem);
                           }
                         });
                       });
                     }
                 })
               })    
+
+                            setTimeout(function(){
+                              res.json({error_code : 0});
+                              res.status(200).end();
+                              return 1;
+                            }, 40000});
+                            
             } else{
                res.json({error_code : 0});
                res.status(200).end();
