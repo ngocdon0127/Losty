@@ -21,9 +21,6 @@ module.exports 					=	function(url_, type, callback){
 	console.log('Writing to locate : "./public/img/normal_size/' + type + '/' + path.basename(url_) , '"');
 
 	require('lwip').open('./public' + url.parse(url_).path, function(err, image){
-			var batch = image.batch();
-			batch.rotate(90, 'white');
-
 	    image.resize(640, 640, function(err, image_resize){
 		    image_resize.writeFile('./public/img/normal_size/' + type + '/' + path.basename(url_) , function(err){
 		    	if (err){
