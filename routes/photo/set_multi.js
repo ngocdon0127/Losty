@@ -15,6 +15,8 @@ var   validate_token= require('./../../app/validate/validate_token');
 
 
 function resize_(res, user_id, files, dem){
+	console.log('Files : ', files);
+	console.log('Dem : ', dem);
 	  var name 			  =   Object.keys(files)[dem];
 
     var temp_path   =   files[name].path;
@@ -57,7 +59,7 @@ function resize_(res, user_id, files, dem){
                   res.json({error_code : 0});
                   res.status(200).end();
                 } else{
-                	resize_(res, files, dem + 1);
+                	resize_(res, user_id, files, dem + 1);
                 }
             }
            });
