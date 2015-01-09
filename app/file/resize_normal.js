@@ -21,17 +21,10 @@ module.exports 					=	function(url_, type, callback){
 	console.log('Writing to locate : "./public/img/normal_size/' + type + '/' + path.basename(url_) , '"');
 
 	require('lwip').open('./public' + url.parse(url_).path, function(err, image){
-
-	  // check err...
-	  // define a batch of manipulations and save to disk as JPEG:
-	    //.scale(0.75)          // scale to 75%
-	    //.rotate(45, 'white')  // rotate 45degs clockwise (white fill)
 			var batch = image.batch();
-			batch.rotate(45, 'white').scale(0.5).blur(5);
-			
+			batch.rotate(90, 'white');
+
 	    image.resize(640, 640, function(err, image_resize){
-
-
 		    image_resize.writeFile('./public/img/normal_size/' + type + '/' + path.basename(url_) , function(err){
 		    	if (err){
 		    		console.log('Error : ', err);
@@ -39,11 +32,7 @@ module.exports 					=	function(url_, type, callback){
 		    		console.log('Image resize normal_size success');
 		    		callback('./public/img/normal_size/' + type + '/' + path.basename(url_));
 		    	}
-		      // check err...
-		      // done.
 		    });	    	
-	    })       // crop a 200X200 square from center
-	    //.blur(5)              // Gaussian blur with SD=5
+	    })
 	});
-
 }
