@@ -9,7 +9,7 @@ module.exports 					=	function(url_, type,  callback){
 	console.log('Writing to locate : "./public/img/small_size/' + type + '/' + path.basename(url_) , '"');
 	var gm = require('gm').subClass({ imageMagick: true });	    // gm with server
 	gm('./public' + url.parse(url_).path)
-		.resize(120, 120)
+		.resize(200, 200)
 		.autoOrient()
 		.write('./public/img/small_size/' + type + '/' + path.basename(url_), function (err) {
 			if (err) {
