@@ -85,7 +85,7 @@ module.exports								=	function(req, res){
 											User.findOne({email : email}, function(err, user_exist2){
 												if (user_exist2){
 													console.log('Email is really exist');
-													res.json({error_code : 200, msg : 'Email is really exist'});
+													res.json({error_code : 0, msg : 'Email is really exist'});
 													res.status(200).end();
 													return 1;
 												} else{
