@@ -60,8 +60,8 @@ module.exports = function(req, res) {
     } else if ( !validator.isEmail(email)){
       res.json({error_code : 201, msg : 'Email is incorrect'});      
       res.status(200).end();
-    } else if (!validator.isLength(password, 6, 25) || !validator.isAlphanumeric(password)){
-      res.json({error_code : 201, msg : 'Format of password is incorrect'});       
+    } else if (!validator.isLength(password, 6, 25) ){
+      res.json({error_code : 201, msg : 'Length of password is incorrect'});       
       res.status(200).end();
     }
     else {
