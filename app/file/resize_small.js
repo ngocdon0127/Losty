@@ -7,29 +7,16 @@ var path = require('path');
 	
 module.exports 					=	function(url_, type,  callback){
 	console.log('Writing to locate : "./public/img/small_size/' + type + '/' + path.basename(url_) , '"');
-	// var gm = require('gm').subClass({ imageMagick: true });	    // gm with server
-	// gm('./public' + url.parse(url_).path)
-	// 	.resize(120, 120)
-	// 	.autoOrient()
-	// 	.write('./public/img/small_size/' + type + '/' + path.basename(url_), function (err) {
-	// 		if (err) {
-	// 			console.log('Error : ', err);
-	// 		}
-	// 		else{
-	// 			callback(domain + '/img/small_size/' + type + '/' + path.basename(url_));
-	// 		}
-	// 	})
-
-	require('lwip').open('./public' + url.parse(url_).path, function(err, image){
-	    image.resize(200, 200, function(err, image_resize){
-		    image_resize.writeFile('./public/img/small_size/' + type + '/' + path.basename(url_) , function(err){
-		    	if (err){
-		    		console.log('Error : ', err);
-		    	} else{
-		    		console.log('Image resize small_size success');
-		    		callback('./public/img/small_size/' + type + '/' + path.basename(url_));
-		    	}
-		    });	    	
-	    })
-	});
+	var gm = require('gm').subClass({ imageMagick: true });	    // gm with server
+	gm('./public' + url.parse(url_).path)
+		.resize(120, 120)
+		.autoOrient()
+		.write('./public/img/small_size/' + type + '/' + path.basename(url_), function (err) {
+			if (err) {
+				console.log('Error : ', err);
+			}
+			else{
+				callback(domain + '/img/small_size/' + type + '/' + path.basename(url_));
+			}
+		})
 }
