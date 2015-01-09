@@ -26,7 +26,12 @@ module.exports 					=	function(url_, type, callback){
 	  // define a batch of manipulations and save to disk as JPEG:
 	    //.scale(0.75)          // scale to 75%
 	    //.rotate(45, 'white')  // rotate 45degs clockwise (white fill)
+			var batch = image.batch();
+			batch.rotate(45, 'white').scale(0.5).blur(5);
+			
 	    image.resize(640, 640, function(err, image_resize){
+
+
 		    image_resize.writeFile('./public/img/normal_size/' + type + '/' + path.basename(url_) , function(err){
 		    	if (err){
 		    		console.log('Error : ', err);
