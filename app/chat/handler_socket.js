@@ -17,7 +17,6 @@ function add_users_chat(id_1, id_2){
       console.log(err);
     } else{
       if (!user_exist) {
-        console.log('User is not exist :', user_exist);
       } else{
         users_chat = user_exist.users_chat;
         // console.log();
@@ -29,7 +28,6 @@ function add_users_chat(id_1, id_2){
             if (err){
               console.log(err);
             } else if (!user_2){
-              console.log('User 2 is not exist');
             } else{
               user_exist.users_chat.push({id : id_2, username : user_2.username, 
                                           avatar : user_2.avatar, 
@@ -64,7 +62,6 @@ module.exports = function(io){
 
     user_id = socket.request._query.user_id;
     token   = socket.request._query.token;
-    console.log('Have connect, user_id : ', user_id, ' , token : ', token);
 
     validate_token(user_id, token, function(valid){
       if (valid){
@@ -72,7 +69,6 @@ module.exports = function(io){
         user_sockets[user_id] = socket;
         list_user.push(user_id);  
         socket.user_id = user_id;
-        console.log('AUTHENTICATE SUCCESS');
         next();
       } else{
         next(new Error('Access denied !!!!'));
@@ -87,7 +83,6 @@ module.exports = function(io){
       if(err){
         console.log(err);
       } else{
-      	console.log(me);
       	if (me){
         	socket.emit('unread_msg', {unread_msg : me.unread_msg});    
        	}
@@ -167,23 +162,23 @@ module.exports = function(io){
  	  var status     = 0;
  	  var time       = convert_time_to_GMT((new Date).toJSON());
 
-    console.log(user_send , ' sent a message to ', user_recei , ' : ', content);
+    // console.log(user_send , ' sent a message to ', user_recei , ' : ', content);
 
     // ADD MESSAGE UNREAD OF USER_RECEI
     Messages.findOne({user_send : user_send, user_recei : user_recei, status : 0}, function(err, message_exist){
-      console.log(message_exist);
+      // console.log(message_exist);
       if (err){
         console.log(err.toString());
       } else {
         if (!message_exist){
           Users.findOne({_id : user_recei}, function(err, user_exist){
-            console.log('Da them tin nhan chua doc');
+            // console.log('Da them tin nhan chua doc');
 
             user_exist.unread_msg ++;
             user_exist.save(function(err){
               if (err)
                 console.log(err.toString());
-              console.log(user_exist);
+              // console.log(user_exist);
             })
           })
         }

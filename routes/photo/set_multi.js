@@ -75,8 +75,9 @@ module.exports 			=	function(req, res){
                             return 1;
                           } else{
                             console.log('save photo successsss');                         
+                            dem = dem + 1;
                             console.log(i, dem);
-                            if (i == Object.keys(files).length){
+                            if (dem == Object.keys(files).length){
                               res.json({error_code : 0});
                               res.status(200).end();
                             }
