@@ -18,6 +18,7 @@ module.exports 					=	function(url_, type, callback){
 	// 			callback(domain + '/img/normal_size/' + type + '/' + path.basename(url_));
 	// 		}
 	// 	})
+	console.log('Writing to locate : "./public/img/normal_size/' + type + '/' + path.basename(url_) , '"');
 
 	require('lwip').open('./public' + url.parse(url_).path, function(err, image){
 
