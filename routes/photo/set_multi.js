@@ -55,7 +55,7 @@ function resize_(res, user_id, files, dem){
             } else{
                 console.log('save photo successsss');                         
                 console.log(dem);
-                if (dem == Object.keys(files).length){
+                if (dem == Object.keys(files).length - 1){
                   res.json({error_code : 0});
                   res.status(200).end();
                 } else{
