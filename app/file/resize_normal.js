@@ -31,6 +31,8 @@ module.exports 					=	function(url_, type, callback){
 	    .writeFile('./public/img/normal_size/' + type + '/' + path.basename(url_) , function(err){
 	    	if (err){
 	    		console.log('Error : ', err);
+	    	} else{
+	    		console.log('Image resize normal_size success');
 	    	}
 	      // check err...
 	      // done.

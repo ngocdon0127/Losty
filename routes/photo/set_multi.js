@@ -86,13 +86,6 @@ module.exports 			=	function(req, res){
                     }
                 })
               })    
-
-                            setTimeout(function(){
-                              res.json({error_code : 0});
-                              res.status(200).end();
-                              return 1;
-                            }, 100000);
-
             } else{
                res.json({error_code : 0});
                res.status(200).end();

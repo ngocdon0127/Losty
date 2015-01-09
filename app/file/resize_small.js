@@ -30,7 +30,7 @@ module.exports 					=	function(url_, type,  callback){
 	    	if (err){
 	    		console.log('Error : ', err);
 	    	} else{
-	    		console.log('Save image success');
+	    		console.log('Image resize small success');
 	    	}
 	      // check err...
 	      // done.
