@@ -29,6 +29,8 @@ module.exports 					=	function(url_, type,  callback){
 	    .writeFile('./public/img/small_size/' + type + '/' + path.basename(url_) , function(err){
 	    	if (err){
 	    		console.log('Error : ', err);
+	    	} else{
+	    		console.log('Save image success');
 	    	}
 	      // check err...
 	      // done.
