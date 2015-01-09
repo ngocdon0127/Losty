@@ -35,8 +35,8 @@ app.get('/api/contact_us',		 						 function(req, res){
 	res.render('contact_us');
 })
 
-app.get('/api/about_losty',		 						 function(req, res){
-	res.render('about_losty');
+app.get('/api/about_us',		 						 function(req, res){
+	res.render('about_us');
 })
 
 
