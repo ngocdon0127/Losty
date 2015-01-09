@@ -15,8 +15,7 @@ var   validate_token= require('./../../app/validate/validate_token');
 
 
 function resize_(res, user_id, files, dem){
-	console.log('Files : ', files);
-	console.log('Dem : ', dem);
+		console.log('Dem : ', dem);
 	  var name 			  =   Object.keys(files)[dem];
 
     var temp_path   =   files[name].path;
