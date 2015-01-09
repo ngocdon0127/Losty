@@ -14,7 +14,7 @@ var async               = require('async');
 var   validate_token= require('./../../app/validate/validate_token');
 
 
-function resize_(res, files, dem){
+function resize_(res, user_id, files, dem){
 	  var name 			  =   Object.keys(files)[dem];
 
     var temp_path   =   files[name].path;
@@ -89,7 +89,7 @@ module.exports 			=	function(req, res){
             var dem = 0;
             console.log(files);
             if (Object.keys(files).length > 0){
-              resize_(res, files, 0);
+              resize_(res, user_id, files, 0);
             } else{
                res.json({error_code : 0});
                res.status(200).end();
