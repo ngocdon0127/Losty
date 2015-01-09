@@ -25,21 +25,21 @@ module.exports 					=	function(url_, type, callback){
 	  // check err...
 	  // define a batch of manipulations and save to disk as JPEG:
 	  image.batch()
-	    .scale(0.75)          // scale to 75%
-	    .rotate(45, 'white')  // rotate 45degs clockwise (white fill)
-	    .crop(640, 640)       // crop a 200X200 square from center
-	    .blur(5)              // Gaussian blur with SD=5
-	    .writeFile('./public/img/normal_size/' + type + '/' + path.basename(url_) , function(err){
-	    	if (err){
-	    		console.log('Error : ', err);
-	    	} else{
-	    		console.log('Image resize normal_size success');
-	    		callback('./public/img/normal_size/' + type + '/' + path.basename(url_));
-	    	}
-	      // check err...
-	      // done.
-	    });
-
+	    //.scale(0.75)          // scale to 75%
+	    //.rotate(45, 'white')  // rotate 45degs clockwise (white fill)
+	    .resize(640, 640, function(err, image_resize){
+		    image_resize.writeFile('./public/img/normal_size/' + type + '/' + path.basename(url_) , function(err){
+		    	if (err){
+		    		console.log('Error : ', err);
+		    	} else{
+		    		console.log('Image resize normal_size success');
+		    		callback('./public/img/normal_size/' + type + '/' + path.basename(url_));
+		    	}
+		      // check err...
+		      // done.
+		    });	    	
+	    })       // crop a 200X200 square from center
+	    //.blur(5)              // Gaussian blur with SD=5
 	});
 
 }

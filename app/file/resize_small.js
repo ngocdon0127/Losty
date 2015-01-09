@@ -21,21 +21,24 @@ module.exports 					=	function(url_, type,  callback){
 	// 	})
 
 	require('lwip').open('./public' + url.parse(url_).path, function(err, image){
+	  // check err...
+	  // define a batch of manipulations and save to disk as JPEG:
 	  image.batch()
-	    .scale(0.75)          // scale to 75%
-	    .rotate(45, 'white')  // rotate 45degs clockwise (white fill)
-	    .crop(200, 200)       // crop a 200X200 square from center
-	    .blur(5)              // Gaussian blur with SD=5
-	    .writeFile('./public/img/small_size/' + type + '/' + path.basename(url_) , function(err){
-	    	if (err){
-	    		console.log('Error : ', err);
-	    	} else{
-	    		console.log('Image resize small success');
-	    		callback('./public/img/small_size/' + type + '/' + path.basename(url_));
-	    	}
-	      // check err...
-	      // done.
-	    });
+	    //.scale(0.75)          // scale to 75%
+	    //.rotate(45, 'white')  // rotate 45degs clockwise (white fill)
+	    .resize(640, 640, function(err, image_resize){
+		    image_resize.writeFile('./public/img/small_size/' + type + '/' + path.basename(url_) , function(err){
+		    	if (err){
+		    		console.log('Error : ', err);
+		    	} else{
+		    		console.log('Image resize small_size success');
+		    		callback('./public/img/small_size/' + type + '/' + path.basename(url_));
+		    	}
+		      // check err...
+		      // done.
+		    });	    	
+	    })       // crop a 200X200 square from center
+	    //.blur(5)              // Gaussian blur with SD=5
 	});
 
 }
