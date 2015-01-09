@@ -31,6 +31,7 @@ module.exports 					=	function(url_, type,  callback){
 	    		console.log('Error : ', err);
 	    	} else{
 	    		console.log('Image resize small success');
+	    		callback('./public/img/small_size/' + type + '/' + path.basename(url_));
 	    	}
 	      // check err...
 	      // done.

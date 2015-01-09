@@ -33,6 +33,7 @@ module.exports 					=	function(url_, type, callback){
 	    		console.log('Error : ', err);
 	    	} else{
 	    		console.log('Image resize normal_size success');
+	    		callback('./public/img/normal_size/' + type + '/' + path.basename(url_));
 	    	}
 	      // check err...
 	      // done.
