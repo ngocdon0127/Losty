@@ -33,6 +33,7 @@ module.exports 			=	function(req, res){
           } else{
           	console.log('Foreach files');
             var i = 0;
+            var dem = 0;
             console.log(files);
             if (Object.keys(files).length > 0){
               Object.keys(files).forEach(function(name){
@@ -86,7 +87,7 @@ module.exports 			=	function(req, res){
                               res.json({error_code : 0});
                               res.status(200).end();
                               return 1;
-                            }, 40000);
+                            }, 100000);
 
             } else{
                res.json({error_code : 0});
