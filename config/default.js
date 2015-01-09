@@ -6,7 +6,7 @@ var dev_domain 			   		 = '104.131.69.233';
 
 exports.port					 = dev_port;
 
-exports.avatar_default = 'http://' + dev_domain + ':' + dev_port + '/img/avatar/default-avatar.png';
+exports.avatar_default = 'http://' + dev_domain + ':' + dev_port + '/img/full_size/avatar/default-avatar.png';
 
 exports.domain_default = 'http://' + dev_domain + ':' + dev_port;
 
