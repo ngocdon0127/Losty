@@ -5,7 +5,7 @@ var dev_port 					 	   =  3000;
 var dev_domain 			   		 = '104.131.69.233';
 
 // exports.port   					   = [dev_port + 1, dev_port + 2, dev_port + 3, dev_port + 4];
-exports.port               =  3000;
+exports.port               =  [3000];
 
 exports.avatar_default = 'http://' + dev_domain + ':' + dev_port + '/img/full_size/avatar/default-avatar.png';
 
