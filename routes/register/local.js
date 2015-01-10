@@ -57,9 +57,11 @@ module.exports = function(req, res) {
     if ( !validate_username(username)) {
       res.json({error_code : 201, msg : 'Username is incorrect'});      
       res.status(200).end();
+
     } else if ( !validator.isEmail(email)){
       res.json({error_code : 201, msg : 'Email is incorrect'});      
       res.status(200).end();
+
     } else if (!validator.isLength(password, 6, 25) ){
       res.json({error_code : 201, msg : 'Length of password is incorrect'});       
       res.status(200).end();
@@ -73,12 +75,11 @@ module.exports = function(req, res) {
           User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
             if (err){
               console.log(err);
-                res.json({error_code : 401, msg : err.toString()});       //  Databse cannot find
-                res.status(200).end();
-              } 
+              res.json({error_code : 401, msg : err.toString()});       //  Databse cannot find
+              res.status(200).end();
+            } 
             else if (user_exist){
-              console.log(user_exist);
-              res.json({error_code : 303, msg : 'Email is really exist'});       //  Email is really exist
+                res.json({error_code : 303, msg : 'Email is really exist'});       //  Email is really exist
                 res.status(200).end();
               } else{
                 var user      = new User;
@@ -112,85 +113,33 @@ module.exports = function(req, res) {
 		                	next(null);
 		                }
                 	}
+
                 ], function(err){
 	                process.nextTick(function(){
 	                  reverseGeocode(location, function(data){
 	                    user.city    = data.city;
 	                    user.country = data.country;
 
-	                    process.nextTick(function(){
-	                      user.save(function(err){
-	                        if (err){
-	                          console.log(err);
-
-	                          res.json({error_code : 402, msg : err.toString()});// Database cannot save
-	                          res.status(200).end();
-	                        } else{
-	                          process.nextTick(function(){
-	                            send_mail_register(email, username);
-	                            make_token(user, res);
-	                          })
-	                        }                                         
-	                      });                                
-	                    });
-	                  });                  
-	                })
-                })
-
-
-
+	                    user.save(function(err){
+	                      if (err){
+	                        console.log(err);
+	                        res.json({error_code : 402, msg : err.toString()});// Database cannot save
+	                        res.status(200).end();
+	                      } else{
+	                        process.nextTick(function(){
+	                          send_mail_register(email, username);
+	                          make_token(user, res);
+	                        })
+	                      }                                         
+	                    });                                
+	                  });
+	                });                  
+	              })
               }
           })
-        }
-      }
-      else {                // UPDATE PROFILE, CANNOT UPDATE IMAGE
-        User.findOne({$or : [{username : username}, {email : email}]}, function(err, user_exist){
-          if (err){
-            res.json({error_code : 401, msg : err.toString()});
-            res.status(200).end();
-          } 
-          else if (user_exist){
-            res.json({error_code : 303, msg : 'User is really exist'});
-            res.status(200).end();
-          } else{
-            var user      = new User;
-            user.username = username;
-            user.email    = email;
-            user.local.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-            user.location = location;
-            user.type_account = 1; // local account
-
-            reverseGeocode(location, function(data){
-              user.city    = data.city;
-              user.country = data.country
-            });
-
-            var file_name = Math.floor(Math.random() * 1000000 + 1) + new Date().getTime() + '.' + extension;
-            var new_location = '/img/full_size/avatar/';
-
-            fs.rename(avatar_link, './public' + new_location + file_name, function(err) {
-              if (err){
-                res.json({error_code : 202, msg : err.toString()});
-                res.status(200).end();
-              } else{
-                user.avatar = domain + new_location + file_name;
-
-                user.save(function(err){
-                  if (err){
-                    res.json({error_code : 402, msg : err.toString()});
-                    res.status(200).end();
-                  } else{
-                    process.nextTick(function(){
-                      make_token(user, res);
-                    })
-                  }
-                })
-              }
-            })
-          }
-        })   	
-	  }
-	}
+      }       	
+	   }
+    }
   }
 }
 

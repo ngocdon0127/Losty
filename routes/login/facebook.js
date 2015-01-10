@@ -58,7 +58,6 @@ module.exports = function(req, res){
 		async.series([
 			function(next){
 			  graph.setAccessToken(access_token);
-
 			  graph.extendAccessToken({
 			    "access_token":      access_token
 			    , "client_id":       client_id
@@ -108,20 +107,6 @@ module.exports = function(req, res){
 			    });
 			},
 
-			// function( next){
-			//     API("/me/locations", function(err, data){											// GET FRIENDS
-			//     	if (err){
-			//     		console.log(err);
-			//        	res.json({error_code : 600, msg : err.message});			//	Have error
-			//        	res.status(200).end();
-			//     	} else{
-			//     		console.log(data);
-			// 	    	locations = data.data;
-			// 	    	next(null);
-			// 	    }
-			//     });
-			// },
-
 			function(next){
 			    API("me?fields=picture.width(800).height(800)&redirect=false", function(err, data){
 			    	if (err){
@@ -137,10 +122,7 @@ module.exports = function(req, res){
 			}], function(err){
 						if (err){
 							console.log(err);
-						}
-
-						console.log(friends);
-
+						} else
 			    	User.findOne( {'facebook.id' : profile.id}, function(err, user_exist){
 			    		if (err){																									// database cannot find
 			    			res.json({error_code : 401, msg : err.toString()});
@@ -171,23 +153,17 @@ module.exports = function(req, res){
 				    			reverseGeocode(location, function(data){
 	                  user.city    = data.city;
 	                  user.country = data.country;
-
-	                  process.nextTick(function(){
-					    				user.save(function(err){
-					    					if (err){
-					    						res.json({error_code : 402, msg : err.toString()});  //	database cannot save
-					    						res.status(200).end();			
-					    					} else{
-					    						process.nextTick(function(){
-					    							// Add friends
-					    							console.log('Di tim ban');
-					    							add_friend_fb(user._id, friends, function(){
-					    								make_token(user, res);	
-					    							});
-					    						})
+					    			user.save(function(err){
+					    				if (err){
+					    					res.json({error_code : 402, msg : err.toString()});  //	database cannot save
+					    					res.status(200).end();			
+					    				} else{
+					    						add_friend_fb(user._id, friends, function(){
+					    							make_token(user, res);	
+					    						});
 					    					}
-					    				})                               
-	                  });
+					    			})
+					    		
 	                });
 
 			    			}

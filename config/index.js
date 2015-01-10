@@ -8,7 +8,7 @@ var express      = require('express');
 
 var favicon = require('serve-favicon');
 
-module.exports = function(app, Router_raw, Router_formdata, Router_body){
+module.exports = function(app, id, Router_raw, Router_formdata, Router_body){
    
     app.use(morgan('dev')); // log every request to the console
     app.use(cookieParser()); // read cookies (needed for auth)
@@ -29,6 +29,7 @@ module.exports = function(app, Router_raw, Router_formdata, Router_body){
     Router_body.use(function(req, res, next){
     	console.log('\n' + new Date);
       console.log('Data request : ', req.body);
+      console.log('Core process : ', id);
     	next();
     })
 
