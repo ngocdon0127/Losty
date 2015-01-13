@@ -1,5 +1,5 @@
 // module.exports	=	function (id){
-	console.log('id in server : ',id);
+	// console.log('id in server : ',id);
 	// =====================================SETUP TOOL NEED===================================
 	var express         =   require('express');
 	var app             =   express();
