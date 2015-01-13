@@ -21,7 +21,9 @@
 
 	mongoose.connect(db_url); // connect to our database
 
-	require('./config/index.js')(app, id, Router_raw, Router_formdata, Router_body);
+	// require('./config/index.js')(app, id, Router_raw, Router_formdata, Router_body);
+
+	require('./config/index.js')(app, Router_raw, Router_formdata, Router_body);
 
 	//require('./app/backup/index.js');
 

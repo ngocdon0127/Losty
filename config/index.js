@@ -8,7 +8,8 @@ var express      = require('express');
 
 var favicon = require('serve-favicon');
 
-module.exports = function(app, id, Router_raw, Router_formdata, Router_body){
+// module.exports = function(app, id, Router_raw, Router_formdata, Router_body){
+module.exports = function(app, Router_raw, Router_formdata, Router_body){
    
     app.use(morgan('dev')); // log every request to the console
     app.use(cookieParser()); // read cookies (needed for auth)
