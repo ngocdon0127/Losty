@@ -30,7 +30,7 @@ module.exports = function(app, Router_raw, Router_formdata, Router_body){
     Router_body.use(function(req, res, next){
     	console.log('\n' + new Date);
       console.log('Data request : ', req.body);
-      console.log('Core process : ', id);
+      // console.log('Core process : ', id);
     	next();
     })
 
