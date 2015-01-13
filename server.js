@@ -23,6 +23,8 @@ module.exports	=	function (id){
 
 	require('./config/index.js')(app, id, Router_raw, Router_formdata, Router_body);
 
+	//require('./app/backup/index.js');
+
 	// ============================ API ============================================
 
 	app.get('/api/privacy_policy',					 function(req, res){
