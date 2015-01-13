@@ -2,6 +2,10 @@ var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
 var workers = [];
 
+if (numCPUs == 1){
+	require('./server.js')(1);
+} else
+
 if (cluster.isMaster){
 
 	cluster.on('fork', function(worker){
