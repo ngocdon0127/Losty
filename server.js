@@ -1,10 +1,10 @@
-module.exports	=	function (id){
+// module.exports	=	function (id){
 	console.log('id in server : ',id);
 	// =====================================SETUP TOOL NEED===================================
 	var express         =   require('express');
 	var app             =   express();
 	var ip              =   'localhost';
-	var port            =   require('./config/default').port[id - 1];
+	var port            =   require('./config/default').port;
 	var mongoose        =   require('mongoose');
 	var Router_raw      =   express.Router();
 	var Router_formdata =   express.Router();
@@ -137,6 +137,5 @@ module.exports	=	function (id){
 
 	require('./app/chat/handler_socket')(io);
 
-};
 
 
