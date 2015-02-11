@@ -79,7 +79,7 @@ module.exports = function(req, res) {
               res.status(200).end();
             } 
             else if (user_exist){
-                res.json({error_code : 303, msg : 'Email is already exist'});       //  Email is really exist
+                res.json({error_code : 303, msg : 'Email is already exist'});     
                 res.status(200).end();
               } else{
                 var user      = new User;
