@@ -6,8 +6,8 @@ var Users      = require('./../../models/users');
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'losty.app@gmail.com',
-        pass: 'Losty@123456'
+        user: 'info@lostyapp.com',
+        pass: 'dwenmbqisvhufgkh'
     }
 });
 
@@ -16,10 +16,10 @@ module.exports          =   function(email, username){
     // the same transporter object for all e-mails
 
     // setup e-mail data with unicode symbols
-    var content = '<p>Dear ' + username  + ', Welcome to LostyApp! <br> Please send us an email to losty.app@gmail.com<br>Your Losty Team</p>';
+    var content = '<p>Dear ' + username  + ', Welcome to LostyApp! <br> Please send us an email to info@lostyapp.com<br>Your Losty Team</p>';
 
     var mailOptions = {
-        from: 'losty.app@gmail.com', // sender address
+        from: 'info@lostyapp.com', // sender address
         to: [email],
         subject: 'Register success Lostyapp',           // Subject line
         text: content,                 // plaintext body

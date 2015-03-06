@@ -6,8 +6,8 @@ var Users      = require('./../../models/users');
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'losty.app@gmail.com',
-        pass: 'Losty@123456'
+        user: 'info@lostyapp.com',
+        pass: 'dwenmbqisvhufgkh'
     }
 });
 
@@ -23,7 +23,7 @@ module.exports          =   function(res, email, key){
             var content = '<p>Dear ' + user_exist.username + ', <br> We received a request to reset the password of your account. <br> If you made this request, please click the link below to get it back, or just ignore this email. <br> Link reset password : http://lostyapp.com:3000/api/reset_password/' + key + '</p>';
 
             var mailOptions = {
-                from: 'losty.app@gmail.com', // sender address
+                from: 'info@lostyapp.com', // sender address
                 to: [email],
                 subject: 'Hello',           // Subject line
                 text: content,                 // plaintext body
