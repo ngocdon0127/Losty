@@ -1,11 +1,9 @@
 var async								=	require('async');
 
-var reverseGeocode  		= 	require('./../../app/map/reverseGeocode');
 var consumer_key 				=	require('./../../app/authen/auth').consumer_key;
 var consumer_secret			=	require('./../../app/authen/auth').consumer_secret;
 
-var make_token					=	require('./../../app/authen/make_token');
-var add_friend_twitter 	= require('./../../app/add_friend/add_friend_twitter');
+// var add_friend_twitter 	= require('./../../app/add_friend/add_friend_twitter');
 
 var User   							=	require('./../../models/users');
 
@@ -18,14 +16,21 @@ var access_token_key, access_token_secret ;
 
 module.exports  	=	function(req, res){
 	try{
+
+		if (process.argv[2] === 'dev') {
+				var consumer_key       			=   require('./../../config/Oauth_development').twitterAuth.consumerKey;
+				var consumer_secret   			=   require('./../../config/Oauth_development').twitterAuth.consumerSecret
+		} else{
+				var consumer_key       			=   require('./../../config/Oauth').twitterAuth.consumerKey;
+				var consumer_secret   			=   require('./../../config/Oauth').twitterAuth.consumerSecret
+		}
+
 		var data  = req.body;
 		access_token_key    = data.access_token_key;
 		access_token_secret = data.access_token_secret;
-		var location     = req.body.location;
-
 	}
 	catch(err){
-		res.json({error_code : 201, msg : err.toString()});						//	Input is invalid
+		res.write(JSON.stringify({error_code : 1, msg : err.toString()}));						
 		res.status(200).end();
 	}
 	finally{
@@ -40,16 +45,14 @@ module.exports  	=	function(req, res){
 				  access_token_secret: access_token_secret
 
 				});
-			  process.nextTick(function(){
-			   	next(null);
-			  })
+				next(null);
 			},
-			function(next){
-				twit.get('/friends/list.json', {include_entities:true}, function(data) {
-				    friends = data.users;
-				    next(null);
-				});
-			},
+			// function(next){
+			// 	twit.get('/friends/list.json', {include_entities:true}, function(data) {
+			// 	    friends = data.users;
+			// 	    next(null);
+			// 	});
+			// },
 
 			function(next){
 
@@ -61,59 +64,35 @@ module.exports  	=	function(req, res){
 			}],
 			function(err){
 				if (!friends || !profile){
-					res.json({error_code : 100, msg : 'Access_token is incorrect'});			// Access_token is incorrect
+					res.write(JSON.stringify({error_code : 1, msg : 'Access_token is incorrect'}));			// Access_token is incorrect
 					res.status(200).end();
 				} else{
 					// LOGIN OR REGISTER
-					User.findOne({'twitter.id' : profile.id}, function(err, user_exist){
+					User.findOne({'twitter_infor.id' : profile.id}, function(err, user_exist){
 						if (err){
-							res.json({error_code : 401, msg : err.toString()});		//	Database cannot find
+							res.write(JSON.stringify({error_code : 1, msg : err.toString()}));
 							res.status(200).end();
 						} else{
 							if (user_exist){
 
 								// LOGIN WITH TWITTER ACCOUNT
 
-								user_exist.twitter.token_key = access_token_key;
-								user_exist.twitter.token_secret = access_token_secret;
+								user_exist.twitter_infor.access_token = access_token_key;
+								user_exist.twitter_infor.token_secret = access_token_secret;
 
-								make_token(user_exist, res);
+								user_exist.makeToken();
+								user_exist.save(function(err){});
+								res.write(JSON.stringify({error_code : 0, user : user_exist}));
+								res.status(200).end();
 							} else{
 								// MAKE NEW ACCOUNT
 
-								var user = new User;
-								user.username = profile.screen_name;
-								user.type_account = 3;
-								user.exist_acc[3] = 1;
+								var newUser = new User();
+								newUser.newInforTw(access_token_key, access_token_secret, profile, function(user){
+									res.write(JSON.stringify({error_code : 0, user : user}));
+									res.status(200).end();
+								})
 
-								// IMAGE NORMAL
-								user.avatar   = profile.profile_image_url.replace('_normal', '');
-								user.avatar_small = user.avatar   = profile.profile_image_url.replace('_normal', '');
-
-								user.twitter.id = profile.id;
-
-								user.twitter.token_key = access_token_key;
-								user.twitter.token_secret = access_token_secret;
-								//user.country 						= profile.location;
-								//user.city 							= '';
-
-				    		reverseGeocode(location, function(data){
-	                user.city    = data.city;
-	                user.country = data.country;
-									user.save(function(err){
-										if (err){
-											res.json({error_code : 402, msg : err.toString()});		//	Database cannot save
-											res.status(200).end();
-										} else{
-												console.log('add friends');
-
-												add_friend_twitter(user._id, friends, function(){
-													console.log('register success');
-													make_token(user, res);	
-												});
-										}
-									});
-								});
 							}
 						}
 					})

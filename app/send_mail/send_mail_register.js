@@ -16,7 +16,7 @@ module.exports          =   function(email, username){
     // the same transporter object for all e-mails
 
     // setup e-mail data with unicode symbols
-    var content = '<p>Dear ' + username  + ', Welcome to LostyApp! <br> Please send us an email to info@lostyapp.com<br>Your Losty Team</p>';
+    var content = '<p>Dear ' + username  + ', Welcome to LostyApp! <br> Please send us an email to info@lostyapp.com!<br>Your Losty Team!</p>';
 
     var mailOptions = {
         from: 'info@lostyapp.com', // sender address

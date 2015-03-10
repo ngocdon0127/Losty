@@ -54,7 +54,7 @@
 		res.render('login_twitter');
 	})
 
-	app.get('/api/reset_password/:resetKey',		 function(req, res){
+	app.get('/reset_password/:resetKey',		 function(req, res){
 		res.render('reset_password', {reset_key : req.params.resetKey});
 	})
 
