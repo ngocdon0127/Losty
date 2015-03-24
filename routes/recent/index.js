@@ -1,73 +1,79 @@
 // ================================ RETURN ITEMS NEAR USER ==========================
 
 
-var Item  	   					= require('./../../models/items');
-var distance   					= require('./../../app/map/distance');
-var validate_token 			= require('./../../app/validate/validate_token');
-var validate_location 	= require('./../../app/validate/validate_location');
-var async								= require('async');
+var Item = require('./../../models/items');
+var distance = require('./../../app/map/distance');
+var validate_token = require('./../../app/validate/validate_token');
+var validate_location = require('./../../app/validate/validate_location');
+var async = require('async');
 
-var distance_max        = 100.0;
+var distance_max = 100.0;
 
 // Rounding num with ext numbers
-function round_f(num,ext){
+function round_f(num, ext) {
 	//num: so can lam tron
 	//ext: phan thap phan
-	var tmp=Math.pow(10, Math.round(ext));
-	return (Math.round(num*tmp)/tmp);
+	var tmp = Math.pow(10, Math.round(ext));
+	return (Math.round(num * tmp) / tmp);
 }
 
-module.exports = function(req, res){
-	try{
+module.exports = function(req, res) {
+	try {
 		// data : {"user" : {"user_id", "token"}, "location", "start", "limit"}
 
-		var data    	= req.body;
+		var data = req.body;
 
-		var user_id 	= data.user.user_id;
-		var token   	= data.user.token;
-		var location	= data.location;
+		var user_id = data.user.user_id;
+		var token = data.user.token;
+		var location = data.location;
 		// if (!validate_location(location))
-  //           throw Error('Location is invalid');
+		//           throw Error('Location is invalid');
 
-		var start       = data.start;	// default = 0
-		var limit       = data.limit;   // default = 20;
-	}
-	catch(err){
-		res.json({error_code : 201, msg : err.toString()});
+		var start = data.start; // default = 0
+		var limit = data.limit; // default = 20;
+	} catch (err) {
+		res.json({
+			error_code: 201,
+			msg: err.toString()
+		});
 		res.status(200).end();
-	}
-
-	finally{
-		validate_token(user_id, token, function(valid){
-			if (!valid){
+	} finally {
+		validate_token(user_id, token, function(valid) {
+			if (!valid) {
 
 				// VALIDATE IS NOT SUCCESS
-				res.json({error_code : 100, msg : 'Authenticate is incorrect'});
+				res.json({
+					error_code: 100,
+					msg: 'Authenticate is incorrect'
+				});
 				res.status(200).end();
 
-			} else{
+			} else {
 				// find all item is near this user
-				Item.find({}, function(err, items){
-					if (err){
-						res.json({error_code : 401, msg : err.toString()});	// Database cannot find
+				Item.find({}, function(err, items) {
+					if (err) {
+						res.json({
+							error_code: 401,
+							msg: err.toString()
+						}); // Database cannot find
 						res.status(200).end();
-					} else{
+					} else {
 						async.waterfall([
-							function(next){	
+							function(next) {
 
-   							items.sort(function(a, b){
-								 	return distance(location, a.location) - distance(location, b.location);
+								items.sort(function(a, b) {
+									return distance(location, a.location) - distance(location, b.location);
 								})
 
-								setTimeout(function(){
+								setTimeout(function() {
 									next(null);
 								}, 1000);
 							},
 
-							function(next){
+							function(next) {
 
-								for (var i = items.length - 1 ; i >= 0 ; i --){
-									if (distance(items[i].location, location) > distance_max){
+								for (var i = items.length - 1; i >= 0; i--) {
+									if (distance(items[i].location, location) > distance_max) {
 										items.splice(i, 1);
 									};
 								}
@@ -75,30 +81,32 @@ module.exports = function(req, res){
 								next(null);
 							},
 
-							function(next){
-								
+							function(next) {
+
 								distances = [];
 
-								process.nextTick(function(){
-									
-									items.forEach(function(item){
+								process.nextTick(function() {
+
+									items.forEach(function(item) {
 										// Convert km to miles
-										distances.push(round_f ( distance(location, item.location) / 1.609, 1 ));
+										distances.push(round_f(distance(location, item.location) / 1.609, 1));
 									})
 
-									process.nextTick(function(){
-										res.json({error_code : 0, items : items.slice(start, start + limit), 
-												  distances : distances.slice(start, start + limit)});
-										res.status(200).end();	
+									process.nextTick(function() {
+										res.json({
+											error_code: 0,
+											items: items.slice(start, start + limit),
+											distances: distances.slice(start, start + limit)
+										});
+										res.status(200).end();
 										next(null);
 									})
 								})
 							}
-						], function(err){});
-					}					
+						], function(err) {});
+					}
 				})
 			}
 		})
 	}
 }
-

@@ -1,14 +1,17 @@
 var UserAuthen = require('./../../models/user_authens');
 
-module.exports = function(user_id, token, callback){
-    UserAuthen.findOne({user_id : user_id, token : token}, function(err, token_exist){
-	    if (err){
-			console.log(err);
-		}else 
-        if (token_exist){
-        	callback(1);
-        } else{
-        	callback(0);	
+module.exports = function(user_id, token, callback) {
+    UserAuthen.findOne({
+        user_id: user_id,
+        token: token
+    }, function(err, token_exist) {
+        if (err) {
+            console.log(err);
+        } else
+        if (token_exist) {
+            callback(1);
+        } else {
+            callback(0);
         }
     })
 }

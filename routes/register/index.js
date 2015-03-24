@@ -1,1 +1,1 @@
-exports.local      = require('./local');
+exports.local = require('./local');

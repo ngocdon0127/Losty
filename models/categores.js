@@ -1,13 +1,13 @@
 // load the things we need
 var mongoose = require('mongoose');
 
-var ObjectId     = mongoose.Schema.Types.ObjectId;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 // define the schema for our item model
 var categorySchema = mongoose.Schema({
-    name            : {
-        type        : String
-    }
+	name: {
+		type: String
+	}
 
 });
 

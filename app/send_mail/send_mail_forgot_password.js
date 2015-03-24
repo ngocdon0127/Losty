@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer');
-var fs         = require('fs');
-var Users      = require('./../../models/users');
+var fs = require('fs');
+var Users = require('./../../models/users');
 
 // create reusable transporter object using SMTP transport
 var transporter = nodemailer.createTransport({
@@ -11,34 +11,38 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports          =   function(res, email, key){
+module.exports = function(res, email, key) {
     // NB! No need to recreate the transporter object. You can use
     // the same transporter object for all e-mails
 
     // setup e-mail data with unicode symbols
-    Users.findOne({email : email}, function(err, user_exist){
-        if (err || !user_exist){
-            res.json({error_code : 308, msg : ' Email is incorrect'});
-        } else{
+    Users.findOne({
+        email: email
+    }, function(err, user_exist) {
+        if (err || !user_exist) {
+            res.json({
+                error_code: 308,
+                msg: ' Email is incorrect'
+            });
+        } else {
             var content = '<p>Dear ' + user_exist.username + ', <br> We received a request to reset the password of your account. <br> If you made this request, please click the link below to get it back, or just ignore this email. <br> Link reset password : http://accounts.lostyapp.com/reset_password/' + key + '</p>';
 
             var mailOptions = {
                 from: 'info@lostyapp.com', // sender address
                 to: [email],
-                subject: 'Hello',           // Subject line
-                text: content,                 // plaintext body
-                html:  content
+                subject: 'Hello', // Subject line
+                text: content, // plaintext body
+                html: content
             };
 
             // send mail with defined transport object
-            transporter.sendMail(mailOptions, function(error, info){
-                if(error){
+            transporter.sendMail(mailOptions, function(error, info) {
+                if (error) {
                     console.log(error);
-                }else{
+                } else {
                     console.log('Message sent: ' + info.response);
                 }
             });
         }
     })
 }
-

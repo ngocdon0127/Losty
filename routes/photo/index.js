@@ -1,10 +1,9 @@
+exports.set = require('./set');
 
-exports.set					=		require('./set');
+exports.del = require('./del');
 
-exports.del					=		require('./del');
+exports.get = require('./get');
 
-exports.get         = 	require('./get');
+exports.getAll = require('./getAll');
 
-exports.getAll			=		require('./getAll');
-
-exports.set_multi			=		require('./set_multi');
+exports.set_multi = require('./set_multi');

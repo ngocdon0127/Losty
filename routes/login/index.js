@@ -1,8 +1,8 @@
 // LOGIN WITH LOCAL ACCOUNT
-exports.local   	=   require('./local');
+exports.local = require('./local');
 
 //LOGIN WITH FACEBOOK ACCOUNT
-exports.facebook 	= require('./facebook');
+exports.facebook = require('./facebook');
 
 // LOGIN WITH TWITTER ACCOUNT
-exports.twitter     = require('./twitter');
+exports.twitter = require('./twitter');

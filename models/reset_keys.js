@@ -1,20 +1,20 @@
 // load the things we need
 var mongoose = require('mongoose');
 
-var ObjectId     = mongoose.Schema.Types.ObjectId;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 // define the schema for our item model
 var reset_keySchema = mongoose.Schema({
 
-    key       : {
-        type         : String,
-        required     : true,
-    },
+	key: {
+		type: String,
+		required: true,
+	},
 
-    email            : {
-        type         : String,
-        required     : true,
-    }
+	email: {
+		type: String,
+		required: true,
+	}
 
 });
 

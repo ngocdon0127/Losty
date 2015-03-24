@@ -10,15 +10,15 @@
 // client_secret_fb  :   'e1a124e86fbd2b95f3f6e12f0e17865c',
 
 
-module.exports 		= function(){
+module.exports = function() {
 	return {
 
 		// FACEBOOK LOSTY}
-		client_id_fb    	:   '1521666321415364',
-		client_secret_fb  :   'e1a124e86fbd2b95f3f6e12f0e17865c',
-		
+		client_id_fb: '1521666321415364',
+		client_secret_fb: 'e1a124e86fbd2b95f3f6e12f0e17865c',
+
 		// TWITTER LOSTY
-		consumer_key      :   'hXiNkPaPrOaEhvV6fANrQWIjY',
-		consumer_secret		:   'bKHQBEqy18weCP1OBMWiOSILXHh95YAbXEFPF4DlKHEn3HhODw'
+		consumer_key: 'hXiNkPaPrOaEhvV6fANrQWIjY',
+		consumer_secret: 'bKHQBEqy18weCP1OBMWiOSILXHh95YAbXEFPF4DlKHEn3HhODw'
 	}
 }()

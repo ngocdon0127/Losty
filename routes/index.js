@@ -1,33 +1,33 @@
-exports.login               =   require('./login');         
+exports.login            = require('./login');
 
-exports.register            =   require('./register');
+exports.register         = require('./register');
 
-exports.logout							=		require('./logout');
+exports.logout           = require('./logout');
 
-exports.item      					=   require('./item');
+exports.item             = require('./item');
 
-exports.category     				=   require('./category');
-	
-exports.upload_photo				=		require('./upload_photo');
+exports.category         = require('./category');
 
-exports.recent							=		require('./recent');
+exports.upload_photo     = require('./upload_photo');
 
-exports.photo								=   require('./photo');
+exports.recent           = require('./recent');
 
-exports.friend							=   require('./friend');
+exports.photo            = require('./photo');
 
-exports.forgot_password     =   require('./forgot_password');
+exports.friend           = require('./friend');
 
-exports.message             =   require('./message');
+exports.forgot_password  = require('./forgot_password');
 
-exports.error_code          =   require('./error_code');
+exports.message          = require('./message');
 
-exports.sync_account				=   require('./sync_account');
+exports.error_code       = require('./error_code');
 
-exports.edit_profile				=   require('./edit_profile');
+exports.sync_account     = require('./sync_account');
 
-exports.deactive_account    =   require('./deactive_account');
+exports.edit_profile     = require('./edit_profile');
 
-exports.index = function(req, res){
-    res.json('get /');
+exports.deactive_account = require('./deactive_account');
+
+exports.index = function(req, res) {
+	res.json('get /');
 }

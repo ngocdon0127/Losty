@@ -1,2 +1,2 @@
-exports.get         = require('./get');
-exports.set         = require('./set');
+exports.get = require('./get');
+exports.set = require('./set');

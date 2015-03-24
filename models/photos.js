@@ -1,30 +1,30 @@
 // load the things we need
 var mongoose = require('mongoose');
 
-var ObjectId     = mongoose.Schema.Types.ObjectId;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 // define the schema for our photo model
 var photoSchema = mongoose.Schema({
 
-    name            : {
-        type        : String
+    name: {
+        type: String
     },
 
     image_link_small: {
-        type        : String
+        type: String
     },
 
-    image_link      : {
-    	type        : String
+    image_link: {
+        type: String
     },
 
-    image_link_normal : {
-        type        : String
+    image_link_normal: {
+        type: String
     },
 
-    user_id         : {
-    	type        : ObjectId,
-    	ref         : 'users'
+    user_id: {
+        type: ObjectId,
+        ref: 'users'
     }
 
 });
